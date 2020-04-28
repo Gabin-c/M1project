@@ -19,12 +19,47 @@ parameter_tabs <- tagList(
     id="params",
     tabPanel("nothing"),  
     tabPanel("annotation",
-             box(title="Upload annotation file",width = 9, status = "primary", solidHeader = TRUE,collapsible = TRUE,
-                 column(width=4,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                 fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))
+            fluidRow(
+              column(width= 6,
+                  box(title="Upload annotation file",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                     column(width=5,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                     fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
+              column(width= 6,     
+                  box(
+                      title = "Accepted files :", width = 12, background = "light-blue",
+                      HTML(
+                        "<li> .csv / .tsv / .txt files </li>
+                        <li> Separated by tabulation, comma or semi-colon </li>
+                        <li> </li>
+                        <li> </li>"),
+                      height = 160
+                      )
+                  )
+            )
+      )
+    )
+)
+
+parameter_volcano <- tagList(
+  tags$style("#params { display:none; }"),
+  tabsetPanel(
+    id="param_volc",
+    tabPanel("No"),  
+    tabPanel("Yes",
+             fluidRow(
+               column(width= 12,
+                   box(title="Parameters",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                     sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6)),
+                     sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30))
+               )
+             )
     )
   )
 )
+
+
+
+
 
 ### User Interface  ----
 ui <- tagList(
@@ -63,8 +98,8 @@ ui <- tagList(
                              menuSubItem("PCA",tabName = "pca"),
                              menuSubItem("MA Plot",tabName = "ma"),
                              menuSubItem("Volcano Plot",tabName = "vulcano"),
-                             menuSubItem("Heatmap 1 ?",tabName = "heatmap1"),
-                             menuSubItem("Heatmap 2 ?",tabName = "heatmap2")
+                             menuSubItem("Distance matrix",tabName = "heatmap1"),
+                             menuSubItem("Heatmap",tabName = "heatmap2")
                              
                     ),
                     tags$hr(),
@@ -88,7 +123,8 @@ ui <- tagList(
             tabItem(tabName = "Input",
                     column(width = 6,
                            box(title="Upload count table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
-                               column(width=4,selectInput("sepcount", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                               column(width=5,
+                                      selectInput("sepcount", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                                fileInput("file", "Upload count table", accept = c(".csv",".txt",".tsv"))
                            )),
                     column(width = 6,
@@ -100,26 +136,41 @@ ui <- tagList(
                                <li> First column has to be gene ID or gene name</li>
                                <li> All others columns are count for each sample</li>"),
                              height = 160
-                             )),                
-                    box( 
-                      dataTableOutput("table"))
+                             )),
+                      dataTableOutput("table")
                     ),
             ### Upload metadata table ----
             tabItem(tabName = "Input2",
-                    fluidPage(
-                      box(title="Upload metadata table",width = 9, status = "primary", solidHeader = TRUE,collapsible = TRUE,
-                          column(width=4,selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                          fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
-                      ),
-                      textInput("condition","Chose your design without linear combination", placeholder = "Conditions")),
+                      column(width = 6,
+                              box(title="Upload metadata table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                                  column(width=5,
+                                         selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                                  fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
+                              )),
+                      column(width = 6,
+                             box(
+                               title = "Accepted files :", width = 12, background = "light-blue",
+                               HTML(
+                                 "<li> .csv / .tsv / .txt files </li>
+                               <li> Separated by tabulation, comma or semi-colon </li>
+                               <li> First column has to be gene ID or gene name</li>
+                               <li> All others columns are count for each sample</li>"),
+                               height = 160
+                             )),
+                    column(width = 12,
+                            box(width = 12,
+                              textInput("condition","Chose your design without linear combination", placeholder = "Conditions"))),
                     dataTableOutput("table2")
             ),
             ### Uploade annotation file ----
             tabItem(tabName = "Input3",
                     fluidPage(
-                      checkboxInput("annotation","Do you have an annotation file",value=FALSE),
-                      parameter_tabs, dataTableOutput("table3")
-                    )
+                      box(width = 12,
+                          checkboxInput("annotation","Do you have an annotation file",value=FALSE)),
+                     fluidRow(
+                      parameter_tabs),
+                     dataTableOutput("table3"))
+                    
             ),
             ### Run DESeq2 ----
             tabItem(tabName = "deseq2",
@@ -137,7 +188,6 @@ ui <- tagList(
                                sliderInput("breaks","Break size",min=0,max=2,value=1.0,step = 0.25)
                         ),
                         column(width = 6,
-                               
                                sliderInput("axis","Axis x",min=0,max=20,value=c(0,14))
                         ),
                         column(width = 6, checkboxInput("normalize","Do you want to see distribution after normalisation ?",value=FALSE)
@@ -211,17 +261,20 @@ ui <- tagList(
             ),
             ### Volcano plot ----
             tabItem(tabName = "vulcano",
-                    box(width = 12,
-                        title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
-                        sliderInput("sliderfold", "Chose your fold", min=-10, max=10, value=c(-6,6)),
-                        sliderInput("sliderlog", "Chose your log10", min=0, max=100, value=30),
-                        checkboxInput("annotation3","Do you have a Annotation file ?",value=FALSE)),
-                    box( solidHeader = F, status = "primary",width = 12,
-                         plotOutput("volcano")),
-                    column(width= 4,
-                           downloadButton("downloadVulcano",'Download plot',class = "btn-warning"))
+                    fluidPage(
+                      box(width = 12,
+                          title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
+                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
+                          checkboxInput("annotation3","Do you have a Annotation file ?",value=FALSE)),
+                      fluidRow(
+                        parameter_volcano),
+                       box( solidHeader = F, status = "primary",width = 12,
+                           plotOutput("volcano")),
+                      column(width= 4,
+                           downloadButton("downloadVulcano",'Download plot',class = "btn-warning")))
             ),
+            
+            
             ### Heatmap ----
             tabItem(tabName = "heatmap1",
                     box(width = 12,
@@ -245,7 +298,7 @@ ui <- tagList(
                         column(width=6,
                                selectInput("conditionheatmap","Choose your condition for Heat map ?", choices = c()),
                                actionButton("logaction3","Run Heat map")),
-                        sliderInput("slider2", label = h1("Choose best pvalue you want to display"), min = 0, 
+                        sliderInput("slider2", label = h1("Chose the number of genes you want to display"), min = 0, 
                                     max = 200, value = c(0, 60))),
                     box(solidHeader = F, status = "primary",width = 12,
                         plotOutput("clusteringmap2", height = 1000, width = 1000)

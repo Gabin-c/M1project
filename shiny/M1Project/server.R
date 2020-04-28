@@ -10,7 +10,7 @@ server <- function(input, output,session) {
     counttable <- read.csv(input$file$datapath, sep = input$sepcount)
   })
   ### Display the count file ----
-  output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 5))
+  output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
   
   
@@ -18,11 +18,9 @@ server <- function(input, output,session) {
   metadata <- reactive({
     req(input$file2)
     meta_table <- read.csv(input$file2$datapath, sep = input$sepmetadata, row.names=NULL)
-    rownames(meta_table)<-meta_table[,1]
-    meta_table<-meta_table[,-1]
   })
   ### Display the metadata file ----
-  output$table2 <- DT::renderDataTable(metadata(),options = list(pageLength = 5))
+  output$table2 <- DT::renderDataTable(metadata(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
   ### Design condition for DESeq2 ----
   observeEvent(input$file2,{
@@ -33,19 +31,28 @@ server <- function(input, output,session) {
   observeEvent(input$annotation, {
     if(input$annotation== TRUE){
       updateTabsetPanel(session, "params", selected = "annotation")
-      
-      
-      
     }else{
       updateTabsetPanel(session, "params", selected = "nothing")
     }
   })
-  
   anno <- reactive({
     req(input$file3)
     read.csv(input$file3$datapath, sep = input$sepanno)
   })
-  output$table3 <- DT::renderDataTable(anno(),options = list(pageLength = 5))
+  output$table3 <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
+  
+  ### Display parameters for volcano
+  observeEvent(input$annotation3, {
+    if(input$annotation3== TRUE){
+      updateTabsetPanel(session, "param_volc", selected = "Yes")
+    }else{
+      updateTabsetPanel(session, "param_volc", selected = "No")
+    }
+  })
+  
+  
+  
+  
   ### DDS object  ---- 
   observeEvent(input$deseq2,{
     req(input$deseq2)
@@ -65,7 +72,7 @@ server <- function(input, output,session) {
     output$clustering_map <- renderPlot(clustering_heatmap(dds$DESeq2,log="vst"))
     
     ### Choices for count distribution
-    updateSelectInput(session,"sample",choices = rownames(metadata()))
+    updateSelectInput(session,"sample",choices = metadata()[,1])
     
     ### Choices for count by gene
     updateSelectInput(session,"gene",choices = count_table()[,1])
@@ -114,7 +121,7 @@ server <- function(input, output,session) {
   
   ### Depth ----
   
-  prout <- eventReactive(input$normalize1,{
+  normdepth <- eventReactive(input$normalize1,{
     if(input$normalize1==TRUE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
     }
@@ -130,7 +137,7 @@ server <- function(input, output,session) {
     }
   )
   depthh <- function(){
-    depth(prout(),breaksize= input$breaks1)
+    depth(normdepth(),breaksize= input$breaks1)
   }
   output$depth <- renderPlot({
     validate(
@@ -140,7 +147,7 @@ server <- function(input, output,session) {
   })
   
   ### Count distribution ----
-  prout1 <- eventReactive(input$normalize,{
+  normcount <- eventReactive(input$normalize,{
     if(input$normalize==TRUE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
     }
@@ -149,7 +156,7 @@ server <- function(input, output,session) {
       
     }
   })
-  distribution <- function(){count_distribution(prout1(), sample = input$sample,min=input$axis[1],max=input$axis[2],breaksize = input$breaks)
+  distribution <- function(){count_distribution(normcount(), sample = input$sample,min=input$axis[1],max=input$axis[2],breaksize = input$breaks)
   }
   output$downloadDistribution <- downloadHandler(
     filename = function(){
@@ -159,7 +166,11 @@ server <- function(input, output,session) {
       ggsave(file, plot = distribution(), device = "png")
     }
   )
-  output$count <- renderPlot(distribution())
+  output$count <- renderPlot({
+    validate(
+      need(dds$DESeq2, "Please run DESeq2")
+    )
+    distribution()})
   
   ### Count by gene ---
   norm <- eventReactive(input$normalize4,{
@@ -181,7 +192,11 @@ server <- function(input, output,session) {
       ggsave(file, plot = countg(), device = "png")
     }
   )
-  output$countgene <- renderPlot(countg())
+  output$countgene <- renderPlot({
+    validate(
+      need(dds$DESeq2, "Please run DESeq2")
+    )
+    countg()})
   
   
   ### MA plot ----
@@ -261,6 +276,14 @@ server <- function(input, output,session) {
       heatmapcluster()
     })})
   
+  output$downloadHeatmap1 <- downloadHandler(
+    filename = "DistanceMatrix.png",
+    content = function(file){
+      png(file)
+      heatmapcluster()
+      dev.off()
+    }
+  )
   ### Heat map 2 ----
   observeEvent(input$logaction3,{
     if(input$log3=="vst"){
@@ -278,4 +301,5 @@ server <- function(input, output,session) {
       heatmap(dds$results,dds$log3,annotation = input$annotation2,metadata=metadata(),condition = input$conditionheatmap,count=colnames(count_table()),min=input$slider2[1],max=input$slider2[2],anno=anno())
       
     })})
+ 
 }
