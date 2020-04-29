@@ -3,6 +3,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyjs)
 library(dplyr)
+library(tidyverse)
 library(vroom)
 library(DT)
 library(DESeq2)
@@ -19,26 +20,26 @@ parameter_tabs <- tagList(
     id="params",
     tabPanel("nothing"),  
     tabPanel("annotation",
-            fluidRow(
-              column(width= 6,
-                  box(title="Upload annotation file",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
-                     column(width=5,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                     fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
-              column(width= 6,     
-                  box(
-                      title = "Accepted files :", width = 12, background = "light-blue",
-                      HTML(
-                        "<li> .csv / .tsv / .txt files </li>
-                        <li> Separated by tabulation, comma or semi-colon </li>
-                        <li> </li>
-                        <li> </li>"),
-                      height = 160
+             fluidRow(
+               column(width= 6,
+                      box(title="Upload annotation file",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                          column(width=5,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                          fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
+               column(width= 6,     
+                      box(
+                        title = "Accepted files :", width = 12,
+                        HTML(
+                          "<li> .csv / .tsv / .txt files </li>
+                          <li> Separated by tabulation, comma or semi-colon </li>
+                          <li> </li>
+                          <li> </li>"),
+                        height = 160
+                        )
                       )
-                  )
-            )
-      )
-    )
-)
+                      )
+               )
+               )
+             )
 
 parameter_volcano <- tagList(
   tags$style("#params { display:none; }"),
@@ -46,16 +47,11 @@ parameter_volcano <- tagList(
     id="param_volc",
     tabPanel("No"),  
     tabPanel("Yes",
-             fluidRow(
-               column(width= 12,
-                   box(title="Parameters",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
-                     sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6)),
-                     sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30))
-               )
-             )
-    )
+             sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6)),
+             sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30))
   )
 )
+
 
 
 
@@ -68,7 +64,6 @@ ui <- tagList(
   div(
     id = "app",
     dashboardPage(
-      skin = "yellow",
       ### Customize the header ----
       dashboardHeader(title = "DESEQ DATA COUNT", 
                       ### Home button----
@@ -111,6 +106,7 @@ ui <- tagList(
       
       ### Organization of the differents pages ----
       dashboardBody(
+        uiOutput("themes"),
         useShinyjs(),
         fluidRow(
           tabItems(
@@ -129,7 +125,7 @@ ui <- tagList(
                            )),
                     column(width = 6,
                            box(
-                             title = "Accepted files :", width = 12, background = "light-blue",
+                             title = "Accepted files :", width = 12,
                              HTML(
                                "<li> .csv / .tsv / .txt files </li>
                                <li> Separated by tabulation, comma or semi-colon </li>
@@ -137,46 +133,53 @@ ui <- tagList(
                                <li> All others columns are count for each sample</li>"),
                              height = 160
                              )),
-                      dataTableOutput("table")
+                    dataTableOutput("table")
                     ),
             ### Upload metadata table ----
             tabItem(tabName = "Input2",
-                      column(width = 6,
-                              box(title="Upload metadata table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
-                                  column(width=5,
-                                         selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                                  fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
-                              )),
-                      column(width = 6,
-                             box(
-                               title = "Accepted files :", width = 12, background = "light-blue",
-                               HTML(
-                                 "<li> .csv / .tsv / .txt files </li>
+                    column(width = 6,
+                           box(title="Upload metadata table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                               column(width=5,
+                                      selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                               fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
+                           )),
+                    column(width = 6,
+                           box(
+                             title = "Accepted files :", width = 12,
+                             HTML(
+                               "<li> .csv / .tsv / .txt files </li>
                                <li> Separated by tabulation, comma or semi-colon </li>
                                <li> First column has to be gene ID or gene name</li>
                                <li> All others columns are count for each sample</li>"),
-                               height = 160
+                             height = 160
                              )),
                     column(width = 12,
-                            box(width = 12,
-                              textInput("condition","Chose your design without linear combination", placeholder = "Conditions"))),
+                           box(width = 12,
+                               textInput("condition","Chose your design without linear combination", placeholder = "Conditions"))),
                     dataTableOutput("table2")
-            ),
+                    ),
             ### Uploade annotation file ----
             tabItem(tabName = "Input3",
                     fluidPage(
                       box(width = 12,
                           checkboxInput("annotation","Do you have an annotation file",value=FALSE)),
-                     fluidRow(
-                      parameter_tabs),
-                     dataTableOutput("table3"))
+                      fluidRow(
+                        parameter_tabs),
+                      dataTableOutput("table3"))
                     
             ),
             ### Run DESeq2 ----
             tabItem(tabName = "deseq2",
                     waiter::use_waiter(),
-                    actionButton("deseq2","Run DESeq2",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block "),
-                    dataTableOutput("table4")
+                    fluidPage(
+                      box(width = 12, solidHeader = F,
+                          HTML("Running DESeq2 will create a dds object .....................
+                               <br> Check if the design chosen previously is good.
+                               <br>If it is not, the application will crash.")),
+                      box(width = 12,
+                          actionButton("deseq2","Run DESeq2",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
+
+                      dataTableOutput("table4"))
             ),
             ### Count distribution plot ----
             tabItem(tabName = "count_distribution",
@@ -199,10 +202,10 @@ ui <- tagList(
                     )
                     
             ),
-            ### Count by gene ---
-            tabItem(tabName = "count_gene",
-                    box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
-                        column(width = 6,
+            #Count by gene ---
+          tabItem(tabName = "count_gene",
+                   box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
+                       column(width = 6,
                                selectInput("gene","Which gene do you want to see ?", choices = c())
                         ),
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
@@ -264,14 +267,20 @@ ui <- tagList(
                     fluidPage(
                       box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
-                          checkboxInput("annotation3","Do you have a Annotation file ?",value=FALSE)),
-                      fluidRow(
-                        parameter_volcano),
-                       box( solidHeader = F, status = "primary",width = 12,
+                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05)
+                      ),
+                      box(width = 12,
+                          title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
+                          checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
+                          uiOutput("annotationUi"),
+                          uiOutput("annotationUi2")
+                          
+                      ),
+                      
+                      box( solidHeader = F, status = "primary",width = 12,
                            plotOutput("volcano")),
                       column(width= 4,
-                           downloadButton("downloadVulcano",'Download plot',class = "btn-warning")))
+                             downloadButton("downloadVulcano",'Download plot',class = "btn-warning")))
             ),
             
             
@@ -298,7 +307,7 @@ ui <- tagList(
                         column(width=6,
                                selectInput("conditionheatmap","Choose your condition for Heat map ?", choices = c()),
                                actionButton("logaction3","Run Heat map")),
-                        sliderInput("slider2", label = h1("Chose the number of genes you want to display"), min = 0, 
+                        sliderInput("slider2", label = h4("Chose the number of genes you want to display"), min = 0, 
                                     max = 200, value = c(0, 60))),
                     box(solidHeader = F, status = "primary",width = 12,
                         plotOutput("clusteringmap2", height = 1000, width = 1000)
@@ -307,9 +316,9 @@ ui <- tagList(
                            downloadButton("downloadHeatmap2",'Download plot',class = "btn-warning")
                     )
             )
+                           )
+                           )
           )
-        )
+          )
       )
-    )
-  )
-)
+      )

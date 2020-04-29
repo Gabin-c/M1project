@@ -49,6 +49,20 @@ server <- function(input, output,session) {
       updateTabsetPanel(session, "param_volc", selected = "No")
     }
   })
+  observeEvent(input$annotation3,{
+    if(input$annotation3== TRUE){
+      output$annotationUi <- renderUI({ 
+        sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6))
+      })
+      output$annotationUi2 <- renderUI({ 
+        sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30)
+      })
+    }else{
+      output$annotationUi <- renderUI({})
+      output$annotationUi2 <- renderUI({})
+    }
+    
+  })
   
   
   
@@ -58,7 +72,7 @@ server <- function(input, output,session) {
     req(input$deseq2)
     waiter <- waiter::Waiter$new(html = spin_3circles())
     waiter$show()
-    on.exit(waiter$hide())
+    
     
     ### Running DESeq1
     dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(input$condition), tidy=TRUE)
@@ -67,6 +81,9 @@ server <- function(input, output,session) {
     
     ### Display count table after dds
     output$table4 <- DT::renderDataTable(counts(dds$dds), options = list(pageLength = 5))
+    
+    ### Clustering map
+    output$clustering_map <- renderPlot(clustering_heatmap(dds$DESeq2,log="vst"))
     
     ### Choices for count distribution
     updateSelectInput(session,"sample",choices = metadata()[,1])
@@ -82,8 +99,14 @@ server <- function(input, output,session) {
     
     
     ### Counts data frame
-    dds$counts_dds <- as.data.frame(counts(dds$DESeq2))
-  
+    dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
+    dds$counts_dds_n <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
+    dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
+    dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
+    
+    ### Heatmap
+    on.exit(waiter$hide())
+    
   })
   
   ### PCA ----
@@ -141,7 +164,7 @@ server <- function(input, output,session) {
   })
   
   ### Count distribution ----
-  normcount <- eventReactive(input$normalize,{
+  normcount <- reactive({
     if(input$normalize==TRUE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
     }
@@ -169,10 +192,10 @@ server <- function(input, output,session) {
   ### Count by gene ---
   norm <- eventReactive(input$normalize4,{
     if(input$normalize4==TRUE){
-      dds$counts_dds <- as.data.frame(counts(dds$DESeq2,normalized=TRUE))
+      dds$counts_turnup_n
     }
     else if(input$normalize4==FALSE){
-      dds$counts_dds <- as.data.frame(counts(dds$DESeq2))
+      dds$counts_turnup 
       
     }
   })
@@ -305,5 +328,28 @@ server <- function(input, output,session) {
       dev.off()
     }
   )
- 
+  ### Theme ----
+  
+  observeEvent(input$theme,{
+    if(input$theme==TRUE){
+      output$themes <- renderUI({
+        shinyDashboardThemes("blue_gradient")
+      })
+      
+    }else{
+      output$themes <-renderUI({
+        shinyDashboardThemes("purple_gradient")
+        
+      })
+      
+      
+    }
+    
+    
+    
+    
+    
+  })
+  
+  
 }
