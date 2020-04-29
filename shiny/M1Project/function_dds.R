@@ -1,4 +1,3 @@
-library(dashboardthemes)
 library(DESeq2)
 library(Biobase)
 library(gplots)
@@ -14,7 +13,12 @@ depth <- function(dds,breaksize=1){
   
   depth$Sample <- row.names(depth)
   
-  return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = breaksize)+labs(title = "Depth of each sample", x="Sample", y="Depth")+theme_bw())
+  return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ 
+           geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = breaksize)+
+           labs(title = "Depth of each sample", x="Sample", y="Depth")+theme_bw()+
+           theme(plot.title = element_text(face = "bold", size= 18)) +
+           theme(axis.title.x = element_text(size=14)) +
+           theme(axis.title.y = element_text(size=14)))
   
 }#ok
 
@@ -23,14 +27,16 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
   
   return(ggplot(data=counts_dds, aes(log(counts_dds[,sample]+1))) + 
            geom_histogram(breaks=seq(min,max,breaksize),position="identity",alpha=0.5,fill="darkcyan", color="dodgerblue1")+
-           theme_classic()+labs(title=sample, x="Count value (number of read by genes) in log(count+1)",y="Count frequency") 
-         
+           theme_classic() +
+           labs(title=sample, x="Count value (number of read by genes) in log(count+1)",y="Count frequency") +
+           theme(plot.title = element_text(face = "bold", size= 18)) +
+           theme(axis.title.x = element_text(size=14)) +
+           theme(axis.title.y = element_text(size=14))
   )
 }#ok
 
 dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
-  
 }
 number_of_DE <- function(dds,padj = 0.05){
   res_dif <- results(dds, tidy= TRUE)
@@ -42,14 +48,17 @@ plotcount <- function(dds,gene){
   dds1[,"name"] <- row.names(dds1)
   return(
    ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
-      geom_point(size=4,aes(colour=factor(name))) + geom_segment(aes(x=dds1[,"name"], 
-                                                                     xend=dds1[,"name"], 
-                                                                     y=0, 
-                                                                     yend=dds1[,gene]),linetype="dotdash")+ 
-      theme(axis.text.x = element_blank() )+ 
-      labs(title=paste("Count of",gene,  "for each sample"), 
-           x="Sample",y="Count")+ guides(color= guide_legend(title = "Sample"))
-    
+     geom_point(size=4,aes(colour=factor(name))) + 
+     geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
+     theme(axis.text.x = element_blank() )+ 
+     labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
+     guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
+     theme(plot.title = element_text(face = "bold", size= 18)) +
+     theme(axis.title.x = element_text(size=14)) +
+     theme(axis.title.y = element_text(size=14)) +
+     theme(legend.text=element_text(size=13)) +
+     theme(legend.title=element_blank())
+
   )
 }
 #Maplot
@@ -61,9 +70,12 @@ maplot <- function(dds,padje=0.05){
            geom_point() + 
            scale_x_log10() +
            geom_hline(yintercept = 0, linetype = "dashed",color = "black") + 
-           ggtitle("MA plot") + theme_bw() +
-           scale_colour_discrete(name="",
-                                 labels=c("Not significative", "Significative", "NA")))
+           theme_bw() +
+           scale_colour_discrete(name="",labels=c("Not significative", "Significative", "NA"))+
+           guides(color = guide_legend(override.aes = list(size=5))) +
+           theme(legend.text=element_text(size=13))+
+           theme(axis.title.x = element_text(size=14)) +
+           theme(axis.title.y = element_text(size=14)))
 }#ok
 #VolcanonPlot
 volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0,minlogP=30,count){
@@ -82,7 +94,11 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
                              point.padding = unit(0.3, "lines"), color = "darkblue") +
              scale_colour_discrete(name="",
                                    labels=c("Not significative", "Significative", "NA")) +
-             geom_vline(xintercept=0,linetype="dashed", color = "red")+theme(legend.text=element_text(size=9)) )
+             guides(color = guide_legend(override.aes = list(size=5))) +
+             geom_vline(xintercept=0,linetype="dashed", color = "red")+
+             theme(legend.text=element_text(size=13)) +
+             theme(axis.title.x = element_text(size=14)) +
+             theme(axis.title.y = element_text(size=14)))
     
     
   }else{
@@ -91,22 +107,36 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
              geom_point()+
              scale_colour_discrete(name="",
                                    labels=c("Not significative", "Significative", "NA")) +
-             geom_vline(xintercept=0,linetype="dashed", color = "red")+guides(colour = guide_legend(override.aes = list(size = 5)))+theme(legend.text=element_text(size=7))) 
+             geom_vline(xintercept=0,linetype="dashed", color = "red") +
+             guides(colour = guide_legend(override.aes = list(size = 5))) +
+             theme(legend.text=element_text(size=13))+
+             theme(axis.title.x = element_text(size=14)) +
+             theme(axis.title.y = element_text(size=14))) 
     
   }
 }
+
 #PCA
 pca <- function(dds,intgroup){
   
+  return(
+    plotPCA(dds, intgroup=intgroup) +
+      theme(axis.title.x = element_text(size=14)) +
+      theme(axis.title.y = element_text(size=14)) +
+      scale_colour_discrete(name="")+
+      guides(colour = guide_legend(override.aes = list(size = 5))) +
+      theme(legend.text=element_text(size=13))+
+      geom_text_repel(
+                      aes(label = colnames(dds)),
+                      size = 3,
+                      box.padding = unit(0.35, "lines"),
+                      point.padding = unit(0.3, "lines"), color = "darkblue")
   
-  return(plotPCA(dds, intgroup=intgroup))
-  
-  
-  
-  
+  )
+
   
 }
-
+?plotPCA
 #heatMap
 clustering_heatmap <- function(dds){
   
