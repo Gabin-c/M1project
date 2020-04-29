@@ -311,5 +311,30 @@ server <- function(input, output,session) {
       dev.off()
     }
   )
+ ### Theme ----
+  
+  observeEvent(input$theme,{
+    if(input$theme==TRUE){
+      output$themes <- renderUI({
+        shinyDashboardThemes("blue_gradient")
+      })
+      
+    }else{
+      output$themes <-renderUI({
+        shinyDashboardThemes("purple_gradient")
+        
+      })
+      
+      
+    }
+    
+    
+    
+   
+    
+  })
+  
  
 }
+
+

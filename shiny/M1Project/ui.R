@@ -111,6 +111,7 @@ ui <- tagList(
       
       ### Organization of the differents pages ----
       dashboardBody(
+        uiOutput("themes"),
         useShinyjs(),
         fluidRow(
           tabItems(
