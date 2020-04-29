@@ -3,6 +3,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyjs)
 library(dplyr)
+library(tidyverse)
 library(vroom)
 library(DT)
 library(DESeq2)
@@ -46,16 +47,11 @@ parameter_volcano <- tagList(
     id="param_volc",
     tabPanel("No"),  
     tabPanel("Yes",
-             fluidRow(
-               column(width= 12,
-                   box(title="Parameters",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
                      sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6)),
                      sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30))
                )
              )
-    )
-  )
-)
+
 
 
 
@@ -265,10 +261,14 @@ ui <- tagList(
                     fluidPage(
                       box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
-                          checkboxInput("annotation3","Do you have a Annotation file ?",value=FALSE)),
-                      fluidRow(
-                        parameter_volcano),
+                          checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
+                          
+                          
+                          uiOutput("annotationUi"),
+                          uiOutput("annotationUi2")
+                          
+                          ),
+                      
                        box( solidHeader = F, status = "primary",width = 12,
                            plotOutput("volcano")),
                       column(width= 4,
