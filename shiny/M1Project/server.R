@@ -42,13 +42,6 @@ server <- function(input, output,session) {
   output$table3 <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
   ### Display parameters for volcano
-  observeEvent(input$annotation3, {
-    if(input$annotation3== TRUE){
-      updateTabsetPanel(session, "param_volc", selected = "Yes")
-    }else{
-      updateTabsetPanel(session, "param_volc", selected = "No")
-    }
-  })
   observeEvent(input$annotation3,{
     if(input$annotation3== TRUE){
       output$annotationUi <- renderUI({ 
@@ -89,7 +82,7 @@ server <- function(input, output,session) {
     updateSelectInput(session,"sample",choices = metadata()[,1])
     
     ### Choices for count by gene
-    updateSelectInput(session,"gene",choices = count_table()[,1])
+    updateSelectizeInput(session,"gene",choices = count_table()[,1], server = TRUE)
     
     ### Choices for PCA
     updateSelectInput(session,"conditionpca",choices = colnames(metadata()))

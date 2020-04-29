@@ -41,16 +41,6 @@ parameter_tabs <- tagList(
                )
              )
 
-parameter_volcano <- tagList(
-  tags$style("#params { display:none; }"),
-  tabsetPanel(
-    id="param_volc",
-    tabPanel("No"),  
-    tabPanel("Yes",
-             sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6)),
-             sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30))
-  )
-)
 
 
 
@@ -206,7 +196,7 @@ ui <- tagList(
           tabItem(tabName = "count_gene",
                    box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                        column(width = 6,
-                               selectInput("gene","Which gene do you want to see ?", choices = c())
+                               selectizeInput("gene","Which gene do you want to see ?", choices = NULL)
                         ),
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
