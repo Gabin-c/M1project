@@ -68,9 +68,6 @@ server <- function(input, output,session) {
     ### Display count table after dds
     output$table4 <- DT::renderDataTable(counts(dds$dds), options = list(pageLength = 5))
     
-    ### Clustering map
-    output$clustering_map <- renderPlot(clustering_heatmap(dds$DESeq2,log="vst"))
-    
     ### Choices for count distribution
     updateSelectInput(session,"sample",choices = metadata()[,1])
     
@@ -85,11 +82,8 @@ server <- function(input, output,session) {
     
     
     ### Counts data frame
-    dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
-    
-    ### Heatmap
-    
-    
+    dds$counts_dds <- as.data.frame(counts(dds$DESeq2))
+  
   })
   
   ### PCA ----
@@ -175,10 +169,10 @@ server <- function(input, output,session) {
   ### Count by gene ---
   norm <- eventReactive(input$normalize4,{
     if(input$normalize4==TRUE){
-      dds$counts_dds <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
+      dds$counts_dds <- as.data.frame(counts(dds$DESeq2,normalized=TRUE))
     }
     else if(input$normalize4==FALSE){
-      dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
+      dds$counts_dds <- as.data.frame(counts(dds$DESeq2))
       
     }
   })

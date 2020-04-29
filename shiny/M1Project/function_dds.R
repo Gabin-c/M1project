@@ -34,20 +34,21 @@ number_of_DE <- function(dds,padj = 0.05){
 }
 #Plotcount
 plotcount <- function(dds,gene){
-  dds1 <-as.data.frame(t(dds))
-  dds1[,"name"] <- row.names(dds1)
+
   return(
-    ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
-      geom_point(size=4,aes(colour=factor(name))) + geom_segment(aes(x=dds1[,"name"], 
-                                                                     xend=dds1[,"name"], 
+    ggplot(dds, aes(x=colnames(dds), y=rownames(dds))) + 
+      geom_point(size=4,aes(colour=factor(name))) + geom_segment(aes(x=colnames(dds), 
+                                                                     xend=colnames(dds), 
                                                                      y=0, 
-                                                                     yend=dds1[,gene]),linetype="dotdash")+ 
+                                                                     yend=rownames(dds)),linetype="dotdash")+ 
       theme(axis.text.x = element_blank() )+ 
       labs(title=paste("Count of",gene,  "for each sample"), 
            x="Sample",y="Count")+ guides(color= guide_legend(title = "Sample"))
     
   )
 }
+
+
 #Maplot
 maplot <- function(dds,padje=0.05){
   
