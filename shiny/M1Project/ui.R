@@ -258,11 +258,7 @@ ui <- tagList(
             ### Volcano plot ----
             tabItem(tabName = "vulcano",
                     fluidPage(
-                      box(width = 12,
-                          title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05)
-                      ),
-                      box(width = 12,
+                   box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
                           sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
