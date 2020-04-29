@@ -293,13 +293,23 @@ server <- function(input, output,session) {
     }
   })
   
+  heatmap2 <- function() {
+    heatmap(dds$results,dds$log3,annotation = input$annotation2,metadata=metadata(),condition = input$conditionheatmap,count=colnames(count_table()),min=input$slider2[1],max=input$slider2[2],anno=anno())
+  }
   output$clusteringmap2 <- renderPlot({
     validate(
       need(dds$log3, "Please run DESeq2 and Heat map")
     )
     withProgress(message = "Running heatmap , please wait",{
-      heatmap(dds$results,dds$log3,annotation = input$annotation2,metadata=metadata(),condition = input$conditionheatmap,count=colnames(count_table()),min=input$slider2[1],max=input$slider2[2],anno=anno())
-      
+      heatmap2()
     })})
+  output$downloadHeatmap2 <- downloadHandler(
+    filename = "Heatmap.png",
+    content = function(file){
+      png(file)
+      heatmap2()
+      dev.off()
+    }
+  )
  
 }
