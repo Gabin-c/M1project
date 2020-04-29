@@ -41,16 +41,7 @@ parameter_tabs <- tagList(
                )
              )
 
-parameter_volcano <- tagList(
-  tags$style("#params { display:none; }"),
-  tabsetPanel(
-    id="param_volc",
-    tabPanel("No"),  
-    tabPanel("Yes",
-             sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6)),
-             sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30))
-  )
-)
+
 
 
 
@@ -202,20 +193,13 @@ ui <- tagList(
                     )
                     
             ),
-<<<<<<< HEAD
-            ### Count by gene ----
-            
-            tabItem(tabName = "count_gene",
-                    box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
-                        column(width = 6,
-                               uiOutput("uichoice")
-=======
+
             #Count by gene ---
           tabItem(tabName = "count_gene",
                    box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                        column(width = 6,
                                selectInput("gene","Which gene do you want to see ?", choices = c())
->>>>>>> 34d355d6dc5fa415069bc5b86f332e1308bfb91c
+
                         ),
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
@@ -281,12 +265,10 @@ ui <- tagList(
                       box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
-<<<<<<< HEAD
                           sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
                       
                           
-=======
->>>>>>> 34d355d6dc5fa415069bc5b86f332e1308bfb91c
+
                           uiOutput("annotationUi"),
                           uiOutput("annotationUi2")
                           
