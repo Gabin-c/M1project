@@ -14,7 +14,7 @@ depth <- function(dds,breaksize=1){
   
   depth$Sample <- row.names(depth)
   
-  return(ggplot(depth, aes( x=Sample ,y=depth[,1],color=Sample))+ geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = breaksize)+labs(title = "Depth of each sample", x="Sample", y="Depth")+theme_bw()+scale_fill_brewer(palette="YlGn"))
+  return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = breaksize)+labs(title = "Depth of each sample", x="Sample", y="Depth")+theme_bw())
   
 }#ok
 

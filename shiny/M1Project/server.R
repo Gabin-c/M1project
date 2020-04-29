@@ -73,7 +73,7 @@ server <- function(input, output,session) {
   ### DDS object  ---- 
   observeEvent(input$deseq2,{
     req(input$deseq2)
-    waiter <- waiter::Waiter$new(html = spin_3circles())
+    waiter <- waiter::Waiter$new(html = spin_ball())
     waiter$show()
     
     
@@ -92,8 +92,9 @@ server <- function(input, output,session) {
     updateSelectInput(session,"sample",choices = metadata()[,1])
     
     ### Choices for count by gene
-    
-    updateSelectInput(session,"gene",choices = count_table()[,1])
+
+    updateSelectizeInput(session,"gene",choices = count_table()[,1], server = TRUE)
+
     
     ### Choices for PCA
     updateSelectInput(session,"conditionpca",choices = colnames(metadata()))

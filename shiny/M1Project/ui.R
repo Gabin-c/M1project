@@ -45,9 +45,6 @@ parameter_tabs <- tagList(
 
 
 
-
-
-
 ### User Interface  ----
 ui <- tagList(
   
@@ -194,11 +191,12 @@ ui <- tagList(
                     
             ),
 
-            #Count by gene ---
+            #Count by gene ----
           tabItem(tabName = "count_gene",
                    box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                        column(width = 6,
-                               selectInput("gene","Which gene do you want to see ?", choices = c())
+               
+                               selectizeInput("gene","Which gene do you want to see ?", choices = NULL)
 
                         ),
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
@@ -213,10 +211,10 @@ ui <- tagList(
             ### Depth plot ----
             tabItem(tabName = "depth",
                     box(title="Depth of Sample",width = 12,solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("breaks1","Bar size",min=0,max=4,value=1.0,step = 0.25),
+                        sliderInput("breaks1","Bar size",min=0,max=4,value=0.75,step = 0.25),
                         checkboxInput("normalize1","Do you want to see depth after normalisation ?",value=FALSE)
                     ),
-                    box(width=12,status = "primary",plotOutput("depth")),
+                    box(width=12,status = "primary",plotOutput("depth",height = 500)),
                     column(width= 4,
                            downloadButton("downloadDepth",'Download plot',class = "btn-warning")
                     )
@@ -230,7 +228,7 @@ ui <- tagList(
                         actionButton("logaction","Run PCA")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("pca")
+                        plotOutput("pca",height = 650)
                     ),
                     column(width= 4,
                            downloadButton("downloadPCA",'Download plot',class = "btn-warning")
@@ -240,7 +238,7 @@ ui <- tagList(
             tabItem(tabName = "dispersion",
                     box(width = 12,
                         title = "Dispersion", solidHeader = T, status = "primary",collapsible = TRUE,
-                        plotOutput("dispersionPlot")),
+                        plotOutput("dispersionPlot",height = 650)),
                     column(width= 4,
                            downloadButton("downloadDispersion",'Download plot',class = "btn-warning")
                     )
@@ -251,7 +249,7 @@ ui <- tagList(
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
                         sliderInput("pvalue", "Chose your pvalue", min=0, max=1, value=0.05)),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("maplot")),
+                        plotOutput("maplot",height = 650)),
                     column(width= 4,
                            downloadButton("downloadMaplot",'Download plot',class = "btn-warning"))
             ),
@@ -271,7 +269,7 @@ ui <- tagList(
                       ),
                       
                       box( solidHeader = F, status = "primary",width = 12,
-                           plotOutput("volcano")),
+                           plotOutput("volcano",height = 650)),
                       column(width= 4,
                              downloadButton("downloadVulcano",'Download plot',class = "btn-warning")))
             ),
@@ -284,7 +282,7 @@ ui <- tagList(
                         selectInput("log1",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         actionButton("logaction2","Run Heat map")),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("clusteringmap")
+                        plotOutput("clusteringmap",height = 650)
                     ),
                     column(width= 4,
                            downloadButton("downloadHeatmap1",'Download plot',class = "btn-warning")
