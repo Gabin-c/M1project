@@ -236,7 +236,7 @@ server <- function(input, output,session) {
   
   ### Volcano plot ----
   volcan <- function(){
-    volcanoPlot(dds$results,annotation = input$annotation3, anno = anno() ,padje=0.5,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count=colnames(count_table()))
+    volcanoPlot(dds$results,annotation = input$annotation3, anno = anno() ,padje=input$pvalue2,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count=colnames(count_table()))
   }
   output$downloadVulcano <- downloadHandler(
     filename = "Volcanoplot.png",
@@ -328,7 +328,7 @@ server <- function(input, output,session) {
       dev.off()
     }
   )
- ### Theme ----
+  ### Theme ----
   
   observeEvent(input$theme,{
     if(input$theme==TRUE){
@@ -347,11 +347,9 @@ server <- function(input, output,session) {
     
     
     
-   
+    
     
   })
   
- 
+  
 }
-
-

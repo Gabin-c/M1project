@@ -24,8 +24,8 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
   return(ggplot(data=counts_dds, aes(log(counts_dds[,sample]+1))) + 
            geom_histogram(breaks=seq(min,max,breaksize),position="identity",alpha=0.5,fill="darkcyan", color="dodgerblue1")+
            theme_classic()+labs(title=sample, x="Count value (number of read by genes) in log(count+1)",y="Count frequency") 
-           
-         )
+         
+  )
 }#ok
 
 dispersion <- function(dds){
@@ -41,7 +41,7 @@ plotcount <- function(dds,gene){
   dds1 <- dds
   dds1[,"name"] <- row.names(dds1)
   return(
-    ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
+   ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
       geom_point(size=4,aes(colour=factor(name))) + geom_segment(aes(x=dds1[,"name"], 
                                                                      xend=dds1[,"name"], 
                                                                      y=0, 
@@ -143,7 +143,4 @@ heatmap <- function(dds, dds2,annotation=FALSE,anno,padje=0.05,metadata,conditio
                   col=c("green","black","black","red"))
     
   }
- }
-  
-  
-
+}
