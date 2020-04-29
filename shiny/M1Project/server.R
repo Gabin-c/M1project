@@ -8,11 +8,21 @@ server <- function(input, output,session) {
   count_table <- reactive({
     req(input$file)
     counttable <- read.csv(input$file$datapath, sep = input$sepcount)
+  
   })
+
+   
+    output$uichoice <- renderUI({
+      selectInput("gene","Which gene do you want to see ?", choices = dds$cu[,1] )
+      
+    })
+    
+
+ 
   ### Display the count file ----
   output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
-  
+ 
   
   ### Import the metadata file ---- 
   metadata <- reactive({
@@ -89,6 +99,7 @@ server <- function(input, output,session) {
     updateSelectInput(session,"sample",choices = metadata()[,1])
     
     ### Choices for count by gene
+    
     updateSelectInput(session,"gene",choices = count_table()[,1])
     
     ### Choices for PCA
@@ -189,7 +200,8 @@ server <- function(input, output,session) {
     )
     distribution()})
   
-  ### Count by gene ---
+  ### Count by gene ----
+  
   norm <- eventReactive(input$normalize4,{
     if(input$normalize4==TRUE){
       dds$counts_turnup_n
@@ -215,7 +227,6 @@ server <- function(input, output,session) {
     )
     countg()})
   
-  
   ### MA plot ----
   maplo <- function(){
     maplot(dds$results,padje=input$pvalue)
@@ -236,7 +247,7 @@ server <- function(input, output,session) {
   
   ### Volcano plot ----
   volcan <- function(){
-    volcanoPlot(dds$results,annotation = input$annotation3, anno = anno() ,padje=0.5,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count=colnames(count_table()))
+    volcanoPlot(dds$results,annotation = input$annotation3, anno = anno() ,padje=input$pvalue2,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count=colnames(count_table()))
   }
   output$downloadVulcano <- downloadHandler(
     filename = "Volcanoplot.png",

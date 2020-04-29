@@ -82,7 +82,7 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
                              point.padding = unit(0.3, "lines"), color = "darkblue") +
              scale_colour_discrete(name="",
                                    labels=c("Not significative", "Significative", "NA")) +
-             geom_vline(xintercept=0,linetype="dashed", color = "red") )
+             geom_vline(xintercept=0,linetype="dashed", color = "red")+theme(legend.text=element_text(size=9)) )
     
     
   }else{
@@ -91,7 +91,7 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
              geom_point()+
              scale_colour_discrete(name="",
                                    labels=c("Not significative", "Significative", "NA")) +
-             geom_vline(xintercept=0,linetype="dashed", color = "red")) 
+             geom_vline(xintercept=0,linetype="dashed", color = "red")+guides(colour = guide_legend(override.aes = list(size = 5)))+theme(legend.text=element_text(size=7))) 
     
   }
 }

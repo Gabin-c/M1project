@@ -64,7 +64,6 @@ ui <- tagList(
   div(
     id = "app",
     dashboardPage(
-      skin = "yellow",
       ### Customize the header ----
       dashboardHeader(title = "DESEQ DATA COUNT", 
                       ### Home button----
@@ -196,11 +195,12 @@ ui <- tagList(
                     )
                     
             ),
-            ### Count by gene ---
+            ### Count by gene ----
+            
             tabItem(tabName = "count_gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
-                               selectInput("gene","Which gene do you want to see ?", choices = c())
+                               uiOutput("uichoice")
                         ),
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
@@ -262,7 +262,8 @@ ui <- tagList(
                       box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
-                          
+                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
+                      
                           
                           uiOutput("annotationUi"),
                           uiOutput("annotationUi2")
