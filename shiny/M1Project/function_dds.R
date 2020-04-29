@@ -7,10 +7,10 @@ library(tidyverse)
 library(NMF)
 library(ggrepel)
 
+### Depth plot
 depth <- function(dds,breaksize=1){
   depth <- dds
   depth <- as.data.frame(colSums(depth))
-  
   depth$Sample <- row.names(depth)
   
   return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ 
@@ -19,9 +19,10 @@ depth <- function(dds,breaksize=1){
            theme(plot.title = element_text(face = "bold", size= 18)) +
            theme(axis.title.x = element_text(size=14)) +
            theme(axis.title.y = element_text(size=14)))
-  
-}#ok
+}
 
+
+### Count distribution plot
 count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
   counts_dds <- dds
   
@@ -33,16 +34,23 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
            theme(axis.title.x = element_text(size=14)) +
            theme(axis.title.y = element_text(size=14))
   )
-}#ok
+}
 
+
+### Dispersion plot
 dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
 }
+
+### ?????
 number_of_DE <- function(dds,padj = 0.05){
   res_dif <- results(dds, tidy= TRUE)
   return(table(res_dif$padj <= padj, useNA="always"))
 }
-#Plotcount
+
+
+
+### Plotcount
 plotcount <- function(dds,gene){
   dds1 <- dds
   dds1[,"name"] <- row.names(dds1)
@@ -58,13 +66,12 @@ plotcount <- function(dds,gene){
      theme(axis.title.y = element_text(size=14)) +
      theme(legend.text=element_text(size=13)) +
      theme(legend.title=element_blank())
-
   )
 }
-#Maplot
+
+
+### Maplot
 maplot <- function(dds,padje=0.05){
-  
-  
   res_dif <- dds %>% mutate(sig=padj<padje)
   return(ggplot(res_dif, aes(x = baseMean, y = log2FoldChange, col = sig)) + 
            geom_point() + 
@@ -76,11 +83,12 @@ maplot <- function(dds,padje=0.05){
            theme(legend.text=element_text(size=13))+
            theme(axis.title.x = element_text(size=14)) +
            theme(axis.title.y = element_text(size=14)))
-}#ok
-#VolcanonPlot
+}
+
+
+### VolcanonPlot
 volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0,minlogP=30,count){
   res_dif <- dds
-  
   if(annotation == TRUE){
     res_dif <- res_dif %>% mutate(sig=padj<padje) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count[1]))
@@ -99,8 +107,6 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
              theme(legend.text=element_text(size=13)) +
              theme(axis.title.x = element_text(size=14)) +
              theme(axis.title.y = element_text(size=14)))
-    
-    
   }else{
     res_dif <- res_dif %>% mutate(sig=padj<padje) %>%  arrange(padj)
     return(ggplot(res_dif, aes(x=log2FoldChange, y=-log10(pvalue), col=sig)) +
@@ -112,13 +118,11 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
              theme(legend.text=element_text(size=13))+
              theme(axis.title.x = element_text(size=14)) +
              theme(axis.title.y = element_text(size=14))) 
-    
   }
 }
 
-#PCA
+### PCA
 pca <- function(dds,intgroup){
-  
   return(
     plotPCA(dds, intgroup=intgroup) +
       theme(axis.title.x = element_text(size=14)) +
@@ -131,27 +135,22 @@ pca <- function(dds,intgroup){
                       size = 3,
                       box.padding = unit(0.35, "lines"),
                       point.padding = unit(0.3, "lines"), color = "darkblue")
-  
   )
-
-  
 }
-?plotPCA
-#heatMap
+
+### Distance matrix
 clustering_heatmap <- function(dds){
-  
   dists <- dist(t(assay(dds)))
   mat <- as.matrix(dists)
   hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
   return(heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13)))
-  
 }
 
+### Heatmap
 heatmap <- function(dds, dds2,annotation=FALSE,anno,padje=0.05,metadata,condition,count,min,max){
   res <- dds
   res <- tbl_df(res)
   if(annotation==TRUE){
-    
     res <- res %>% 
       arrange(padj) %>% 
       inner_join(anno,by=c("row"=count[1])) %>%
@@ -166,11 +165,11 @@ heatmap <- function(dds, dds2,annotation=FALSE,anno,padje=0.05,metadata,conditio
   }else{
     res <- res %>% 
       arrange(padj) %>% filter(padj<padje)
+    
     NMF::aheatmap(assay(dds2)[arrange(res, padj, pvalue)$row[min:max],], 
                   labRow=arrange(res, padj, pvalue)$symbol[min:max], 
                   scale="row", distfun="pearson", 
                   annCol=dplyr::select(metadata, condition), 
                   col=c("green","black","black","red"))
-    
   }
 }
