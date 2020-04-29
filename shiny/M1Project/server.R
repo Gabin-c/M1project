@@ -339,7 +339,7 @@ server <- function(input, output,session) {
       dev.off()
     }
   )
- ### Theme ----
+  ### Theme ----
   
   observeEvent(input$theme,{
     if(input$theme==TRUE){
@@ -358,11 +358,9 @@ server <- function(input, output,session) {
     
     
     
-   
+    
     
   })
   
- 
+  
 }
-
-
