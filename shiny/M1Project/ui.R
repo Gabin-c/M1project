@@ -139,7 +139,7 @@ ui <- tagList(
                         br(), "- Distance matrix",
                         br(), "- Heatmap",style="padding-left: 5em", align = "justify")
                       
-                    )
+                      )
             ),
             ### Upload count table ----
             tabItem(tabName = "Input",

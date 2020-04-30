@@ -4,6 +4,7 @@ server <- function(input, output,session) {
   ### Increase the authorized size for upload ----
   options(shiny.maxRequestSize=30*1024^2)
   
+  
   ### Intro : 
   output$countexample <- renderTable({   
     countex <- read.csv("countexample.csv",sep=",")
@@ -19,8 +20,6 @@ server <- function(input, output,session) {
     annoex<- read.csv("annoexample.csv",sep=",")
     annoex
   })
-  
-  
   
   ### Import the count ----
   count_table <- reactive({
