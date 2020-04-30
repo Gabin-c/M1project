@@ -10,6 +10,7 @@ library(DESeq2)
 library(shinyWidgets)
 library(shinythemes)
 library(waiter)
+
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
 
@@ -247,7 +248,9 @@ ui <- tagList(
             tabItem(tabName = "ma",
                     box(width = 12,
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("pvalue", "Chose your pvalue", min=0, max=1, value=0.05)),
+                        sliderInput("pvalue", "Chose your pvalue", min=0, max=1, value=0.05),
+                        tableOutput("num_DE")
+                        ),
                     box(solidHeader = F, status = "primary",width = 12,
                         plotOutput("maplot",height = 650)),
                     column(width= 4,
@@ -277,6 +280,7 @@ ui <- tagList(
             
             ### Heatmap ----
             tabItem(tabName = "heatmap1",
+                    
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         selectInput("log1",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
@@ -290,6 +294,7 @@ ui <- tagList(
             ),
             ### Heat map 2 ----
             tabItem(tabName = "heatmap2",
+                    waiter::use_waiter(),
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         column(width=6, selectInput("log3",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),

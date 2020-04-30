@@ -32,9 +32,11 @@ dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
   
 }
-number_of_DE <- function(dds,padj = 0.05){
-  res_dif <- results(dds, tidy= TRUE)
-  return(table(res_dif$padj <= padj, useNA="always"))
+number_of_DE <- function(dds,padje = 0.05){
+  res_dif <- dds
+  tb <- as.data.frame(table(res_dif$padj <= padje ,useNA="always"))
+  colnames(tb) = c("DE","Gene")
+  return(tb)
 }
 #Plotcount
 plotcount <- function(dds,gene){
