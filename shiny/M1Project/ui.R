@@ -56,15 +56,24 @@ ui <- tagList(
     id = "app",
     dashboardPage(
       ### Customize the header ----
+
       dashboardHeader(title = "RNA-seq DE analysis", 
+
                       ### Home button----
                       tags$li(a(onclick = "openTab('Intro')",
                                 href = NULL,
                                 icon("home"),
                                 title = "Homepage",
                                 style = "cursor: pointer;"),
-                              class = "dropdown")
-                      
+                              class = "dropdown",
+                              tags$script(HTML("
+                                       var openTab = function(tabName){
+                                       $('a', $('.sidebar')).each(function() {
+                                       if(this.getAttribute('data-value') == tabName) {
+                                       this.click()
+                                       };
+                                       });
+                                       }")))
       ),
       
       ### Differents menu (page) in the sidebar ----
@@ -341,8 +350,10 @@ ui <- tagList(
                         column(width=6,
                                selectInput("conditionheatmap","Choose your condition for Heat map ?", choices = c()),
                                actionButton("logaction3","Run Heat map")),
-                        sliderInput("slider2", label = "Chose the number of genes you want to display", min = 0, 
-                                    max = 200, value = c(0, 60))),
+
+                        column(width=12,
+                        sliderInput("slider2",label="Chose the number of genes you want to display", min = 0, 
+                                    max = 200, value = c(0, 60)))),
                     box(solidHeader = F, status = "primary",width = 12,
                         withSpinner(plotOutput("clusteringmap2", height = 1000, width = 1000))
                     ),
