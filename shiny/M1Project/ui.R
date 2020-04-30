@@ -11,6 +11,7 @@ library(shinyWidgets)
 library(shinythemes)
 library(waiter)
 library(dashboardthemes)
+library(shinycssloaders)
 
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
@@ -24,7 +25,7 @@ parameter_tabs <- tagList(
     tabPanel("annotation",
              fluidRow(
                column(width= 6,
-                      box(title="Upload annotation file",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                      box(title="Upload annotation file",width = 12, solidHeader = TRUE,collapsible = TRUE,
                           column(width=5,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                           fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
                column(width= 6,     
@@ -70,23 +71,14 @@ ui <- tagList(
       dashboardSidebar(
         sidebarMenu(id="mysidebar",
                     menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
-                    menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),startExpanded = FALSE,
+                    menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),startExpanded = TRUE,
                              menuItemOutput("menuCheck"),
                              menuItemOutput("menuCheck1"),
                              menuItemOutput("menuCheck2")),
                     menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
-                    menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = FALSE,
-                             menuSubItem("Count distribution",tabName = "count_distribution"),
-                             menuSubItem("Count by gene", tabName = "count_gene"),
-                             menuSubItem("Depth of sample",tabName = "depth"),
-                             menuSubItem("Dispersion",tabName = "dispersion"),
-                             menuSubItem("PCA",tabName = "pca"),
-                             menuSubItem("MA Plot",tabName = "ma"),
-                             menuSubItem("Volcano Plot",tabName = "vulcano"),
-                             menuSubItem("Distance matrix",tabName = "heatmap1"),
-                             menuItemOutput("menuCheck3")
-                             
-                    ),
+
+                    menuItemOutput("menuResults"),
+
                     tags$hr(),
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
@@ -121,15 +113,15 @@ ui <- tagList(
                         This App necessarily requires a 'Count Data Table' and a 'Metadata Table'. An optional 'Annotation File' can be added", style="padding-left: 2em", align = "justify"),
                       h4("1.1 Count Data Table", style="padding-left: 3em"),
                       p("The Count Data Table has to contains the count for each sample of the experiment for each gene and the first column has to be gene ID or gene name as below :",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,tableOutput("countexample")),
+                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("countexample"))),
                       br(),
                       h4("1.2 Metadata Table", style="padding-left: 3em"),
                       p("The Metadata table has to contains the informations of the experiment with at least 2 columns. The first one is the samples in the same order as the columns of the Count Table. 
                         The second one is a condition column. You can add as many columns as you have factors in your experiment.",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,tableOutput("metadataexample")),
+                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("metadataexample"))),
                       h4("1.2  Annotation File", style="padding-left: 3em"),
                       p("The Annotation File contains informations about the genes. If you have one, it must contains a column named 'symbol' in which we can find the symbol of each gene.",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,tableOutput("annoexample")),
+                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoexample"))),
                       h3("2. Results", style="padding-left: 1em"),
                       p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
                       p("- Count distribution",
@@ -148,7 +140,7 @@ ui <- tagList(
             ### Upload count table ----
             tabItem(tabName = "Input",
                     column(width = 6,
-                           box(title="Upload count table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                           box(title="Upload count table",width = 12, solidHeader = TRUE,collapsible = TRUE,
                                column(width=5,
                                       selectInput("sepcount", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                                fileInput("file", "Upload count table", accept = c(".csv",".txt",".tsv"))
@@ -167,8 +159,8 @@ ui <- tagList(
                     ),
             ### Upload metadata table ----
             tabItem(tabName = "Input2",
-                    column(width = 6,
-                           box(title="Upload metadata table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                   column(width = 6,
+                           box(title="Upload metadata table",width = 12, solidHeader = TRUE,collapsible = TRUE,
                                column(width=5,
                                       selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                                fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
@@ -195,8 +187,8 @@ ui <- tagList(
                           checkboxInput("annotation","Do you have an annotation file",value=FALSE)),
                       fluidRow(
                         parameter_tabs),
-                      dataTableOutput("table3"))
-                    
+                      dataTableOutput("table3")
+                    )
             ),
             ### Run DESeq2 ----
             tabItem(tabName = "deseq2",
@@ -211,8 +203,9 @@ ui <- tagList(
                       box(width = 12,
                           actionButton("deseq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
                       
-                      dataTableOutput("table4"))
-                      ),
+                      dataTableOutput("table4")
+                      )
+            ),
             ### Count distribution plot ----
             tabItem(tabName = "count_distribution",
                     box(title="Count distribution",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
@@ -228,7 +221,7 @@ ui <- tagList(
                         column(width = 6, checkboxInput("normalize","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
                     ),
-                    box(width=12,status = "primary",plotOutput("count")),
+                    box(width=12,status = "primary",withSpinner(plotOutput("count"))),
                     column(width= 4,
                            downloadButton("downloadDistribution",'Download plot',class = "btn-warning")
                     )
@@ -246,7 +239,7 @@ ui <- tagList(
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
                     ),
-                    box(width=12,status = "primary",plotOutput("countgene")),
+                    box(width=12,status = "primary",withSpinner(plotOutput("countgene"))),
                     column(width= 4,
                            downloadButton("downloadCountgene",'Download plot',class = "btn-warning")
                     )
@@ -258,7 +251,7 @@ ui <- tagList(
                         sliderInput("breaks1","Bar size",min=0,max=4,value=0.75,step = 0.25),
                         checkboxInput("normalize1","Do you want to see depth after normalisation ?",value=FALSE)
                     ),
-                    box(width=12,status = "primary",plotOutput("depth",height = 500)),
+                    box(width=12,status = "primary",withSpinner(plotOutput("depth",height = 500))),
                     column(width= 4,
                            downloadButton("downloadDepth",'Download plot',class = "btn-warning")
                     )
@@ -272,7 +265,7 @@ ui <- tagList(
                         actionButton("logaction","Run PCA")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("pca",height = 650)
+                        withSpinner(plotOutput("pca",height = 650))
                     ),
                     column(width= 4,
                            downloadButton("downloadPCA",'Download plot',class = "btn-warning")
@@ -282,7 +275,7 @@ ui <- tagList(
             tabItem(tabName = "dispersion",
                     box(width = 12,
                         title = "Dispersion", solidHeader = T, status = "primary",collapsible = TRUE,
-                        plotOutput("dispersionPlot",height = 650)),
+                        withSpinner(plotOutput("dispersionPlot",height = 650))),
                     column(width= 4,
                            downloadButton("downloadDispersion",'Download plot',class = "btn-warning")
                     )
@@ -295,7 +288,7 @@ ui <- tagList(
                         tableOutput("num_DE")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("maplot",height = 650)),
+                        withSpinner(plotOutput("maplot",height = 650))),
                     column(width= 4,
                            downloadButton("downloadMaplot",'Download plot',class = "btn-warning"))
             ),
@@ -315,7 +308,7 @@ ui <- tagList(
                       ),
                       
                       box( solidHeader = F, status = "primary",width = 12,
-                           plotOutput("volcano",height = 650)),
+                           withSpinner(plotOutput("volcano",height = 650))),
                       column(width= 4,
                              downloadButton("downloadVulcano",'Download plot',class = "btn-warning")))
             ),
@@ -329,7 +322,7 @@ ui <- tagList(
                         selectInput("log1",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         actionButton("logaction2","Run Heat map")),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("clusteringmap",height = 650)
+                        withSpinner(plotOutput("clusteringmap",height = 650))
                     ),
                     column(width= 4,
                            downloadButton("downloadHeatmap1",'Download plot',class = "btn-warning")
@@ -346,10 +339,10 @@ ui <- tagList(
                         column(width=6,
                                selectInput("conditionheatmap","Choose your condition for Heat map ?", choices = c()),
                                actionButton("logaction3","Run Heat map")),
-                        sliderInput("slider2", label = h4("Chose the number of genes you want to display"), min = 0, 
+                        sliderInput("slider2", label = "Chose the number of genes you want to display", min = 0, 
                                     max = 200, value = c(0, 60))),
                     box(solidHeader = F, status = "primary",width = 12,
-                        plotOutput("clusteringmap2", height = 1000, width = 1000)
+                        withSpinner(plotOutput("clusteringmap2", height = 1000, width = 1000))
                     ),
                     column(width= 4,
                            downloadButton("downloadHeatmap2",'Download plot',class = "btn-warning")

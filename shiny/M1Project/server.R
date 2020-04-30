@@ -120,7 +120,7 @@ server <- function(input, output,session) {
     dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
     dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
     
-    ### Heatmap
+
     on.exit(waiter$hide())
     
   })
@@ -352,19 +352,37 @@ server <- function(input, output,session) {
       dev.off()
     }
   )
+  
   menu3 <- reactive({
     if(input$logaction3){
-      menuSubItem("Heatmap",tabName = "heatmap2", icon = icon("user-check"))
+      menuSubItem("Heatmap",tabName = "heatmap2", icon = icon("far fa-check-square"))
     }else{
       menuSubItem("Heatmap",tabName = "heatmap2")
       
       
     }
     })
-  output$menuCheck3 <- renderMenu({
-    menu3()
-  })
   
+  menu4 <- reactive({
+    if(input$logaction2){
+      menuSubItem("Distance matrix",tabName = "heatmap1",icon = icon("far fa-check-square"))
+    }else{
+      menuSubItem("Distance matrix",tabName = "heatmap1")
+      
+      
+    }
+    
+    })
+  menu5 <- reactive({
+    if(input$logaction){
+      menuSubItem("PCA",tabName = "pca",icon = icon("far fa-check-square"))
+    }else{
+      menuSubItem("PCA",tabName = "pca")
+      
+      
+    }
+    
+  })
   
   
   ### Theme ----
@@ -381,7 +399,7 @@ server <- function(input, output,session) {
         
       })
     }
-    })
+  })
   
   
   menu <- reactive({
@@ -395,7 +413,24 @@ server <- function(input, output,session) {
   output$menuCheck <- renderMenu({
     menu()
       })
-    
+  
+  observeEvent(input$deseq2,{
+     output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
+               menuSubItem("Count distribution",tabName = "count_distribution",icon = icon("far fa-check-square")),
+               menuSubItem("Count by gene", tabName = "count_gene",icon = icon("far fa-check-square")),
+               menuSubItem("Depth of sample",tabName = "depth",icon = icon("far fa-check-square")),
+               menuSubItem("Dispersion",tabName = "dispersion",icon = icon("far fa-check-square")),
+               menu5(),
+               menuSubItem("MA Plot",tabName = "ma",icon = icon("far fa-check-square")),
+               menuSubItem("Volcano Plot",tabName = "vulcano",icon = icon("far fa-check-square")),
+               menu4(),
+               
+                 menu3()
+               
+               )  
+     })
+  })
+
 
     
     
@@ -425,6 +460,10 @@ server <- function(input, output,session) {
      
     
     
+
   
   
+
 }
+
+
