@@ -1,31 +1,45 @@
-
-
-
 ### Server  ----
 server <- function(input, output,session) {
   dds <- reactiveValues()
   ### Increase the authorized size for upload ----
   options(shiny.maxRequestSize=30*1024^2)
   
+  
+  ### Intro : 
+  output$countexample <- renderTable({   
+    countex <- read.csv("countexample.csv",sep=",")
+    countex
+  })
+  
+  output$metadataexample <- renderTable({   
+    metaex<- read.csv("metadataexample.csv",sep=",")
+    metaex
+  }, na = "")
+  
+  output$annoexample <- renderTable({   
+    annoex<- read.csv("annoexample.csv",sep=",")
+    annoex
+  })
+  
   ### Import the count ----
   count_table <- reactive({
     req(input$file)
     counttable <- read.csv(input$file$datapath, sep = input$sepcount)
-  
-  })
-
-   
-    output$uichoice <- renderUI({
-      selectInput("gene","Which gene do you want to see ?", choices = dds$cu[,1] )
-      
-    })
     
-
- 
+  })
+  
+  
+  output$uichoice <- renderUI({
+    selectInput("gene","Which gene do you want to see ?", choices = dds$cu[,1] )
+    
+  })
+  
+  
+  
   ### Display the count file ----
   output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
- 
+  
   
   ### Import the metadata file ---- 
   metadata <- reactive({
@@ -95,9 +109,9 @@ server <- function(input, output,session) {
     updateSelectInput(session,"sample",choices = metadata()[,1])
     
     ### Choices for count by gene
-
+    
     updateSelectizeInput(session,"gene",choices = count_table()[,1], server = TRUE)
-
+    
     
     ### Choices for PCA
     updateSelectInput(session,"conditionpca",choices = colnames(metadata()))
@@ -286,7 +300,7 @@ server <- function(input, output,session) {
   })
   
   ### Heat map 1 ----
- 
+  
   observeEvent(input$logaction2,{
     if(input$log1=="vst"){
       dds$log2 <- vst(dds$DESeq2, blind=FALSE)
@@ -334,8 +348,8 @@ server <- function(input, output,session) {
       need(dds$log3, "Please run DESeq2 and Heat map")
     )
     
-      heatmap2()
-    })
+    heatmap2()
+  })
   output$downloadHeatmap2 <- downloadHandler(
     filename = "Heatmap.png",
     content = function(file){
@@ -357,15 +371,8 @@ server <- function(input, output,session) {
         shinyDashboardThemes("grey_light")
         
       })
-      
-      
     }
-    
-    
-    
-    
-    
-  })
+    })
   
   
 }

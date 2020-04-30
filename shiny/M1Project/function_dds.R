@@ -58,17 +58,17 @@ plotcount <- function(dds,gene){
   dds1 <- dds
   dds1[,"name"] <- row.names(dds1)
   return(
-   ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
-     geom_point(size=4,aes(colour=factor(name))) + 
-     geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
-     theme(axis.text.x = element_blank() )+ 
-     labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
-     guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
-     theme(plot.title = element_text(face = "bold", size= 18)) +
-     theme(axis.title.x = element_text(size=14)) +
-     theme(axis.title.y = element_text(size=14)) +
-     theme(legend.text=element_text(size=13)) +
-     theme(legend.title=element_blank())
+    ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
+      geom_point(size=4,aes(colour=factor(name))) + 
+      geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
+      theme(axis.text.x = element_blank() )+ 
+      labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
+      guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
+      theme(plot.title = element_text(face = "bold", size= 18)) +
+      theme(axis.title.x = element_text(size=14)) +
+      theme(axis.title.y = element_text(size=14)) +
+      theme(legend.text=element_text(size=13)) +
+      theme(legend.title=element_blank())
   )
 }
 
@@ -134,10 +134,10 @@ pca <- function(dds,intgroup){
       guides(colour = guide_legend(override.aes = list(size = 5))) +
       theme(legend.text=element_text(size=13))+
       geom_text_repel(
-                      aes(label = colnames(dds)),
-                      size = 3,
-                      box.padding = unit(0.35, "lines"),
-                      point.padding = unit(0.3, "lines"), color = "darkblue")
+        aes(label = colnames(dds)),
+        size = 3,
+        box.padding = unit(0.35, "lines"),
+        point.padding = unit(0.3, "lines"), color = "darkblue")
   )
 }
 
