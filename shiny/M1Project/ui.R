@@ -56,7 +56,7 @@ ui <- tagList(
     id = "app",
     dashboardPage(
       ### Customize the header ----
-      dashboardHeader(title = "DESEQ DATA COUNT", 
+      dashboardHeader(title = "RNA-seq DE analysis", 
                       ### Home button----
                       tags$li(a(onclick = "openTab('Intro')",
                                 href = NULL,
@@ -195,15 +195,17 @@ ui <- tagList(
                     waiter::use_waiter(),
                     fluidPage(
                       box(width = 12, solidHeader = F,
+    
                           
-                          HTML("<h3>Here you gonna run DESeq2 workflow.</h3> 
+                          
+                          HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
                               
                                <br><h5> Check if  your design chosen previously is good.</h5>
-                               <br><h5>If it is not, the application will crash.</h5>")),
+                               <br><h5>If it is not, the application will crash.</h5></center>")),
                       box(width = 12,
                           actionButton("deseq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
-                      
-                      dataTableOutput("table4")
+                      uiOutput("table4")
+                     
                       )
             ),
             ### Count distribution plot ----

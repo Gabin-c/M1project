@@ -94,7 +94,10 @@ server <- function(input, output,session) {
     dds$results <- results(dds$DESeq2,tidy=TRUE)
     
     ### Display count table after dds
-    output$table4 <- DT::renderDataTable(counts(dds$dds), options = list(pageLength = 5))
+    output$table4 <- renderUI({
+      box(width = 12, solidHeader = F,
+          HTML("<center><h3>DESeq2 workflow successfully completed</h3></center>"))
+      })
     
     ### Clustering map
     output$clustering_map <- renderPlot(clustering_heatmap(dds$DESeq2,log="vst"))
