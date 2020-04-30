@@ -10,6 +10,7 @@ library(DESeq2)
 library(shinyWidgets)
 library(shinythemes)
 library(waiter)
+library(dashboardthemes)
 
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
@@ -167,9 +168,9 @@ ui <- tagList(
                                <br>If it is not, the application will crash.")),
                       box(width = 12,
                           actionButton("deseq2","Run DESeq2",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
-
+                      
                       dataTableOutput("table4"))
-            ),
+                      ),
             ### Count distribution plot ----
             tabItem(tabName = "count_distribution",
                     box(title="Count distribution",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
@@ -191,14 +192,14 @@ ui <- tagList(
                     )
                     
             ),
-
+            
             #Count by gene ----
-          tabItem(tabName = "count_gene",
-                   box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
-                       column(width = 6,
-               
+            tabItem(tabName = "count_gene",
+                    box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
+                        column(width = 6,
+                               
                                selectizeInput("gene","Which gene do you want to see ?", choices = NULL)
-
+                               
                         ),
                         column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
@@ -259,13 +260,13 @@ ui <- tagList(
             ### Volcano plot ----
             tabItem(tabName = "vulcano",
                     fluidPage(
-                   box(width = 12,
+                      box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
                           sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
-                      
                           
-
+                          
+                          
                           uiOutput("annotationUi"),
                           uiOutput("annotationUi2")
                           
@@ -312,9 +313,9 @@ ui <- tagList(
                            downloadButton("downloadHeatmap2",'Download plot',class = "btn-warning")
                     )
             )
-                           )
+            )
+                    )
                            )
           )
-          )
-      )
+            )
       )
