@@ -7,7 +7,29 @@ library(tidyverse)
 library(NMF)
 library(ggrepel)
 
-### Depth plot
+
+### Preamble ----
+### All of this function can be use after you have run a DESeq2 workflow.
+### You need a DESeq2 dataset to be able to run it.
+###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
+###      - depth()
+###      - count_distribution()
+###      - plotcount()
+###   - DESeq2 : results object after run DESeq() on your DESeq2 dataset and results() onr DESeq() object 
+###      - maplot()
+###      - volcanoplot()
+###      - number_of_DE 
+###   - DESeq2 : after run DESeq() on your DESeq2 datasetn and do vst() or rlogtransformation() on DESeq() object
+###      - pca()
+###      - heatmap()
+###      - clustering_heatmap()
+###      - dispersion()
+
+### Depth plot ----
+### depth return a barplot of depth sample with ggplot library  
+### depth need two argument
+###   - dds which is an count table of an RNAseq experience which have in column : sample and in row :  gene
+###   - breaksize which is width of the bar
 depth <- function(dds,breaksize=1){
   depth <- dds
   depth <- as.data.frame(colSums(depth))
@@ -22,7 +44,15 @@ depth <- function(dds,breaksize=1){
 }
 
 
-### Count distribution plot
+### Count distribution plot ----
+### count_distribution return an histogram of count value distribution in the log(count+1) format for one sample
+### count_distribution need five argument
+###   - dds which is an count table of an RNAseq experience which have in column : sample and in row :  gene
+###   - breaksize which is width of histogram bar
+###   - sample for which we display the count distribution
+###   - min which is the min of x axis 
+###   - max which is the max of x axis
+
 count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
   counts_dds <- dds
   
@@ -37,11 +67,13 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
 }
 
 
-### Dispersion plot
+### Dispersion plot ----
+### dispersion return plot obtain by DESeq2::plotDispEsts() function of DESeq2 package
+### dispersion just need one argument : a DESeq() object
 dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
 }
-
+### nummber of differemtial express gene ----
 number_of_DE <- function(dds,padje = 0.05){
   res_dif <- dds
   tb <- as.data.frame(table(res_dif$padj <= padje ,useNA="always"))
@@ -53,27 +85,27 @@ number_of_DE <- function(dds,padje = 0.05){
 
 
 
-### Plotcount
+### Plotcount ----
 plotcount <- function(dds,gene){
   dds1 <- dds
   dds1[,"name"] <- row.names(dds1)
   return(
-    ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
-      geom_point(size=4,aes(colour=factor(name))) + 
-      geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
-      theme(axis.text.x = element_blank() )+ 
-      labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
-      guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
-      theme(plot.title = element_text(face = "bold", size= 18)) +
-      theme(axis.title.x = element_text(size=14)) +
-      theme(axis.title.y = element_text(size=14)) +
-      theme(legend.text=element_text(size=13)) +
-      theme(legend.title=element_blank())
+   ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
+     geom_point(size=4,aes(colour=factor(name))) + 
+     geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
+     theme(axis.text.x = element_blank() )+ 
+     labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
+     guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
+     theme(plot.title = element_text(face = "bold", size= 18)) +
+     theme(axis.title.x = element_text(size=14)) +
+     theme(axis.title.y = element_text(size=14)) +
+     theme(legend.text=element_text(size=13)) +
+     theme(legend.title=element_blank())
   )
 }
 
 
-### Maplot
+### Maplot ---- 
 maplot <- function(dds,padje=0.05){
   res_dif <- dds %>% mutate(sig=padj<padje)
   return(ggplot(res_dif, aes(x = baseMean, y = log2FoldChange, col = sig)) + 
@@ -89,7 +121,7 @@ maplot <- function(dds,padje=0.05){
 }
 
 
-### VolcanonPlot
+### VolcanonPlot ---- 
 volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0,minlogP=30,count){
   res_dif <- dds
   if(annotation == TRUE){
@@ -124,7 +156,7 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
   }
 }
 
-### PCA
+### PCA ---- 
 pca <- function(dds,intgroup){
   return(
     plotPCA(dds, intgroup=intgroup) +
@@ -134,14 +166,14 @@ pca <- function(dds,intgroup){
       guides(colour = guide_legend(override.aes = list(size = 5))) +
       theme(legend.text=element_text(size=13))+
       geom_text_repel(
-        aes(label = colnames(dds)),
-        size = 3,
-        box.padding = unit(0.35, "lines"),
-        point.padding = unit(0.3, "lines"), color = "darkblue")
+                      aes(label = colnames(dds)),
+                      size = 3,
+                      box.padding = unit(0.35, "lines"),
+                      point.padding = unit(0.3, "lines"), color = "darkblue")
   )
 }
 
-### Distance matrix
+### Distance matrix ----
 clustering_heatmap <- function(dds){
   dists <- dist(t(assay(dds)))
   mat <- as.matrix(dists)
@@ -149,7 +181,7 @@ clustering_heatmap <- function(dds){
   return(heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13)))
 }
 
-### Heatmap
+### Heatmap ----
 heatmap <- function(dds, dds2,annotation=FALSE,anno,padje=0.05,metadata,condition,count,min,max){
   res <- dds
   res <- tbl_df(res)
@@ -176,108 +208,3 @@ heatmap <- function(dds, dds2,annotation=FALSE,anno,padje=0.05,metadata,conditio
                   col=c("green","black","black","red"))
   }
 }
-
-
-### themes ----
-poor_mans_flatly2 <- shinyDashboardThemeDIY(
-  
-  ### general
-  appFontFamily = "Arial"
-  ,appFontColor = "rgb(246, 247, 255)"
-  ,primaryFontColor = "rgb(0,0,0)"
-  ,infoFontColor = "rgb(0,0,0)"
-  ,successFontColor = "rgb(0,0,0)"
-  ,warningFontColor = "rgb(0,0,0)"
-  ,dangerFontColor = "rgb(0,0,0)"
-  ,bodyBackColor = "rgb(44,62,90)"
-  
-  ### header
-  ,logoBackColor = "rgb(44,62,80))"
-  
-  ,headerButtonBackColor = "rgb(44,62,80)"
-  ,headerButtonIconColor = "rgb(246, 247, 255)"
-  ,headerButtonBackColorHover = "rgb(44,62,70)"
-  ,headerButtonIconColorHover = "rgb(246, 247, 255)"
-  
-  ,headerBackColor = "rgb(44,62,80)"
-  ,headerBoxShadowColor = ""
-  ,headerBoxShadowSize = "0px 0px 0px"
-  
-  ### sidebar
-  ,sidebarBackColor = "rgb(44,62,80)"
-  ,sidebarPadding = 0
-  
-  ,sidebarMenuBackColor = "inherit"
-  ,sidebarMenuPadding = 0
-  ,sidebarMenuBorderRadius = 0
-  
-  ,sidebarShadowRadius = ""
-  ,sidebarShadowColor = "0px 0px 0px"
-  
-  ,sidebarUserTextColor = "rgb(255,255,255)"
-  
-  ,sidebarSearchBackColor = "rgb(255,255,255)"
-  ,sidebarSearchIconColor = "rgb(44,62,80)"
-  ,sidebarSearchBorderColor = "rgb(255,255,255)"
-  
-  ,sidebarTabTextColor = "rgb(255,255,255)"
-  ,sidebarTabTextSize = 14
-  ,sidebarTabBorderStyle = "none"
-  ,sidebarTabBorderColor = "none"
-  ,sidebarTabBorderWidth = 0
-  
-  ,sidebarTabBackColorSelected = "rgb(30,43,55)"
-  ,sidebarTabTextColorSelected = "rgb(246, 247, 255)"
-  ,sidebarTabRadiusSelected = "0px"
-  
-  ,sidebarTabBackColorHover = "rgb(44,62,80)"
-  ,sidebarTabTextColorHover = "rgb(0,0,0)"
-  ,sidebarTabBorderStyleHover = "none"
-  ,sidebarTabBorderColorHover = "none"
-  ,sidebarTabBorderWidthHover = 0
-  ,sidebarTabRadiusHover = "0px"
-  
-  ### boxes
-  ,boxBackColor = "rgb(44,62,80)"
-  ,boxBorderRadius = 0
-  ,boxShadowSize = "0px 0px 0px"
-  ,boxShadowColor = ""
-  ,boxTitleSize = 19
-  ,boxDefaultColor = "rgb(52,152,219)"
-  ,boxPrimaryColor = "rgb(246, 247, 255)"
-  ,boxInfoColor = "rgb(52,152,219)"
-  ,boxSuccessColor = "rgb(24, 188, 156)"
-  ,boxWarningColor = "rgb(243,156,18)"
-  ,boxDangerColor = "rgb(231,76,60)"
-  
-  ,tabBoxTabColor = "rgb(255,255,255)"
-  ,tabBoxTabTextSize = 14
-  ,tabBoxTabTextColor = "rgb(24, 188, 156)"
-  ,tabBoxTabTextColorSelected = "rgb(255, 255, 255)"
-  ,tabBoxBackColor = "rgb(255,255,255)"
-  ,tabBoxHighlightColor = "rgb(255,255,255)"
-  ,tabBoxBorderRadius = 10
-  
-  ### inputs
-  ,buttonBackColor = "rgb(44,62,80)"
-  ,buttonTextColor = "rgb(246, 247, 255)"
-  ,buttonBorderColor = "rgb(246, 247, 255)"
-  ,buttonBorderRadius = 5
-  
-  ,buttonBackColorHover = "rgb(30,43,55)"
-  ,buttonTextColorHover = "rgb(255,255,255)"
-  ,buttonBorderColorHover = "rgb(30,43,55)"
-  
-  ,textboxBackColor = "rgb(0,0,0)"
-  ,textboxBorderColor = "rgb(206,212,218)"
-  ,textboxBorderRadius = 5
-  ,textboxBackColorSelect = "rgb(0,0,0)"
-  ,textboxBorderColorSelect = "rgb(89,126,162)"
-  
-  ### tables
-  ,tableBackColor = "rgb(0,0,0)"
-  ,tableBorderColor = "rgb(236,240,241)"
-  ,tableBorderTopSize = 2
-  ,tableBorderRowSize = 2
-  
-)

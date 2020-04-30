@@ -180,8 +180,8 @@ ui <- tagList(
                              HTML(
                                "<li> .csv / .tsv / .txt files </li>
                                <li> Separated by tabulation, comma or semi-colon </li>
-                               <li> First column has to be gene ID or gene name</li>
-                               <li> All others columns are count for each sample</li>"),
+                               <li> At least metadata table contains two column</li>
+                               <li> At least one column has to be factor</li>"),
                              height = 160
                              )),
                     column(width = 12,
@@ -204,11 +204,13 @@ ui <- tagList(
                     waiter::use_waiter(),
                     fluidPage(
                       box(width = 12, solidHeader = F,
-                          HTML("Running DESeq2 will create a dds object .....................
-                               <br> Check if the design chosen previously is good.
-                               <br>If it is not, the application will crash.")),
+                          
+                          HTML("<h3>Here you gonna run DESeq2 workflow.</h3> 
+                              
+                               <br><h5> Check if  your design chosen previously is good.</h5>
+                               <br><h5>If it is not, the application will crash.</h5>")),
                       box(width = 12,
-                          actionButton("deseq2","Run DESeq2",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
+                          actionButton("deseq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
                       
                       dataTableOutput("table4")
                       )
@@ -235,7 +237,7 @@ ui <- tagList(
                     
             ),
             
-            #Count by gene ----
+            ### Count by gene ----
             tabItem(tabName = "count_gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
