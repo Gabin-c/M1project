@@ -29,12 +29,6 @@ server <- function(input, output,session) {
   })
   
   
-  output$uichoice <- renderUI({
-    selectInput("gene","Which gene do you want to see ?", choices = dds$cu[,1] )
-    
-  })
-  
-  
   
   ### Display the count file ----
   output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
@@ -68,7 +62,7 @@ server <- function(input, output,session) {
   })
   output$table3 <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
-  ### Display parameters for volcano
+  ### Display parameters for volcano ---- 
   observeEvent(input$annotation3,{
     if(input$annotation3== TRUE){
       output$annotationUi <- renderUI({ 
@@ -373,6 +367,35 @@ server <- function(input, output,session) {
       })
     }
   })
+  
+  
+  menu <- reactive({
+    if(is.null(input$file)==TRUE){
+      menuSubItem(text = "1.1 Input count table", tabName = "Input")
+      
+    }else{
+      menuSubItem(text = "1.1 Input count table", tabName = "Input", icon = icon("far fa-check-square"))
+    }
+  })
+  output$menuCheck <- renderMenu({
+    menu()
+    
+    
+    
+    
+      
+        
+        
+      })
+    
+
+    
+    
+      
+    
+     
+    
+    
   
   
 }

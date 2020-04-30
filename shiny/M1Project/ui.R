@@ -72,7 +72,7 @@ ui <- tagList(
         sidebarMenu(id="mysidebar",
                     menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
                     menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),startExpanded = FALSE,
-                             menuSubItem(text = "1.1 Input count table", tabName = "Input"),
+                             menuItemOutput("menuCheck"),
                              menuSubItem(text = "1.2 Input metadata table", tabName = "Input2"),
                              menuSubItem(text = "1.3 Input annotation file", tabName = "Input3")),
                     menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
