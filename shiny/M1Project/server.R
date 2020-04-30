@@ -352,6 +352,21 @@ server <- function(input, output,session) {
       dev.off()
     }
   )
+  menu3 <- reactive({
+    if(input$logaction3){
+      menuSubItem("Heatmap",tabName = "heatmap2", icon = icon("user-check"))
+    }else{
+      menuSubItem("Heatmap",tabName = "heatmap2")
+      
+      
+    }
+    })
+  output$menuCheck3 <- renderMenu({
+    menu3()
+  })
+  
+  
+  
   ### Theme ----
   
   observeEvent(input$theme,{
@@ -379,20 +394,34 @@ server <- function(input, output,session) {
   })
   output$menuCheck <- renderMenu({
     menu()
-    
-    
-    
-    
-      
-        
-        
       })
     
 
     
     
+  menu1 <- reactive({
+    if(is.null(input$file2)==TRUE){
+      menuSubItem(text = "1.2 Input metadata table", tabName = "Input2")
       
+    }else{
+      menuSubItem(text = "1.2 Input metadata table", tabName = "Input2", icon = icon("far fa-check-square"))
+    }
+  })
+  output$menuCheck1 <- renderMenu({
+    menu1()
+  })
     
+  menu2 <- reactive({
+    if(is.null(input$file3)==TRUE){
+      menuSubItem(text = "1.3 Input annotation file", tabName = "Input3")
+      
+    }else{
+      menuSubItem(text = "1.3 Input annotation file", tabName = "Input3", icon = icon("far fa-check-square"))
+    }
+  })
+  output$menuCheck2 <- renderMenu({
+    menu2()
+  })
      
     
     

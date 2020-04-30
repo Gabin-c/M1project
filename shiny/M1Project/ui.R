@@ -72,8 +72,8 @@ ui <- tagList(
                     menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
                     menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),startExpanded = FALSE,
                              menuItemOutput("menuCheck"),
-                             menuSubItem(text = "1.2 Input metadata table", tabName = "Input2"),
-                             menuSubItem(text = "1.3 Input annotation file", tabName = "Input3")),
+                             menuItemOutput("menuCheck1"),
+                             menuItemOutput("menuCheck2")),
                     menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
                     menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = FALSE,
                              menuSubItem("Count distribution",tabName = "count_distribution"),
@@ -84,7 +84,7 @@ ui <- tagList(
                              menuSubItem("MA Plot",tabName = "ma"),
                              menuSubItem("Volcano Plot",tabName = "vulcano"),
                              menuSubItem("Distance matrix",tabName = "heatmap1"),
-                             menuSubItem("Heatmap",tabName = "heatmap2")
+                             menuItemOutput("menuCheck3")
                              
                     ),
                     tags$hr(),
