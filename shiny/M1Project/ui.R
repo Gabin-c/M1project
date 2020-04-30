@@ -179,7 +179,7 @@ ui <- tagList(
                              HTML(
                                "<li> .csv / .tsv / .txt files </li>
                                <li> Separated by tabulation, comma or semi-colon </li>
-                               <li> At least metadata table countain two column</li>
+                               <li> At least metadata table contains two column</li>
                                <li> At least one column has to be factor</li>"),
                              height = 160
                              )),
