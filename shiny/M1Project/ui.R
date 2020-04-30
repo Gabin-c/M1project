@@ -11,6 +11,7 @@ library(shinyWidgets)
 library(shinythemes)
 library(waiter)
 library(dashboardthemes)
+
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
 
@@ -102,7 +103,43 @@ ui <- tagList(
             ### Introduction ----
             tabItem(tabName = "Intro",
                     fluidPage(
-                      includeMarkdown("intro.Rmd"))
+                      h2("Introduction"),
+                      p("This is an R Shiny web interactive application developed as part of a ", 
+                        strong("course project."), "The purpose of this application is to perform an ",
+                        strong("differential expression analysis from a counts table"), "in order to help researchers getting interpretable results.",
+                        align = "justify"),
+                      p("This application uses the package ", 
+                        a("DESeq2", href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html"), 
+                        "from Bioconductor. It is a package to study differential gene expression analysis based on the negative binomial distribution. It allows a quick visualization of results in order to analyze the counts table data. The results will be given in different form like graphics, heatmaps, MAplot or even Volcano plot.",
+                        align = "justify"),
+                      tags$hr(),
+                      h3("1. Upload data", style="padding-left: 1em"),
+                      p("The input data files accepted for this App are 3 files in '.txt', '.csv' or '.tsv' format separated by comma, tabulation or semi-colon.
+                        This App necessarily requires a 'Count Data Table' and a 'Metadata Table'. An optional 'Annotation File' can be added", style="padding-left: 2em", align = "justify"),
+                      h4("1.1 Count Data Table", style="padding-left: 3em"),
+                      p("The Count Data Table has to contains the count for each sample of the experiment for each gene and the first column has to be gene ID or gene name as below :",style="padding-left: 5em", align = "justify"),
+                      column( 12, style="padding-left: 5em" ,tableOutput("countexample")),
+                      br(),
+                      h4("1.2 Metadata Table", style="padding-left: 3em"),
+                      p("The Metadata table has to contains the informations of the experiment with at least 2 columns. The first one is the samples in the same order as the columns of the Count Table. 
+                        The second one is a condition column. You can add as many columns as you have factors in your experiment.",style="padding-left: 5em", align = "justify"),
+                      column( 12, style="padding-left: 5em" ,tableOutput("metadataexample")),
+                      h4("1.2  Annotation File", style="padding-left: 3em"),
+                      p("The Annotation File contains informations about the genes. If you have one, it must contains a column named 'symbol' in which we can find the symbol of each gene.",style="padding-left: 5em", align = "justify"),
+                      column( 12, style="padding-left: 5em" ,tableOutput("annoexample")),
+                      h3("2. Results", style="padding-left: 1em"),
+                      p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
+                      p("- Count distribution",
+                        br(), "- Count by gene",
+                        br(), "- Depth of sample",
+                        br(), "- Dispersion",
+                        br(), "- PCA",
+                        br(), "- MA plot",
+                        br(), "- Volcano plot",
+                        br(), "- Distance matrix",
+                        br(), "- Heatmap",style="padding-left: 5em", align = "justify")
+                      
+                    )
             ),
             ### Upload count table ----
             tabItem(tabName = "Input",
@@ -248,7 +285,9 @@ ui <- tagList(
             tabItem(tabName = "ma",
                     box(width = 12,
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("pvalue", "Chose your pvalue", min=0, max=1, value=0.05)),
+                        sliderInput("pvalue", "Chose your pvalue", min=0, max=1, value=0.05),
+                        tableOutput("num_DE")
+                    ),
                     box(solidHeader = F, status = "primary",width = 12,
                         plotOutput("maplot",height = 650)),
                     column(width= 4,
@@ -278,6 +317,7 @@ ui <- tagList(
             
             ### Heatmap ----
             tabItem(tabName = "heatmap1",
+                    
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         selectInput("log1",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
@@ -291,6 +331,7 @@ ui <- tagList(
             ),
             ### Heat map 2 ----
             tabItem(tabName = "heatmap2",
+                    waiter::use_waiter(),
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         column(width=6, selectInput("log3",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),

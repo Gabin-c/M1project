@@ -4,25 +4,43 @@ server <- function(input, output,session) {
   ### Increase the authorized size for upload ----
   options(shiny.maxRequestSize=30*1024^2)
   
+  ### Intro : 
+  output$countexample <- renderTable({   
+    countex <- read.csv("countexample.csv",sep=",")
+    countex
+  })
+  
+  output$metadataexample <- renderTable({   
+    metaex<- read.csv("metadataexample.csv",sep=",")
+    metaex
+  }, na = "")
+  
+  output$annoexample <- renderTable({   
+    annoex<- read.csv("annoexample.csv",sep=",")
+    annoex
+  })
+  
+  
+  
   ### Import the count ----
   count_table <- reactive({
     req(input$file)
     counttable <- read.csv(input$file$datapath, sep = input$sepcount)
-  
-  })
-
-   
-    output$uichoice <- renderUI({
-      selectInput("gene","Which gene do you want to see ?", choices = dds$cu[,1] )
-      
-    })
     
-
- 
+  })
+  
+  
+  output$uichoice <- renderUI({
+    selectInput("gene","Which gene do you want to see ?", choices = dds$cu[,1] )
+    
+  })
+  
+  
+  
   ### Display the count file ----
   output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
- 
+  
   
   ### Import the metadata file ---- 
   metadata <- reactive({
@@ -92,9 +110,9 @@ server <- function(input, output,session) {
     updateSelectInput(session,"sample",choices = metadata()[,1])
     
     ### Choices for count by gene
-
+    
     updateSelectizeInput(session,"gene",choices = count_table()[,1], server = TRUE)
-
+    
     
     ### Choices for PCA
     updateSelectInput(session,"conditionpca",choices = colnames(metadata()))
@@ -238,6 +256,9 @@ server <- function(input, output,session) {
     )
     maplo()
   })
+  output$num_DE <- renderTable({
+    number_of_DE(dds$results,input$pvalue)
+  })
   
   ### Volcano plot ----
   volcan <- function(){
@@ -280,6 +301,7 @@ server <- function(input, output,session) {
   })
   
   ### Heat map 1 ----
+  
   observeEvent(input$logaction2,{
     if(input$log1=="vst"){
       dds$log2 <- vst(dds$DESeq2, blind=FALSE)
@@ -288,6 +310,7 @@ server <- function(input, output,session) {
     }
   })
   heatmapcluster <- function(){
+    
     clustering_heatmap(dds$log2)
   }
   output$clusteringmap <- renderPlot({
@@ -316,15 +339,18 @@ server <- function(input, output,session) {
   })
   
   heatmap2 <- function() {
+    input$logaction3
+    
+    
     heatmap(dds$results,dds$log3,annotation = input$annotation2,metadata=metadata(),condition = input$conditionheatmap,count=colnames(count_table()),min=input$slider2[1],max=input$slider2[2],anno=anno())
   }
   output$clusteringmap2 <- renderPlot({
     validate(
       need(dds$log3, "Please run DESeq2 and Heat map")
     )
-    withProgress(message = "Running heatmap , please wait",{
-      heatmap2()
-    })})
+    
+    heatmap2()
+  })
   output$downloadHeatmap2 <- downloadHandler(
     filename = "Heatmap.png",
     content = function(file){
@@ -338,12 +364,12 @@ server <- function(input, output,session) {
   observeEvent(input$theme,{
     if(input$theme==TRUE){
       output$themes <- renderUI({
-        shinyDashboardThemes("blue_gradient")
+        poor_mans_flatly2
       })
       
     }else{
       output$themes <-renderUI({
-        shinyDashboardThemes("purple_gradient")
+        shinyDashboardThemes("poor_mans_flatly")
         
       })
       
