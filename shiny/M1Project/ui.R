@@ -90,7 +90,10 @@ ui <- tagList(
                     tags$hr(),
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
-                    ),tags$hr()
+                    ),tags$hr(),
+                    helpText("Developed by ", a("David Gallien ", href="https://www.linkedin.com/in/david-gallien-2096b9193/"), "and ", br(), a("Gabin Coudray ", href="https://www.linkedin.com/in/gabin-coudray-a1941913b/"), ", first year of ", br(),
+                             a("Bioinformatics Master's degree ", href="http://bioinfo-rennes.fr/"), "in ", br(), "Rennes, ",
+                             a("University of Rennes 1 ", href="https://www.univ-rennes1.fr/"), style="padding-left:1em; padding-right:1em;position:absolute; bottom:1em; ", align = "center")
         )
       ),
       
