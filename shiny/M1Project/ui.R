@@ -86,8 +86,9 @@ ui <- tagList(
                              menuSubItem("Volcano Plot",tabName = "vulcano"),
                              menuSubItem("Distance matrix",tabName = "heatmap1"),
                              menuSubItem("Heatmap",tabName = "heatmap2")
-                             
+         
                     ),
+                    
                     tags$hr(),
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
