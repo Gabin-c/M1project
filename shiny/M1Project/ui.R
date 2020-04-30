@@ -180,7 +180,7 @@ ui <- tagList(
                                "<li> .csv / .tsv / .txt files </li>
                                <li> Separated by tabulation, comma or semi-colon </li>
                                <li> At least metadata table countain two column</li>
-                               <li> At least one column have to be factor</li>"),
+                               <li> At least one column has to be factor</li>"),
                              height = 160
                              )),
                     column(width = 12,
@@ -235,7 +235,7 @@ ui <- tagList(
                     
             ),
             
-            #Count by gene ----
+            ### Count by gene ----
             tabItem(tabName = "count_gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
