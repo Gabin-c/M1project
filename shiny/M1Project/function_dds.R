@@ -207,7 +207,7 @@ poor_mans_flatly2 <- shinyDashboardThemeDIY(
   ,sidebarBackColor = "rgb(44,62,80)"
   ,sidebarPadding = 0
   
-  ,sidebarMenuBackColor = "inherit"
+  ,sidebarMenuBackColor = "rgb(44,62,80)"
   ,sidebarMenuPadding = 0
   ,sidebarMenuBorderRadius = 0
   
