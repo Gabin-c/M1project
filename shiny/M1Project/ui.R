@@ -33,8 +33,8 @@ parameter_tabs <- tagList(
                         HTML(
                           "<li> .csv / .tsv / .txt files </li>
                           <li> Separated by tabulation, comma or semi-colon </li>
-                          <li> </li>
-                          <li> </li>"),
+                          <li> One column with genes symbols named 'symbol'</li>
+                          "),
                         height = 160
                         )
                       )
@@ -140,7 +140,8 @@ ui <- tagList(
                         br(), "- MA plot",
                         br(), "- Volcano plot",
                         br(), "- Distance matrix",
-                        br(), "- Heatmap",style="padding-left: 5em", align = "justify")
+                        br(), "- Heatmap",style="padding-left: 5em", align = "justify"),
+                      p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       
                       )
             ),
