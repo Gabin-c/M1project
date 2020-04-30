@@ -120,7 +120,7 @@ server <- function(input, output,session) {
     dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
     dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
     
-    ### Heatmap
+
     on.exit(waiter$hide())
     
   })
@@ -379,23 +379,25 @@ server <- function(input, output,session) {
   })
   output$menuCheck <- renderMenu({
     menu()
-    
-    
-    
-    
-      
-        
-        
       })
-    
+  
+  observeEvent(input$deseq2,{
+     output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
+               menuSubItem("Count distribution",tabName = "count_distribution"),
+               menuSubItem("Count by gene", tabName = "count_gene"),
+               menuSubItem("Depth of sample",tabName = "depth"),
+               menuSubItem("Dispersion",tabName = "dispersion"),
+               menuSubItem("PCA",tabName = "pca"),
+               menuSubItem("MA Plot",tabName = "ma"),
+               menuSubItem("Volcano Plot",tabName = "vulcano"),
+               menuSubItem("Distance matrix",tabName = "heatmap1"),
+               menuSubItem("Heatmap",tabName = "heatmap2") )  
+     })
+  })
 
-    
-    
-      
-    
-     
-    
-    
   
   
+
 }
+
+

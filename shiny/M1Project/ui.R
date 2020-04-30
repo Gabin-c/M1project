@@ -25,7 +25,7 @@ parameter_tabs <- tagList(
     tabPanel("annotation",
              fluidRow(
                column(width= 6,
-                      box(title="Upload annotation file",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                      box(title="Upload annotation file",width = 12, solidHeader = TRUE,collapsible = TRUE,
                           column(width=5,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                           fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
                column(width= 6,     
@@ -76,19 +76,7 @@ ui <- tagList(
                              menuSubItem(text = "1.2 Input metadata table", tabName = "Input2"),
                              menuSubItem(text = "1.3 Input annotation file", tabName = "Input3")),
                     menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
-                    menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = FALSE,
-                             menuSubItem("Count distribution",tabName = "count_distribution"),
-                             menuSubItem("Count by gene", tabName = "count_gene"),
-                             menuSubItem("Depth of sample",tabName = "depth"),
-                             menuSubItem("Dispersion",tabName = "dispersion"),
-                             menuSubItem("PCA",tabName = "pca"),
-                             menuSubItem("MA Plot",tabName = "ma"),
-                             menuSubItem("Volcano Plot",tabName = "vulcano"),
-                             menuSubItem("Distance matrix",tabName = "heatmap1"),
-                             menuSubItem("Heatmap",tabName = "heatmap2")
-         
-                    ),
-                    
+                    menuItemOutput("menuResults"),
                     tags$hr(),
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
@@ -150,7 +138,7 @@ ui <- tagList(
             ### Upload count table ----
             tabItem(tabName = "Input",
                     column(width = 6,
-                           box(title="Upload count table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                           box(title="Upload count table",width = 12, solidHeader = TRUE,collapsible = TRUE,
                                column(width=5,
                                       selectInput("sepcount", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                                fileInput("file", "Upload count table", accept = c(".csv",".txt",".tsv"))
@@ -170,7 +158,7 @@ ui <- tagList(
             ### Upload metadata table ----
             tabItem(tabName = "Input2",
                    column(width = 6,
-                           box(title="Upload metadata table",width = 12, status = "primary", solidHeader = TRUE,collapsible = TRUE,
+                           box(title="Upload metadata table",width = 12, solidHeader = TRUE,collapsible = TRUE,
                                column(width=5,
                                       selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                                fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
