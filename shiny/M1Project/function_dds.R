@@ -7,7 +7,29 @@ library(tidyverse)
 library(NMF)
 library(ggrepel)
 
-### Depth plot
+
+### Preamble ----
+### All of this function can be use after you have run a DESeq2 workflow.
+### You need a DESeq2 dataset to be able to run it.
+###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
+###      - depth()
+###      - count_distribution()
+###      - plotcount()
+###   - DESeq2 : results object after run DESeq() on your DESeq2 dataset and results() onr DESeq() object 
+###      - maplot()
+###      - volcanoplot()
+###      - number_of_DE 
+###   - DESeq2 : after run DESeq() on your DESeq2 datasetn and do vst() or rlogtransformation() on DESeq() object
+###      - pca()
+###      - heatmap()
+###      - clustering_heatmap()
+###      - dispersion()
+
+### Depth plot ----
+### depth return a barplot of depth sample with ggplot library  
+### depth need two argument
+###   - dds which is an count table of an RNAseq experience which have in column : sample and in row :  gene
+###   - breaksize which is width of the bar
 depth <- function(dds,breaksize=1){
   depth <- dds
   depth <- as.data.frame(colSums(depth))
@@ -22,7 +44,15 @@ depth <- function(dds,breaksize=1){
 }
 
 
-### Count distribution plot
+### Count distribution plot ----
+### count_distribution return an histogram of count value distribution in the log(count+1) format for one sample
+### count_distribution need five argument
+###   - dds which is an count table of an RNAseq experience which have in column : sample and in row :  gene
+###   - breaksize which is width of histogram bar
+###   - sample for which we display the count distribution
+###   - min which is the min of x axis 
+###   - max which is the max of x axis
+
 count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
   counts_dds <- dds
   
@@ -37,11 +67,13 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
 }
 
 
-### Dispersion plot
+### Dispersion plot ----
+### dispersion return plot obtain by DESeq2::plotDispEsts() function of DESeq2 package
+### dispersion just need one argument : a DESeq() object
 dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
 }
-
+### nummber of differemtial express gene ----
 number_of_DE <- function(dds,padje = 0.05){
   res_dif <- dds
   tb <- as.data.frame(table(res_dif$padj <= padje ,useNA="always"))
@@ -53,27 +85,27 @@ number_of_DE <- function(dds,padje = 0.05){
 
 
 
-### Plotcount
+### Plotcount ----
 plotcount <- function(dds,gene){
   dds1 <- dds
   dds1[,"name"] <- row.names(dds1)
   return(
-    ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
-      geom_point(size=4,aes(colour=factor(name))) + 
-      geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
-      theme(axis.text.x = element_blank() )+ 
-      labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
-      guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
-      theme(plot.title = element_text(face = "bold", size= 18)) +
-      theme(axis.title.x = element_text(size=14)) +
-      theme(axis.title.y = element_text(size=14)) +
-      theme(legend.text=element_text(size=13)) +
-      theme(legend.title=element_blank())
+   ggplot(dds1, aes(x=dds1[,"name"], y=dds1[,gene])) + 
+     geom_point(size=4,aes(colour=factor(name))) + 
+     geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
+     theme(axis.text.x = element_blank() )+ 
+     labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
+     guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
+     theme(plot.title = element_text(face = "bold", size= 18)) +
+     theme(axis.title.x = element_text(size=14)) +
+     theme(axis.title.y = element_text(size=14)) +
+     theme(legend.text=element_text(size=13)) +
+     theme(legend.title=element_blank())
   )
 }
 
 
-### Maplot
+### Maplot ---- 
 maplot <- function(dds,padje=0.05){
   res_dif <- dds %>% mutate(sig=padj<padje)
   return(ggplot(res_dif, aes(x = baseMean, y = log2FoldChange, col = sig)) + 
@@ -89,7 +121,7 @@ maplot <- function(dds,padje=0.05){
 }
 
 
-### VolcanonPlot
+### VolcanonPlot ---- 
 volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0,minlogP=30,count){
   res_dif <- dds
   if(annotation == TRUE){
@@ -124,7 +156,7 @@ volcanoPlot <-function(dds, annotation=FALSE,anno,padje=0.05,maxlogF=6,minlogF=0
   }
 }
 
-### PCA
+### PCA ---- 
 pca <- function(dds,intgroup){
   return(
     plotPCA(dds, intgroup=intgroup) +
@@ -134,14 +166,14 @@ pca <- function(dds,intgroup){
       guides(colour = guide_legend(override.aes = list(size = 5))) +
       theme(legend.text=element_text(size=13))+
       geom_text_repel(
-        aes(label = colnames(dds)),
-        size = 3,
-        box.padding = unit(0.35, "lines"),
-        point.padding = unit(0.3, "lines"), color = "darkblue")
+                      aes(label = colnames(dds)),
+                      size = 3,
+                      box.padding = unit(0.35, "lines"),
+                      point.padding = unit(0.3, "lines"), color = "darkblue")
   )
 }
 
-### Distance matrix
+### Distance matrix ----
 clustering_heatmap <- function(dds){
   dists <- dist(t(assay(dds)))
   mat <- as.matrix(dists)
@@ -149,7 +181,7 @@ clustering_heatmap <- function(dds){
   return(heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13)))
 }
 
-### Heatmap
+### Heatmap ----
 heatmap <- function(dds, dds2,annotation=FALSE,anno,padje=0.05,metadata,condition,count,min,max){
   res <- dds
   res <- tbl_df(res)
