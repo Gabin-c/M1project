@@ -12,9 +12,11 @@ library(shinythemes)
 library(waiter)
 library(dashboardthemes)
 library(shinycssloaders)
-
+library(shinydashboardPlus)
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
+
+
 
 ### Annotation pannel ----
 parameter_tabs <- tagList(
@@ -91,13 +93,9 @@ ui <- tagList(
                     tags$hr(),
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
-                    ),tags$hr(),
-                    helpText("Developed by ", a("David Gallien ", href="https://www.linkedin.com/in/david-gallien-2096b9193/"), "and ", br(), a("Gabin Coudray ", href="https://www.linkedin.com/in/gabin-coudray-a1941913b/"), ", first year of ", br(),
-                             a("Bioinformatics Master's degree ", href="http://bioinfo-rennes.fr/"), "in ", br(), "Rennes, ",
-                             a("University of Rennes 1 ", href="https://www.univ-rennes1.fr/"), style="padding-left:1em; padding-right:1em;position:absolute; bottom:1em; ", align = "center")
-        )
+                    ),tags$hr()
+          )
       ),
-      
       ### Organization of the differents pages ----
       dashboardBody(
         uiOutput("themes"),
@@ -361,10 +359,24 @@ ui <- tagList(
                            downloadButton("downloadHeatmap2",'Download plot',class = "btn-warning")
                     )
             )
-            )
-                    )
-                           )
           )
-            )
+        )
       )
+    )
+  ),
+  tags$footer(
+    wellPanel(
+      HTML('
+             <p align="center" width="4">Developed by <a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a> and <a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
+             <p align="center" width="4">First year of <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Masters degree</a> in Rennes. </p>
+             <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>'
+    ), 
+    style = 
+      "
+        position:relative;
+        width:100%;
+        background-color: #46505a;"
+  ))
+)
+
 
