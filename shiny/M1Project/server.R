@@ -66,10 +66,10 @@ server <- function(input, output,session) {
   observeEvent(input$annotation3,{
     if(input$annotation3== TRUE){
       output$annotationUi <- renderUI({ 
-        sliderInput("sliderfold", "Chose your fold", min=-20, max=20, value=c(-6,6))
+        sliderInput("sliderfold", "Choose your fold", min=-20, max=20, value=c(-6,6))
       })
       output$annotationUi2 <- renderUI({ 
-        sliderInput("sliderlog", "Chose your log10", min=0, max=300, value=30)
+        sliderInput("sliderlog", "Choose your log10", min=0, max=300, value=30)
       })
     }else{
       output$annotationUi <- renderUI({})
@@ -427,16 +427,11 @@ server <- function(input, output,session) {
                menuSubItem("MA Plot",tabName = "ma",icon = icon("far fa-check-square")),
                menuSubItem("Volcano Plot",tabName = "vulcano",icon = icon("far fa-check-square")),
                menu4(),
-               
                  menu3()
-               
                )  
      })
   })
 
-
-    
-    
   menu1 <- reactive({
     if(is.null(input$file2)==TRUE){
       menuSubItem(text = "1.2 Input metadata table", tabName = "Input2")

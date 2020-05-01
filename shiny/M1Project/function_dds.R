@@ -9,7 +9,7 @@ library(ggrepel)
 
 
 ### Preamble ----
-### All of this function can be use after you have run a DESeq2 workflow.
+### All of this function can be use after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
 ###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
 ###      - depth()
@@ -28,7 +28,7 @@ library(ggrepel)
 ### Depth plot ----
 ### depth return a barplot of depth sample with ggplot library  
 ### depth need two argument
-###   - dds which is an count table of an RNAseq experience which have in column : sample and in row :  gene
+###   - dds which is a count table of a RNAseq experience which have in column : sample, and in row :  gene
 ###   - breaksize which is width of the bar
 depth <- function(dds,breaksize=1){
   depth <- dds
@@ -37,7 +37,7 @@ depth <- function(dds,breaksize=1){
   
   return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ 
            geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = breaksize)+
-           labs(title = "Depth of each sample", x="Sample", y="Depth")+theme_bw()+
+           labs(title = "Depth of each sample", x="Samples", y="Depth")+theme_bw()+
            theme(plot.title = element_text(face = "bold", size= 18)) +
            theme(axis.title.x = element_text(size=14)) +
            theme(axis.title.y = element_text(size=14)))
@@ -45,9 +45,9 @@ depth <- function(dds,breaksize=1){
 
 
 ### Count distribution plot ----
-### count_distribution return an histogram of count value distribution in the log(count+1) format for one sample
-### count_distribution need five argument
-###   - dds which is an count table of an RNAseq experience which have in column : sample and in row :  gene
+### count_distribution return an histogram of count values distribution in the log(count+1) format for one sample
+### count_distribution need five arguments
+###   - dds which is a count table of an RNAseq experience which have in column : sample, and in row :  gene
 ###   - breaksize which is width of histogram bar
 ###   - sample for which we display the count distribution
 ###   - min which is the min of x axis 
@@ -59,7 +59,7 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
   return(ggplot(data=counts_dds, aes(log(counts_dds[,sample]+1))) + 
            geom_histogram(breaks=seq(min,max,breaksize),position="identity",alpha=0.5,fill="darkcyan", color="dodgerblue1")+
            theme_classic() +
-           labs(title=sample, x="Count value (number of read by genes) in log(count+1)",y="Count frequency") +
+           labs(title=sample, x="Counts values (number of reads by gene) in log(count+1)",y="Counts frequencies") +
            theme(plot.title = element_text(face = "bold", size= 18)) +
            theme(axis.title.x = element_text(size=14)) +
            theme(axis.title.y = element_text(size=14))
@@ -68,7 +68,7 @@ count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
 
 
 ### Dispersion plot ----
-### dispersion return plot obtain by DESeq2::plotDispEsts() function of DESeq2 package
+### dispersion return plot obtained by DESeq2::plotDispEsts() function of DESeq2 package
 ### dispersion just need one argument : a DESeq() object
 dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
@@ -77,7 +77,7 @@ dispersion <- function(dds){
 number_of_DE <- function(dds,padje = 0.05){
   res_dif <- dds
   tb <- as.data.frame(table(res_dif$padj <= padje ,useNA="always"))
-  colnames(tb) = c("DE","Gene")
+  colnames(tb) = c("DE","Genes")
   return(tb)
 }
 
@@ -94,7 +94,7 @@ plotcount <- function(dds,gene){
      geom_point(size=4,aes(colour=factor(name))) + 
      geom_segment(aes(x=dds1[,"name"], xend=dds1[,"name"], y=0, yend=dds1[,gene]),linetype="dotdash")+ 
      theme(axis.text.x = element_blank() )+ 
-     labs(title=paste("Count of",gene,  "for each sample"),x="Sample",y="Count")+ 
+     labs(title=paste("Count of",gene,  "for each sample"),x="Samples",y="Counts")+ 
      guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
      theme(plot.title = element_text(face = "bold", size= 18)) +
      theme(axis.title.x = element_text(size=14)) +

@@ -107,27 +107,27 @@ ui <- tagList(
                     fluidPage(
                       h2("Introduction"),
                       p("This is an R Shiny web interactive application developed as part of a ", 
-                        strong("course project."), "The purpose of this application is to perform an ",
+                        strong("course project."), "The purpose of this application is to perform a ",
                         strong("differential expression analysis from a counts table"), "in order to help researchers getting interpretable results.",
                         align = "justify"),
                       p("This application uses the package ", 
                         a("DESeq2", href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html"), 
-                        "from Bioconductor. It is a package to study differential gene expression analysis based on the negative binomial distribution. It allows a quick visualization of results in order to analyze the counts table data. The results will be given in different form like graphics, heatmaps, MAplot or even Volcano plot.",
+                        "from Bioconductor. It is a package to study differential gene expression analysis based on the negative binomial distribution. It allows a quick visualization of results in order to analyze the counts table data. The results will be given in different forms like graphics, heatmaps, MAplot or even Volcano plot.",
                         align = "justify"),
                       tags$hr(),
                       h3("1. Upload data", style="padding-left: 1em"),
                       p("The input data files accepted for this App are 3 files in '.txt', '.csv' or '.tsv' format separated by comma, tabulation or semi-colon.
                         This App necessarily requires a 'Count Data Table' and a 'Metadata Table'. An optional 'Annotation File' can be added", style="padding-left: 2em", align = "justify"),
                       h4("1.1 Count Data Table", style="padding-left: 3em"),
-                      p("The Count Data Table has to contains the count for each sample of the experiment for each gene and the first column has to be gene ID or gene name as below :",style="padding-left: 5em", align = "justify"),
+                      p("The Count Data Table must contain the count for each sample of the experiment for each gene and the first column must be gene ID or gene name as below :",style="padding-left: 5em", align = "justify"),
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("countexample"))),
                       br(),
                       h4("1.2 Metadata Table", style="padding-left: 3em"),
-                      p("The Metadata table has to contains the informations of the experiment with at least 2 columns. The first one is the samples in the same order as the columns of the Count Table. 
+                      p("The Metadata table must contain the information of the experiment with at least 2 columns. The first one corresponds to the samples in the same order as the columns of the Count Table. 
                         The second one is a condition column. You can add as many columns as you have factors in your experiment.",style="padding-left: 5em", align = "justify"),
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("metadataexample"))),
                       h4("1.2  Annotation File", style="padding-left: 3em"),
-                      p("The Annotation File contains informations about the genes. If you have one, it must contains a column named 'symbol' in which we can find the symbol of each gene.",style="padding-left: 5em", align = "justify"),
+                      p("The Annotation File contains informations about the genes. If you have one, it must contain a column named 'symbol' in which we can find the symbol of each gene.",style="padding-left: 5em", align = "justify"),
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoexample"))),
                       h3("2. Results", style="padding-left: 1em"),
                       p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
@@ -178,20 +178,20 @@ ui <- tagList(
                              HTML(
                                "<li> .csv / .tsv / .txt files </li>
                                <li> Separated by tabulation, comma or semi-colon </li>
-                               <li> At least metadata table contains two column</li>
+                               <li> At least metadata table contains two columns</li>
                                <li> At least one column has to be factor</li>"),
                              height = 160
                              )),
                     column(width = 12,
                            box(width = 12,
-                               textInput("condition","Chose your design without linear combination", placeholder = "Conditions"))),
+                               textInput("condition","Choose your design without linear combination", placeholder = "Conditions"))),
                     dataTableOutput("table2")
                     ),
             ### Uploade annotation file ----
             tabItem(tabName = "Input3",
                     fluidPage(
                       box(width = 12,
-                          checkboxInput("annotation","Do you have an annotation file",value=FALSE)),
+                          checkboxInput("annotation","Do you have an annotation file ?",value=FALSE)),
                       fluidRow(
                         parameter_tabs),
                       dataTableOutput("table3")
@@ -207,7 +207,7 @@ ui <- tagList(
                           
                           HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
                               
-                               <br><h5> Check if  your design chosen previously is good.</h5>
+                               <br><h5> Check if your design chosen previously is correct.</h5>
                                <br><h5>If it is not, the application will crash.</h5></center>")),
                       box(width = 12,
                           actionButton("deseq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
@@ -293,7 +293,7 @@ ui <- tagList(
             tabItem(tabName = "ma",
                     box(width = 12,
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("pvalue", "Chose your pvalue", min=0, max=1, value=0.05),
+                        sliderInput("pvalue", "Choose your pvalue", min=0, max=1, value=0.05),
                         tableOutput("num_DE")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
@@ -306,8 +306,8 @@ ui <- tagList(
                     fluidPage(
                       box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                          checkboxInput("annotation3","Do you have an annotation file",value=FALSE),
-                          sliderInput("pvalue2", "Chose your pvalue", min=0, max=1, value=0.05),
+                          checkboxInput("annotation3","Do you have an annotation file ?",value=FALSE),
+                          sliderInput("pvalue2", "Choose your pvalue", min=0, max=1, value=0.05),
                           
                           
                           
@@ -350,7 +350,7 @@ ui <- tagList(
                                actionButton("logaction3","Run Heat map")),
 
                         column(width=12,
-                        sliderInput("slider2",label="Chose the number of genes you want to display", min = 0, 
+                        sliderInput("slider2",label="Choose the number of genes you want to display", min = 0, 
                                     max = 200, value = c(0, 60)))),
                     box(solidHeader = F, status = "primary",width = 12,
                         withSpinner(plotOutput("clusteringmap2", height = 1000, width = 1000))
@@ -368,14 +368,14 @@ ui <- tagList(
     wellPanel(
       HTML('
              <p align="center" width="4">Developed by <a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a> and <a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
-             <p align="center" width="4">First year of <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Masters degree</a> in Rennes. </p>
+             <p align="center" width="4">First year of <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Master<span>&#39;</span>s degree</a> in Rennes. </p>
              <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>'
     ), 
     style = 
       "
         position:relative;
         width:100%;
-        background-color: #46505a;"
+        background-color: #2d3741;"
   ))
 )
 
