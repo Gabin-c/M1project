@@ -1,4 +1,5 @@
 ### Library ----
+### here we found all library need for proper functionning of app
 library(shiny)
 library(shinydashboard)
 library(shinyjs)
@@ -19,6 +20,9 @@ source("function_dds.R")
 
 
 ### Annotation pannel ----
+### parameter_tabs is a tabsetPanel for input annotation page
+### it allow to switch between panel when we use updateTabsetPanel()
+### in our case it is when we check right annotation boxes of input annotation page
 parameter_tabs <- tagList(
   tags$style("#params { display:none; }"),
   tabsetPanel(
@@ -51,17 +55,25 @@ parameter_tabs <- tagList(
 
 
 ### User Interface  ----
+### UI is a shinydashboard, we use library shinydashboard to set up a dashboard UI
+### a dashboard is compound of :
+###   - a Header
+###   - a sidebar
+###   - a body 
 ui <- tagList(
   
   ### Parameters of the dashboard ----
+  
   div(
     id = "app",
     dashboardPage(
       ### Customize the header ----
-
+      ### header is composate of :
+      ###   - a title 
+      ###   - a home bouton which on click return user on introduction page
       dashboardHeader(title = "RNA-seq DE analysis", 
 
-                      ### Home button----
+                      ### Home button ----
                       tags$li(a(onclick = "openTab('Intro')",
                                 href = NULL,
                                 icon("home"),
@@ -78,11 +90,14 @@ ui <- tagList(
                                        }")))
       ),
       
-      ### Differents menu (page) in the sidebar ----
+      ### Sidebar ----
+      ### Sider bar  is composate of a sidebar menu
+      ### in this sidebar menu we have menu item which is associate with a tab of body dashboard 
       dashboardSidebar(
         sidebarMenu(id="mysidebar",
                     menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
                     menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),startExpanded = TRUE,
+                             # menuItem which are set up in the server function
                              menuItemOutput("menuCheck"),
                              menuItemOutput("menuCheck1"),
                              menuItemOutput("menuCheck2")),
@@ -90,19 +105,27 @@ ui <- tagList(
 
                     menuItemOutput("menuResults"),
 
-                    tags$hr(),
+                    tags$hr(),# a simple line 
+                    # this menu generate a switch button to set theme of dashboard
+                    # two options are available a light or dark mode
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
                     ),tags$hr()
           )
       ),
-      ### Organization of the differents pages ----
+      ### Dashboard body ----
+      ### Organization of the differents pages associate with their menuItem
       dashboardBody(
         uiOutput("themes"),
         useShinyjs(),
         fluidRow(
           tabItems(
             ### Introduction ----
+            ### introduction page associate with menuItem "Informations"
+            ### In this page we find all information about application
+            ### in particular how it works and different tool used to generate DE analysis
+            ### to generate layout html tag provide by shiny library are used 
+            ### withSpinner() of shinycssloaders library is use to generate waiting screen during load of img
             tabItem(tabName = "Intro",
                     fluidPage(
                       h2("Introduction"),
@@ -145,6 +168,15 @@ ui <- tagList(
                       )
             ),
             ### Upload count table ----
+            ### upload page of count table of RNA-seq experience
+            ### this page is associate with menuItemOuput("")
+            ### On this page we find :
+            ###   - a box which countain :
+            ###       - a selectInput of separator 
+            ###       - a fileInput to upload count table of RNA-seq experience
+            ###   - a box which countain :
+            ###       - information about file accepted in fileInput 
+            ###   - a dataTableOutput of count table input in fileInput
             tabItem(tabName = "Input",
                     column(width = 6,
                            box(title="Upload count table",width = 12, solidHeader = TRUE,collapsible = TRUE,
@@ -165,6 +197,18 @@ ui <- tagList(
                     dataTableOutput("table")
                     ),
             ### Upload metadata table ----
+            ### upload page of metadata file of RNA-seq experience
+            ### this page is associate with menuItemOuput("")
+            ### On this page we find :
+            ###   - a box which countain :
+            ###       - a selectInput of separator 
+            ###       - a fileInput to upload metadata of RNA-seq experience
+            ###   - a box which countain :
+            ###       - information about file accepted in fileInput
+            ###   - a box which countain :
+            ###       - a text input to chose design formula to set for DESeq2 dataset object
+            ###   - a dataTableOutput of metadata input in fileInput
+            
             tabItem(tabName = "Input2",
                    column(width = 6,
                            box(title="Upload metadata table",width = 12, solidHeader = TRUE,collapsible = TRUE,
@@ -187,7 +231,21 @@ ui <- tagList(
                                textInput("condition","Choose your design without linear combination", placeholder = "Conditions"))),
                     dataTableOutput("table2")
                     ),
-            ### Uploade annotation file ----
+            ### Upload annotation file ----
+            ### upload page of annotation file associate with the RNA-seq experience
+            ### this page is associate with menuItemOuput("")
+            ### on this page we find :
+            ###   - a box with :
+            ###       - a checkboxInput :  
+            ###            - if box is check on : parameter_tabs is set on annotation
+            ###               - On this page we find :
+            ###                   - a box which countain :
+            ###                       - a selectInput of separator 
+            ###                       - a fileInput to upload metadata of RNA-seq experience
+            ###                   - a box which countain :
+            ###                       - information about file accepted in fileInput
+            ###            - if box is check off : parameter_tabs is set on nothing
+            ###               - On this page we find : nothing 
             tabItem(tabName = "Input3",
                     fluidPage(
                       box(width = 12,
@@ -198,6 +256,7 @@ ui <- tagList(
                     )
             ),
             ### Run DESeq2 ----
+            ### 
             tabItem(tabName = "deseq2",
                     waiter::use_waiter(),
                     fluidPage(
