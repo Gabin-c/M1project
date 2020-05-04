@@ -256,7 +256,9 @@ ui <- tagList(
                     )
             ),
             ### Run DESeq2 ----
-            ### 
+            ### On this page we find little information about how run DESeq2 workflow
+            ### a actionButton when press it run DESeq2 workflow 
+            ### a uiOutput("") set on server function
             tabItem(tabName = "deseq2",
                     waiter::use_waiter(),
                     fluidPage(
@@ -274,7 +276,15 @@ ui <- tagList(
                      
                       )
             ),
-            ### Count distribution plot ----
+            ### Count distribution page ----
+            ### On this page we find distribution plot and it parameters after running DESeq
+            ### On this page we find :
+            ###     - a box() which countain :
+            ###         - selectInput of sample which set sample on count.distribution.plot function
+            ###         - sliderInput of break width which set break.width on count.distribution.plot function
+            ###         - sliderInput range of x.axis which set x.min and x.max on count.distribution.plot function
+            ###     - a box() which countain :
+            ###         - return of count.distribution.plot 
             tabItem(tabName = "count_distribution",
                     box(title="Count distribution",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
@@ -297,6 +307,7 @@ ui <- tagList(
             ),
             
             ### Count by gene ----
+            
             tabItem(tabName = "count_gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
