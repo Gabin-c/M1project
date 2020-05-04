@@ -6,74 +6,74 @@ server <- function(input, output,session) {
   
   
   ### Intro : 
-  output$countexample <- renderTable({   
+  output$countExample <- renderTable({   
     countex <- read.csv("countexample.csv",sep=",")
     countex
   })
   
-  output$metadataexample <- renderTable({   
-    metaex<- read.csv("metadataexample.csv",sep=",")
+  output$metadataExample <- renderTable({   
+    metaex <- read.csv("metadataexample.csv",sep=",")
     metaex
   }, na = "")
   
-  output$annoexample <- renderTable({   
-    annoex<- read.csv("annoexample.csv",sep=",")
+  output$annoExample <- renderTable({   
+    annoex <- read.csv("annoexample.csv",sep=",")
     annoex
   })
   
   ### Import the count ----
   count_table <- reactive({
-    req(input$file)
-    counttable <- read.csv(input$file$datapath, sep = input$sepcount)
+    req(input$CountDataTable)
+    countTable <- read.csv(input$CountDataTable$datapath, sep = input$separator_Count)
     
   })
   
   
   
   ### Display the count file ----
-  output$table <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
+  output$CountReadTable <- DT::renderDataTable(count_table(), options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
   
   
   ### Import the metadata file ---- 
   metadata <- reactive({
-    req(input$file2)
-    meta_table <- read.csv(input$file2$datapath, sep = input$sepmetadata, row.names=NULL)
+    req(input$MetadataFile)
+    meta_table <- read.csv(input$MetadataFile$datapath, sep = input$separator_Metadata, row.names=NULL)
   })
   ### Display the metadata file ----
-  output$table2 <- DT::renderDataTable(metadata(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
+  output$MetaTable <- DT::renderDataTable(metadata(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
   ### Design condition for DESeq2 ----
-  observeEvent(input$file2,{
-    updateTextInput(session,"condition", value = paste("~ ",paste(colnames(metadata()), collapse=" + ")))
+  observeEvent(input$MetadataFile,{
+    updateTextInput(session,"DesignDESeq2", value = paste("~ ",paste(colnames(metadata()), collapse=" + ")))
   })
   
   ### Import annotation file ----
-  observeEvent(input$annotation, {
-    if(input$annotation== TRUE){
-      updateTabsetPanel(session, "params", selected = "annotation")
+  observeEvent(input$CheckAnnotation, {
+    if(input$CheckAnnotation == TRUE){
+      updateTabsetPanel(session, "paramsAnno", selected = "annotation")
     }else{
-      updateTabsetPanel(session, "params", selected = "nothing")
+      updateTabsetPanel(session, "paramsAnno", selected = "nothing")
     }
   })
   anno <- reactive({
-    req(input$file3)
-    read.csv(input$file3$datapath, sep = input$sepanno)
+    req(input$AnnotationFile)
+    read.csv(input$AnnotationFile$datapath, sep = input$sep_Anno)
   })
-  output$table3 <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
+  output$AnnoTable <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
   ### Display parameters for volcano ---- 
-  observeEvent(input$annotation3,{
-    if(input$annotation3== TRUE){
-      output$annotationUi <- renderUI({ 
+  observeEvent(input$annotationVolcano,{
+    if(input$annotationVolcano== TRUE){
+      output$SliderFoldVolcano <- renderUI({ 
         sliderInput("sliderfold", "Choose your fold", min=-20, max=20, value=c(-6,6))
       })
-      output$annotationUi2 <- renderUI({ 
+      output$SliderLogVolcano <- renderUI({ 
         sliderInput("sliderlog", "Choose your log10", min=0, max=300, value=30)
       })
     }else{
-      output$annotationUi <- renderUI({})
-      output$annotationUi2 <- renderUI({})
+      output$SliderFoldVolcano <- renderUI({})
+      output$SliderLogVolcano <- renderUI({})
     }
     
   })
@@ -82,22 +82,22 @@ server <- function(input, output,session) {
   
   
   ### DDS object  ---- 
-  observeEvent(input$deseq2,{
-    req(input$deseq2)
+  observeEvent(input$RunDESeq2,{
+    req(input$RunDESeq2)
     waiter <- waiter::Waiter$new(html = spin_ball())
     waiter$show()
     
     
     ### Running DESeq1
-    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(input$condition), tidy=TRUE)
+    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(input$DesignDESeq2), tidy=TRUE)
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
     
     ### Display count table after dds
-    output$table4 <- renderUI({
+    output$SuccessMessage <- renderUI({
       box(width = 12, solidHeader = F,
           HTML("<center><h3>DESeq2 workflow successfully completed</h3></center>"))
-      })
+    })
     
     ### Clustering map
     output$clustering_map <- renderPlot(clustering_heatmap(dds$DESeq2,log="vst"))
@@ -114,7 +114,7 @@ server <- function(input, output,session) {
     updateSelectInput(session,"conditionpca",choices = colnames(metadata()))
     
     ### Choices heatmap
-    updateSelectInput(session,"conditionheatmap",choices = colnames(metadata()))
+    updateSelectInput(session,"conditionHeatmap",choices = colnames(metadata()))
     
     
     ### Counts data frame
@@ -123,45 +123,45 @@ server <- function(input, output,session) {
     dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
     dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
     
-
+    
     on.exit(waiter$hide())
     
   })
   
   ### PCA ----
-  observeEvent(input$logaction,{
-    if(input$log=="vst"){
-      dds$log <- vst(dds$DESeq2, blind=FALSE)
+  observeEvent(input$runPCA,{
+    if(input$TransformationPCA=="vst"){
+      dds$TransformationPCA <- vst(dds$DESeq2, blind=FALSE)
     }else{
-      dds$log <- rlogTransformation(dds$DESeq2,blind=FALSE)
+      dds$TransformationPCA <- rlogTransformation(dds$DESeq2,blind=FALSE)
     }
   })
-  pcaa <- function(){
-    pca(dds$log,input$conditionpca)
+  PCAfunction <- function(){
+    pca(dds$TransformationPCA,input$conditionpca)
     
   }
   output$downloadPCA <- downloadHandler(
     filename = "PCA.png",
     content = function(file){
-      ggsave(file, plot = pcaa(), device = "png")
+      ggsave(file, plot = PCAfunction(), device = "png")
     }
   )
-  output$pca <- renderPlot({
+  output$PCAplot <- renderPlot({
     withProgress(message = "Running PCA , please wait",{
       
       validate(
-        need(dds$log, "Please run DESeq2 and PCA")
+        need(dds$TransformationPCA, "Please run DESeq2 and PCA")
       )
-      pcaa()
+      PCAfunction()
     })})
   
   ### Depth ----
   
-  normdepth <- eventReactive(input$normalize1,{
-    if(input$normalize1==TRUE){
+  normdepth <- eventReactive(input$normalizeDepth,{
+    if(input$normalizeDepth==TRUE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
     }
-    else if(input$normalize1==FALSE){
+    else if(input$normalizeDepth==FALSE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
       
     }
@@ -169,30 +169,30 @@ server <- function(input, output,session) {
   output$downloadDepth <- downloadHandler(
     filename = "Depth.png",
     content = function(file){
-      ggsave(file, plot = depthh(), device = "png")
+      ggsave(file, plot = depthFunction(), device = "png")
     }
   )
-  depthh <- function(){
-    depth(normdepth(),breaksize= input$breaks1)
+  depthFunction <- function(){
+    depth(normdepth(),breaksize= input$breaksDepth)
   }
   output$depth <- renderPlot({
     validate(
       need(dds$counts_dds, "Please run DESeq2")
     )
-    depthh()
+    depthFunction()
   })
   
   ### Count distribution ----
   normcount <- reactive({
-    if(input$normalize==TRUE){
+    if(input$normalizeDistribution==TRUE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
     }
-    else if(input$normalize==FALSE){
+    else if(input$normalizeDistribution==FALSE){
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
       
     }
   })
-  distribution <- function(){count_distribution(normcount(), sample = input$sample,min=input$axis[1],max=input$axis[2],breaksize = input$breaks)
+  distribution <- function(){count_distribution(normcount(), sample = input$sample,min=input$axis[1],max=input$axis[2],breaksize = input$breaksDistribution)
   }
   output$downloadDistribution <- downloadHandler(
     filename = function(){
@@ -202,25 +202,26 @@ server <- function(input, output,session) {
       ggsave(file, plot = distribution(), device = "png")
     }
   )
-  output$count <- renderPlot({
+  output$CountDistributionPlot <- renderPlot({
     validate(
       need(dds$DESeq2, "Please run DESeq2")
     )
     distribution()})
   
+  
   ### Count by gene ----
   
-  norm <- eventReactive(input$normalize4,{
-    if(input$normalize4==TRUE){
+  normCountGene <- eventReactive(input$normalizeCountGene,{
+    if(input$normalizeCountGene==TRUE){
       dds$counts_turnup_n
     }
-    else if(input$normalize4==FALSE){
+    else if(input$normalizeCountGene==FALSE){
       dds$counts_turnup 
       
     }
   })
   countg <- function() {
-    plotcount(norm(), input$gene)
+    plotcount(normCountGene(), input$gene)
   }
   
   output$downloadCountgene <- downloadHandler(
@@ -229,53 +230,53 @@ server <- function(input, output,session) {
       ggsave(file, plot = countg(), device = "png")
     }
   )
-  output$countgene <- renderPlot({
+  output$CountGenePlot <- renderPlot({
     validate(
       need(dds$DESeq2, "Please run DESeq2")
     )
     countg()})
   
   ### MA plot ----
-  maplo <- function(){
-    maplot(dds$results,padje=input$pvalue)
+  MAplotFunction <- function(){
+    maplot(dds$results,padje=input$pvalueMAplot)
     
   }
   output$downloadMaplot <- downloadHandler(
     filename = "Maplot.png",
     content = function(file){
-      ggsave(file, plot = maplo(), device = "png")
+      ggsave(file, plot = MAplotFunction(), device = "png")
     }
   )
-  output$maplot <- renderPlot({
+  output$MAplot <- renderPlot({
     validate(
       need(dds$results, "Please run DESeq2")
     )
-    maplo()
+    MAplotFunction()
   })
-  output$num_DE <- renderTable({
-    number_of_DE(dds$results,input$pvalue)
+  output$numberDEgenes <- renderTable({
+    number_of_DE(dds$results,input$pvalueMAplot)
   })
   
   ### Volcano plot ----
-  volcan <- function(){
-    volcanoPlot(dds$results,annotation = input$annotation3, anno = anno() ,padje=input$pvalue2,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count=colnames(count_table()))
+  VolcanoplotFunction <- function(){
+    volcanoPlot(dds$results,annotation = input$annotationVolcano, anno = anno() ,padje=input$pvalueVolcano,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count=colnames(count_table()))
   }
-  output$downloadVulcano <- downloadHandler(
+  output$downloadVolcano <- downloadHandler(
     filename = "Volcanoplot.png",
     content = function(file){
-      ggsave(file, plot = volcan(), device = "png")
+      ggsave(file, plot = VolcanoplotFunction(), device = "png")
     }
   )
   
-  output$volcano <- renderPlot({
+  output$volcanoPlot <- renderPlot({
     validate(
       need(dds$results, "Please run DESeq2")
     )
-    volcan()
+    VolcanoplotFunction()
   })
   
   ### Dispersion ----
-  dispersion1 <- function(){
+  dispersionFunction <- function(){
     dispersion(dds$DESeq2)
   }
   
@@ -283,7 +284,7 @@ server <- function(input, output,session) {
     filename = "Dispersion.png",
     content = function(file){
       png(file)
-      dispersion1()
+      dispersionFunction()
       dev.off()
     }
   )
@@ -292,92 +293,92 @@ server <- function(input, output,session) {
     validate(
       need(dds$DESeq2, "Please run DESeq2")
     )
-    dispersion1()
+    dispersionFunction()
     
   })
   
   ### Heat map 1 ----
   
-  observeEvent(input$logaction2,{
-    if(input$log1=="vst"){
-      dds$log2 <- vst(dds$DESeq2, blind=FALSE)
+  observeEvent(input$RunMatrix,{
+    if(input$TransformationMatrix=="vst"){
+      dds$TransformationMatrix <- vst(dds$DESeq2, blind=FALSE)
     }else{
-      dds$log2 <- rlogTransformation(dds$DESeq2,blind=FALSE)
+      dds$TransformationMatrix <- rlogTransformation(dds$DESeq2,blind=FALSE)
     }
   })
-  heatmapcluster <- function(){
+  distanceCluster <- function(){
     
-    clustering_heatmap(dds$log2)
+    clustering_heatmap(dds$TransformationMatrix)
   }
-  output$clusteringmap <- renderPlot({
+  output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
       validate(
-        need(dds$log2, "Please run DESeq2 and Heat map")
+        need(dds$TransformationMatrix, "Please run DESeq2 and Heat map")
       )
-      heatmapcluster()
+      distanceCluster()
     })})
   
-  output$downloadHeatmap1 <- downloadHandler(
+  output$downloadDistanceMatrix <- downloadHandler(
     filename = "DistanceMatrix.png",
     content = function(file){
       png(file)
-      heatmapcluster()
+      distanceCluster()
       dev.off()
     }
   )
   ### Heat map 2 ----
-  observeEvent(input$logaction3,{
-    if(input$log3=="vst"){
-      dds$log3 <- vst(dds$DESeq2, blind=FALSE)
+  observeEvent(input$RunHeatmap,{
+    if(input$TransformationHeatmap=="vst"){
+      dds$TransformationHeatmap <- vst(dds$DESeq2, blind=FALSE)
     }else{
-      dds$log3 <- rlogTransformation(dds$DESeq2,blind=FALSE)
+      dds$TransformationHeatmap <- rlogTransformation(dds$DESeq2,blind=FALSE)
     }
   })
   
-  heatmap2 <- function() {
-    input$logaction3
+  heatmapCluster <- function() {
+    input$RunHeatmap
     
     
-    heatmap(dds$results,dds$log3,annotation = input$annotation2,metadata=metadata(),condition = input$conditionheatmap,count=colnames(count_table()),min=input$slider2[1],max=input$slider2[2],anno=anno())
+    heatmap(dds$results,dds$TransformationHeatmap,annotation = input$annotationHeatmap,metadata=metadata(),condition = input$conditionHeatmap,count=colnames(count_table()),min=input$nbGenes[1],max=input$nbGenes[2],anno=anno())
   }
-  output$clusteringmap2 <- renderPlot({
+  output$Heatmap <- renderPlot({
     validate(
-      need(dds$log3, "Please run DESeq2 and Heat map")
+      need(dds$TransformationHeatmap, "Please run DESeq2 and Heat map")
     )
     
-    heatmap2()
+    heatmapCluster()
   })
-  output$downloadHeatmap2 <- downloadHandler(
+  output$downloadHeatmap <- downloadHandler(
     filename = "Heatmap.png",
     content = function(file){
       png(file)
-      heatmap2()
+      heatmapCluster()
       dev.off()
     }
   )
   
-  menu3 <- reactive({
-    if(input$logaction3){
-      menuSubItem("Heatmap",tabName = "heatmap2", icon = icon("far fa-check-square"))
+  menuHeatmap <- reactive({
+    if(input$RunHeatmap){
+      menuSubItem("Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Heatmap",tabName = "heatmap2")
+      menuSubItem("Heatmap",tabName = "Heatmap")
       
       
     }
-    })
+  })
   
-  menu4 <- reactive({
-    if(input$logaction2){
-      menuSubItem("Distance matrix",tabName = "heatmap1",icon = icon("far fa-check-square"))
+  menuDistanceMatrix <- reactive({
+    if(input$RunMatrix){
+      menuSubItem("Distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Distance matrix",tabName = "heatmap1")
+      menuSubItem("Distance matrix",tabName = "DistanceMatrix")
       
       
     }
     
-    })
-  menu5 <- reactive({
-    if(input$logaction){
+  })
+  menuPCA <- reactive({
+    if(input$runPCA){
       menuSubItem("PCA",tabName = "pca",icon = icon("far fa-check-square"))
     }else{
       menuSubItem("PCA",tabName = "pca")
@@ -406,62 +407,54 @@ server <- function(input, output,session) {
   
   
   menu <- reactive({
-    if(is.null(input$file)==TRUE){
-      menuSubItem(text = "1.1 Input count table", tabName = "Input")
+    if(is.null(input$CountDataTable)==TRUE){
+      menuSubItem(text = "1.1 Input count table", tabName = "CountData")
       
     }else{
-      menuSubItem(text = "1.1 Input count table", tabName = "Input", icon = icon("far fa-check-square"))
+      menuSubItem(text = "1.1 Input count table", tabName = "CountData", icon = icon("far fa-check-square"))
     }
   })
-  output$menuCheck <- renderMenu({
+  output$CountTable <- renderMenu({
     menu()
-      })
-  
-  observeEvent(input$deseq2,{
-     output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
-               menuSubItem("Count distribution",tabName = "count_distribution",icon = icon("far fa-check-square")),
-               menuSubItem("Count by gene", tabName = "count_gene",icon = icon("far fa-check-square")),
-               menuSubItem("Depth of sample",tabName = "depth",icon = icon("far fa-check-square")),
-               menuSubItem("Dispersion",tabName = "dispersion",icon = icon("far fa-check-square")),
-               menu5(),
-               menuSubItem("MA Plot",tabName = "ma",icon = icon("far fa-check-square")),
-               menuSubItem("Volcano Plot",tabName = "vulcano",icon = icon("far fa-check-square")),
-               menu4(),
-                 menu3()
-               )  
-     })
   })
-
-  menu1 <- reactive({
-    if(is.null(input$file2)==TRUE){
-      menuSubItem(text = "1.2 Input metadata table", tabName = "Input2")
+  
+  observeEvent(input$RunDESeq2,{
+    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
+                                                 menuSubItem("Count distribution",tabName = "Count_Distribution",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Count by gene", tabName = "Count_Gene",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Depth of sample",tabName = "Depth",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Dispersion",tabName = "Dispersion",icon = icon("far fa-check-square")),
+                                                 menuPCA(),
+                                                 menuSubItem("MA Plot",tabName = "MAplot",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Volcano Plot",tabName = "Volcanoplot",icon = icon("far fa-check-square")),
+                                                 menuDistanceMatrix(),
+                                                 menuHeatmap()
+    )  
+    })
+  })
+  
+  menuMetadata <- reactive({
+    if(is.null(input$MetadataFile)==TRUE){
+      menuSubItem(text = "1.2 Input metadata table", tabName = "Metadata")
       
     }else{
-      menuSubItem(text = "1.2 Input metadata table", tabName = "Input2", icon = icon("far fa-check-square"))
+      menuSubItem(text = "1.2 Input metadata table", tabName = "Metadata", icon = icon("far fa-check-square"))
     }
   })
-  output$menuCheck1 <- renderMenu({
-    menu1()
+  output$MetadataTable <- renderMenu({
+    menuMetadata()
   })
-    
-  menu2 <- reactive({
-    if(is.null(input$file3)==TRUE){
-      menuSubItem(text = "1.3 Input annotation file", tabName = "Input3")
+  
+  menuAnnotation <- reactive({
+    if(is.null(input$AnnotationFile)==TRUE){
+      menuSubItem(text = "1.3 Input annotation file", tabName = "Annotation")
       
     }else{
-      menuSubItem(text = "1.3 Input annotation file", tabName = "Input3", icon = icon("far fa-check-square"))
+      menuSubItem(text = "1.3 Input annotation file", tabName = "Annotation", icon = icon("far fa-check-square"))
     }
   })
-  output$menuCheck2 <- renderMenu({
-    menu2()
+  output$AnnotationTable <- renderMenu({
+    menuAnnotation()
   })
-     
-    
-    
-
   
-  
-
 }
-
-

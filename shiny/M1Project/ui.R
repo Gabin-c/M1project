@@ -14,22 +14,22 @@ library(dashboardthemes)
 library(shinycssloaders)
 library(shinydashboardPlus)
 ### Files with all the function needed to make plots ----
-source("function_dds.R")
+source("dds function.R")
 
 
 
 ### Annotation pannel ----
-parameter_tabs <- tagList(
-  tags$style("#params { display:none; }"),
+parameters_Annotation <- tagList(
+  tags$style("#paramsAnno { display:none; }"),
   tabsetPanel(
-    id="params",
+    id="paramsAnno",
     tabPanel("nothing"),  
     tabPanel("annotation",
              fluidRow(
                column(width= 6,
                       box(title="Upload annotation file",width = 12, solidHeader = TRUE,collapsible = TRUE,
-                          column(width=5,selectInput("sepanno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                          fileInput("file3", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
+                          column(width=5,selectInput("sep_Anno", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                          fileInput("AnnotationFile", "Upload annotation file", accept = c(".csv",".txt",".tsv")))),
                column(width= 6,     
                       box(
                         title = "Accepted files :", width = 12,
@@ -58,9 +58,9 @@ ui <- tagList(
     id = "app",
     dashboardPage(
       ### Customize the header ----
-
+      
       dashboardHeader(title = "RNA-seq DE analysis", 
-
+                      
                       ### Home button----
                       tags$li(a(onclick = "openTab('Intro')",
                                 href = NULL,
@@ -69,13 +69,13 @@ ui <- tagList(
                                 style = "cursor: pointer;"),
                               class = "dropdown",
                               tags$script(HTML("
-                                       var openTab = function(tabName){
-                                       $('a', $('.sidebar')).each(function() {
-                                       if(this.getAttribute('data-value') == tabName) {
-                                       this.click()
-                                       };
-                                       });
-                                       }")))
+                                               var openTab = function(tabName){
+                                               $('a', $('.sidebar')).each(function() {
+                                               if(this.getAttribute('data-value') == tabName) {
+                                               this.click()
+                                               };
+                                               });
+                                               }")))
       ),
       
       ### Differents menu (page) in the sidebar ----
@@ -83,18 +83,18 @@ ui <- tagList(
         sidebarMenu(id="mysidebar",
                     menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
                     menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),startExpanded = TRUE,
-                             menuItemOutput("menuCheck"),
-                             menuItemOutput("menuCheck1"),
-                             menuItemOutput("menuCheck2")),
+                             menuItemOutput("CountTable"),
+                             menuItemOutput("MetadataTable"),
+                             menuItemOutput("AnnotationTable")),
                     menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
-
+                    
                     menuItemOutput("menuResults"),
-
+                    
                     tags$hr(),
                     menuItem(icon = NULL,
                              materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
                     ),tags$hr()
-          )
+        )
       ),
       ### Organization of the differents pages ----
       dashboardBody(
@@ -120,15 +120,15 @@ ui <- tagList(
                         This App necessarily requires a 'Count Data Table' and a 'Metadata Table'. An optional 'Annotation File' can be added", style="padding-left: 2em", align = "justify"),
                       h4("1.1 Count Data Table", style="padding-left: 3em"),
                       p("The Count Data Table must contain the count for each sample of the experiment for each gene and the first column must be gene ID or gene name as below :",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("countexample"))),
+                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("countExample"))),
                       br(),
                       h4("1.2 Metadata Table", style="padding-left: 3em"),
                       p("The Metadata table must contain the information of the experiment with at least 2 columns. The first one corresponds to the samples in the same order as the columns of the Count Table. 
                         The second one is a condition column. You can add as many columns as you have factors in your experiment.",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("metadataexample"))),
+                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("metadataExample"))),
                       h4("1.2  Annotation File", style="padding-left: 3em"),
                       p("The Annotation File contains informations about the genes. If you have one, it must contain a column named 'symbol' in which we can find the symbol of each gene.",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoexample"))),
+                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoExample"))),
                       h3("2. Results", style="padding-left: 1em"),
                       p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
                       p("- Count distribution",
@@ -143,14 +143,14 @@ ui <- tagList(
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       
                       )
-            ),
+                    ),
             ### Upload count table ----
-            tabItem(tabName = "Input",
+            tabItem(tabName = "CountData",
                     column(width = 6,
                            box(title="Upload count table",width = 12, solidHeader = TRUE,collapsible = TRUE,
                                column(width=5,
-                                      selectInput("sepcount", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                               fileInput("file", "Upload count table", accept = c(".csv",".txt",".tsv"))
+                                      selectInput("separator_Count", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                               fileInput("CountDataTable", "Upload count table", accept = c(".csv",".txt",".tsv"))
                            )),
                     column(width = 6,
                            box(
@@ -162,15 +162,15 @@ ui <- tagList(
                                <li> All others columns are count for each sample</li>"),
                              height = 160
                              )),
-                    dataTableOutput("table")
+                    dataTableOutput("CountReadTable")
                     ),
             ### Upload metadata table ----
-            tabItem(tabName = "Input2",
-                   column(width = 6,
+            tabItem(tabName = "Metadata",
+                    column(width = 6,
                            box(title="Upload metadata table",width = 12, solidHeader = TRUE,collapsible = TRUE,
                                column(width=5,
-                                      selectInput("sepmetadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
-                               fileInput("file2", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
+                                      selectInput("separator_Metadata", "Separator:", c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
+                               fileInput("MetadataFile", "Upload metadata table", accept = c(".csv",".txt",".tsv"))
                            )),
                     column(width = 6,
                            box(
@@ -184,17 +184,17 @@ ui <- tagList(
                              )),
                     column(width = 12,
                            box(width = 12,
-                               textInput("condition","Choose your design without linear combination", placeholder = "Conditions"))),
-                    dataTableOutput("table2")
+                               textInput("DesignDESeq2","Choose your design without linear combination", placeholder = "Conditions"))),
+                    dataTableOutput("MetaTable")
                     ),
             ### Uploade annotation file ----
-            tabItem(tabName = "Input3",
+            tabItem(tabName = "Annotation",
                     fluidPage(
                       box(width = 12,
-                          checkboxInput("annotation","Do you have an annotation file ?",value=FALSE)),
+                          checkboxInput("CheckAnnotation","Do you have an annotation file ?",value=FALSE)),
                       fluidRow(
-                        parameter_tabs),
-                      dataTableOutput("table3")
+                        parameters_Annotation),
+                      dataTableOutput("AnnoTable")
                     )
             ),
             ### Run DESeq2 ----
@@ -202,35 +202,31 @@ ui <- tagList(
                     waiter::use_waiter(),
                     fluidPage(
                       box(width = 12, solidHeader = F,
-    
-                          
-                          
                           HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
-                              
                                <br><h5> Check if your design chosen previously is correct.</h5>
                                <br><h5>If it is not, the application will crash.</h5></center>")),
                       box(width = 12,
-                          actionButton("deseq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
-                      uiOutput("table4")
-                     
-                      )
-            ),
+                          actionButton("RunDESeq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
+                      uiOutput("SuccessMessage")
+                      
+                          )
+                    ),
             ### Count distribution plot ----
-            tabItem(tabName = "count_distribution",
+            tabItem(tabName = "Count_Distribution",
                     box(title="Count distribution",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
                                selectInput("sample","Which sample do you want to see ?", choices = c())
                         ),
                         column(width = 6,
-                               sliderInput("breaks","Break size",min=0,max=2,value=1.0,step = 0.25)
+                               sliderInput("breaksDistribution","Break size",min=0,max=2,value=1.0,step = 0.25)
                         ),
                         column(width = 6,
                                sliderInput("axis","Axis x",min=0,max=20,value=c(0,14))
                         ),
-                        column(width = 6, checkboxInput("normalize","Do you want to see distribution after normalisation ?",value=FALSE)
+                        column(width = 6, checkboxInput("normalizeDistribution","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
                     ),
-                    box(width=12,status = "primary",withSpinner(plotOutput("count"))),
+                    box(width=12,status = "primary",withSpinner(plotOutput("CountDistributionPlot"))),
                     column(width= 4,
                            downloadButton("downloadDistribution",'Download plot',class = "btn-warning")
                     )
@@ -238,27 +234,27 @@ ui <- tagList(
             ),
             
             ### Count by gene ----
-            tabItem(tabName = "count_gene",
+            tabItem(tabName = "Count_Gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
                                
                                selectizeInput("gene","Which gene do you want to see ?", choices = NULL)
                                
                         ),
-                        column(width = 6, checkboxInput("normalize4","Do you want to see distribution after normalisation ?",value=FALSE)
+                        column(width = 6, checkboxInput("normalizeCountGene","Do you want to see distribution after normalisation ?",value=FALSE)
                         )
                     ),
-                    box(width=12,status = "primary",withSpinner(plotOutput("countgene"))),
+                    box(width=12,status = "primary",withSpinner(plotOutput("CountGenePlot"))),
                     column(width= 4,
                            downloadButton("downloadCountgene",'Download plot',class = "btn-warning")
                     )
                     
             ),
             ### Depth plot ----
-            tabItem(tabName = "depth",
+            tabItem(tabName = "Depth",
                     box(title="Depth of Sample",width = 12,solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("breaks1","Bar size",min=0,max=4,value=0.75,step = 0.25),
-                        checkboxInput("normalize1","Do you want to see depth after normalisation ?",value=FALSE)
+                        sliderInput("breaksDepth","Bar size",min=0,max=4,value=0.75,step = 0.25),
+                        checkboxInput("normalizeDepth","Do you want to see depth after normalisation ?",value=FALSE)
                     ),
                     box(width=12,status = "primary",withSpinner(plotOutput("depth",height = 500))),
                     column(width= 4,
@@ -269,19 +265,19 @@ ui <- tagList(
             tabItem(tabName = "pca",
                     box(width = 12,
                         title = "PCA", solidHeader = T, status = "primary",collapsible = TRUE,
-                        selectInput("log",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
+                        selectInput("TransformationPCA",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         selectInput("conditionpca","Choose your intgroup for PCA ?", choices = c()),
-                        actionButton("logaction","Run PCA")
+                        actionButton("runPCA","Run PCA")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
-                        withSpinner(plotOutput("pca",height = 650))
+                        withSpinner(plotOutput("PCAplot",height = 650))
                     ),
                     column(width= 4,
                            downloadButton("downloadPCA",'Download plot',class = "btn-warning")
                     )
             ),
             ### Dispersion plot ----
-            tabItem(tabName = "dispersion",
+            tabItem(tabName = "Dispersion",
                     box(width = 12,
                         title = "Dispersion", solidHeader = T, status = "primary",collapsible = TRUE,
                         withSpinner(plotOutput("dispersionPlot",height = 650))),
@@ -290,93 +286,86 @@ ui <- tagList(
                     )
             ),
             ### MA plot ----
-            tabItem(tabName = "ma",
+            tabItem(tabName = "MAplot",
                     box(width = 12,
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                        sliderInput("pvalue", "Choose your pvalue", min=0, max=1, value=0.05),
-                        tableOutput("num_DE")
+                        sliderInput("pvalueMAplot", "Choose your pvalue", min=0, max=1, value=0.05),
+                        tableOutput("numberDEgenes")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
-                        withSpinner(plotOutput("maplot",height = 650))),
+                        withSpinner(plotOutput("MAplot",height = 650))),
                     column(width= 4,
                            downloadButton("downloadMaplot",'Download plot',class = "btn-warning"))
             ),
             ### Volcano plot ----
-            tabItem(tabName = "vulcano",
+            tabItem(tabName = "Volcanoplot",
                     fluidPage(
                       box(width = 12,
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
-                          checkboxInput("annotation3","Do you have an annotation file ?",value=FALSE),
-                          sliderInput("pvalue2", "Choose your pvalue", min=0, max=1, value=0.05),
-                          
-                          
-                          
-                          uiOutput("annotationUi"),
-                          uiOutput("annotationUi2")
-                          
+                          checkboxInput("annotationVolcano","Do you have an annotation file ?",value=FALSE),
+                          sliderInput("pvalueVolcano", "Choose your pvalue", min=0, max=1, value=0.05),
+                          uiOutput("SliderFoldVolcano"),
+                          uiOutput("SliderLogVolcano")
                       ),
-                      
                       box( solidHeader = F, status = "primary",width = 12,
-                           withSpinner(plotOutput("volcano",height = 650))),
+                           withSpinner(plotOutput("volcanoPlot",height = 650))),
                       column(width= 4,
-                             downloadButton("downloadVulcano",'Download plot',class = "btn-warning")))
+                             downloadButton("downloadVolcano",'Download plot',class = "btn-warning")))
             ),
             
             
             ### Heatmap ----
-            tabItem(tabName = "heatmap1",
+            tabItem(tabName = "DistanceMatrix",
                     
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
-                        selectInput("log1",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
-                        actionButton("logaction2","Run Heat map")),
+                        selectInput("TransformationMatrix",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
+                        actionButton("RunMatrix","Run Heat map")),
                     box(solidHeader = F, status = "primary",width = 12,
-                        withSpinner(plotOutput("clusteringmap",height = 650))
+                        withSpinner(plotOutput("DistanceMatrixMap",height = 650))
                     ),
                     column(width= 4,
-                           downloadButton("downloadHeatmap1",'Download plot',class = "btn-warning")
+                           downloadButton("downloadDistanceMatrix",'Download plot',class = "btn-warning")
                     )
             ),
             ### Heat map 2 ----
-            tabItem(tabName = "heatmap2",
+            tabItem(tabName = "Heatmap",
                     waiter::use_waiter(),
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
-                        column(width=6, selectInput("log3",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
-                               checkboxInput("annotation2","Do you have a Annotation file ?",value=FALSE)
+                        column(width=6, selectInput("TransformationHeatmap",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
+                               checkboxInput("annotationHeatmap","Do you have a Annotation file ?",value=FALSE)
                         ),
                         column(width=6,
-                               selectInput("conditionheatmap","Choose your condition for Heat map ?", choices = c()),
-                               actionButton("logaction3","Run Heat map")),
-
+                               selectInput("conditionHeatmap","Choose your condition for Heat map ?", choices = c()),
+                               actionButton("RunHeatmap","Run Heat map")),
+                        
                         column(width=12,
-                        sliderInput("slider2",label="Choose the number of genes you want to display", min = 0, 
-                                    max = 200, value = c(0, 60)))),
+                               sliderInput("nbGenes",label="Choose the number of genes you want to display", min = 0, 
+                                           max = 200, value = c(0, 60)))),
                     box(solidHeader = F, status = "primary",width = 12,
-                        withSpinner(plotOutput("clusteringmap2", height = 1000, width = 1000))
+                        withSpinner(plotOutput("Heatmap", height = 1000, width = 1000))
                     ),
                     column(width= 4,
-                           downloadButton("downloadHeatmap2",'Download plot',class = "btn-warning")
+                           downloadButton("downloadHeatmap",'Download plot',class = "btn-warning")
                     )
             )
+                           )
+            )
+            )
           )
-        )
-      )
-    )
-  ),
+                    ),
   tags$footer(
     wellPanel(
       HTML('
-             <p align="center" width="4">Developed by <a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a> and <a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
-             <p align="center" width="4">First year of <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Master<span>&#39;</span>s degree</a> in Rennes. </p>
-             <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>'
-    ), 
-    style = 
-      "
-        position:relative;
-        width:100%;
-        background-color: #2d3741;"
-  ))
-)
-
-
+           <p align="center" width="4">Developed by <a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a> and <a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
+           <p align="center" width="4">First year of <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Master<span>&#39;</span>s degree</a> in Rennes. </p>
+           <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>'
+      ), 
+      style = 
+        "
+      position:relative;
+      width:100%;
+      background-color: #2d3741;"
+      ))
+  )

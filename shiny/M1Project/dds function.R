@@ -9,7 +9,7 @@ library(ggrepel)
 
 
 ### Preamble ----
-### All of this function can be use after running a DESeq2 workflow.
+### All of this function can be used after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
 ###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
 ###      - depth.plot()
@@ -109,7 +109,7 @@ count.plot <- function(dds.count,gene){
       theme(axis.title.y = element_text(size=14)) +
       theme(legend.text=element_text(size=13)) +
       theme(legend.title=element_blank())
-  )
+  ))
 }
 
 
@@ -219,8 +219,8 @@ distance.matrix.heatmap <- function(dds.resTransf){
 ###   - metadata which a design table of an RNA-seq experience
 ###   - dds.resTransf which is an DESeq2 transformate object with vst() or rLogtransformation()
 ###   - condition : design formula of RNA-seq experience
-###   - min : num of the row in results table start from the top
-###   - max : num of the row in results table start from the top
+###   - min : num of row in results table starting from the top
+###   - max : num of row in results table starting from the top
 gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,anno,p.val=0.05,metadata,condition,count.tb,min,max){
   res <- tbl_df(dds.results)
   if(is.anno==TRUE){
