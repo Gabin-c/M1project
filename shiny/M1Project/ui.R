@@ -67,11 +67,13 @@ ui <- tagList(
   div(
     id = "app",
     dashboardPage(
+      
       ### Customize the header ----
       ### header is composate of :
       ###   - a title 
       ###   - a home bouton which on click return user on introduction page
       dashboardHeader(title = "RNA-seq DE analysis", 
+                      uiOutput("themes"),
 
                       ### Home button ----
                       tags$li(a(onclick = "openTab('Intro')",
@@ -117,7 +119,7 @@ ui <- tagList(
       ### Dashboard body ----
       ### Organization of the differents pages associate with their menuItem
       dashboardBody(
-        uiOutput("themes"),
+        
         useShinyjs(),
         fluidRow(
           tabItems(
