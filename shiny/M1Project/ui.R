@@ -1,5 +1,5 @@
 ### Library ----
-### here we found all library need for proper functionning of app
+### here we find all library need for proper functionning of app
 library(shiny)
 library(shinydashboard)
 library(shinyjs)
@@ -279,7 +279,7 @@ ui <- tagList(
                     ),
             
             ### Count distribution page ----
-            ### On this page we find distribution plot and it parameters after running DESeq
+            ### On this page we find count distribution plot and it parameters after running DESeq
             ### On this page we find :
             ###     - a box() which countain :
             ###         - selectInput of sample which set sample on count.distribution.plot function
@@ -308,7 +308,15 @@ ui <- tagList(
                     
             ),
             
-            ### Count by gene ----
+            ### Count by gene page ----
+            ### On this page we find count by gene plot and it parameters after running DESeq
+            ### On this page we find :
+            ###     - a box() which countain :
+            ###         - selectizeInput of gene which set sample on count.gene.plot function
+            ###         - a checkBox normalization if checkbox is check ON dds.count use is normalize, else dds.count use is not normalize
+            ###     - a box() which countain :
+            ###         - return of count.gene.plot 
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "Count_Gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
@@ -326,6 +334,14 @@ ui <- tagList(
                     
             ),
             ### Depth plot ----
+            ### On this page we find depth sample plot and it parameters after running DESeq
+            ### On this page we find :
+            ###     - a box() which countain :
+            ###         - sliderInput of break width which set break.width on depth.plot function
+            ###         - a checkBox normalization if checkbox is check ON dds.count use is normalize, else dds.count use is not normalize
+            ###     - a box() which countain :
+            ###         - return of depth.plot 
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "Depth",
                     box(title="Depth of Sample",width = 12,solidHeader = T, status = "primary",collapsible = TRUE,
                         sliderInput("breaksDepth","Bar size",min=0,max=4,value=0.75,step = 0.25),
@@ -337,6 +353,15 @@ ui <- tagList(
                     )
             ),
             ### PCA plot ----
+            ### On this page we find PCA plot and it parameters after running DESeq
+            ### We find :
+            ###     - a box() which countain :
+            ###         - a selectInput of intgroup for pca.plot function
+            ###         - a selectInput to chose transformation for pca.plot 
+            ###         - a actionButton to run pca?plot function
+            ###     - a box() which countain :
+            ###         - return of pca.plot 
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "pca",
                     box(width = 12,
                         title = "PCA", solidHeader = T, status = "primary",collapsible = TRUE,
@@ -352,6 +377,11 @@ ui <- tagList(
                     )
             ),
             ### Dispersion plot ----
+            ### On this page we find dispersion plot after running DESeq
+            ### We find :
+            ###     - a box() which countain :
+            ###         - return of dispersion.plot 
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "Dispersion",
                     box(width = 12,
                         title = "Dispersion", solidHeader = T, status = "primary",collapsible = TRUE,
@@ -361,6 +391,14 @@ ui <- tagList(
                     )
             ),
             ### MA plot ----
+            ### On this page we find MA plot and it parameters after running DESeq
+            ### We find :
+            ###     - a box() which countain :
+            ###         - sliderInput of P.value which set p.val of ma.plot function
+            ###         - a tableOutput() of number.DE.gene function
+            ###     - a box() which countain :
+            ###         - return of ma.plot 
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "MAplot",
                     box(width = 12,
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
@@ -373,6 +411,15 @@ ui <- tagList(
                            downloadButton("downloadMaplot",'Download plot',class = "btn-warning"))
             ),
             ### Volcano plot ----
+            ### On this page we find MA plot and it parameters after running DESeq
+            ### We find :
+            ###     - a box() which countain :
+            ###         - sliderInput of P.value which set p.val of volcano.plot function
+            ###         - a checkbox Yes/No if there an annotation
+            ###              - if check Yes uiOutput("sliderFoldVolcano") and uiOutput("SliderLogVolcanon") appear
+            ###     - a box() which countain :
+            ###         - return of volcano.plot 
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "Volcanoplot",
                     fluidPage(
                       box(width = 12,
@@ -389,7 +436,15 @@ ui <- tagList(
             ),
             
             
-            ### Heatmap ----
+            ### distance matrix heat map ----
+            ### On this page we find distance matrix heat map and it parameters after running DESeq
+            ### We find :
+            ###     - a box() which countain :
+            ###         - a selectInput to chose transformation for distance.matrix.heatmap  
+            ###         - a actionButton to run distance.matrix.heatmap function
+            ###     - a box() which countain :
+            ###         - return of distance.matrix.heatmap
+            ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "DistanceMatrix",
                     
                     box(width = 12,
@@ -403,7 +458,19 @@ ui <- tagList(
                            downloadButton("downloadDistanceMatrix",'Download plot',class = "btn-warning")
                     )
             ),
-            ### Heat map 2 ----
+            ### Gene expression heatmap ----
+            ### On this page we find gene expression heatmap and it parameters after running DESeq
+            ### We find :
+            ###     - a box() which countain :
+            ###         - a selectInput to chose transformation for gene.expression.heatmap  
+            ###         - a selectInput to chose condition for gene.expression.heatmap
+            ###         - a annotation checkboxInput() for is.Anno of gene.expressions.heatmap function
+            ###         - a actionButton to run gene.expression.heatmap function
+            ###         - a sliderInput to set the number of genes to display in gene.expression.heatmap
+            ###     - a box() which countain :
+            ###         - return of distance.matrix.heatmap
+            ###     - a downloadButton to download  the generate plot
+            
             tabItem(tabName = "Heatmap",
                     waiter::use_waiter(),
                     box(width = 12,
@@ -430,6 +497,7 @@ ui <- tagList(
             )
           )
                     ),
+  ### footer settings ----
   tags$footer(
     wellPanel(
       HTML('
