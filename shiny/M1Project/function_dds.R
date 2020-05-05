@@ -30,13 +30,12 @@ library(ggrepel)
 ### depth need two argument
 ###   - dds which is a count table of a RNAseq experience which have in column : sample, and in row :  gene
 ###   - breaksize which is width of the bar
-depth <- function(dds,breaksize=1){
-  depth <- dds
-  depth <- as.data.frame(colSums(depth))
+depth.plot <- function(dds.count,break.width=1){
+  depth <- as.data.frame(colSums(dds.count))
   depth$Sample <- row.names(depth)
   
   return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ 
-           geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = breaksize)+
+           geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = break.width)+
            labs(title = "Depth of each sample", x="Samples", y="Depth")+theme_bw()+
            theme(plot.title = element_text(face = "bold", size= 18)) +
            theme(axis.title.x = element_text(size=14)) +
@@ -53,11 +52,10 @@ depth <- function(dds,breaksize=1){
 ###   - min which is the min of x axis 
 ###   - max which is the max of x axis
 
-count_distribution <- function(dds, sample,min=0,max=14,breaksize=1){
-  counts_dds <- dds
+count.distribution.plot <- function(dds.count, sample,x.min=0,x.max=14,break.width=1){
   
-  return(ggplot(data=counts_dds, aes(log(counts_dds[,sample]+1))) + 
-           geom_histogram(breaks=seq(min,max,breaksize),position="identity",alpha=0.5,fill="darkcyan", color="dodgerblue1")+
+  return(ggplot(data=dds.count, aes(log(dds.count[,sample]+1))) + 
+           geom_histogram(breaks=seq(x.min,x.max,break.width),position="identity",alpha=0.5,fill="darkcyan", color="dodgerblue1")+
            theme_classic() +
            labs(title=sample, x="Counts values (number of reads by gene) in log(count+1)",y="Counts frequencies") +
            theme(plot.title = element_text(face = "bold", size= 18)) +
@@ -74,12 +72,14 @@ dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
 }
 ### nummber of differemtial express gene ----
-number_of_DE <- function(dds,padje = 0.05){
-  res_dif <- dds
-  tb <- as.data.frame(table(res_dif$padj <= padje ,useNA="always"))
-  colnames(tb) = c("DE","Genes")
-  return(tb)
+
+
+number.DE.gene <- function(dds.result,p.val = 0.05){
+  tb.DE <- as.data.frame(table(dds.result$padj <= p.val ,useNA="always"))
+  colnames(tb.DE) = c("DE","Genes")
+  return(tb.DE)
 }
+
 
 
 

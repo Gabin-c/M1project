@@ -15,7 +15,7 @@ library(dashboardthemes)
 library(shinycssloaders)
 library(shinydashboardPlus)
 ### Files with all the function needed to make plots ----
-source("dds function.R")
+source("function_dds.R")
 
 
 

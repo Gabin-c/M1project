@@ -173,7 +173,7 @@ server <- function(input, output,session) {
     }
   )
   depthFunction <- function(){
-    depth(normdepth(),breaksize= input$breaksDepth)
+    depth.plot(normdepth(),break.width= input$breaksDepth)
   }
   output$depth <- renderPlot({
     validate(
@@ -192,7 +192,7 @@ server <- function(input, output,session) {
       
     }
   })
-  distribution <- function(){count_distribution(normcount(), sample = input$sample,min=input$axis[1],max=input$axis[2],breaksize = input$breaksDistribution)
+  distribution <- function(){count.distribution.plot(normcount(), sample = input$sample,x.min=input$axis[1],x.max=input$axis[2],break.width = input$breaksDistribution)
   }
   output$downloadDistribution <- downloadHandler(
     filename = function(){
