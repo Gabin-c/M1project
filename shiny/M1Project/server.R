@@ -128,7 +128,7 @@ server <- function(input, output,session) {
     }
   })
 
-  ### Display count distribution plot using count_distribution() function (see dds function.R)
+  ### Display count distribution plot using count.distribution.plot() function (see function_dds.R)
   distribution <- function(){count.distribution.plot(normcount(), sample = input$sample,x.min=input$axis[1],x.max=input$axis[2],break.width = input$breaksDistribution)}
 
   output$CountDistributionPlot <- renderPlot({
@@ -157,7 +157,7 @@ server <- function(input, output,session) {
       dds$counts_turnup 
     }
   })
-  ### Display Count by gene plot using plotcount() function (see dds function.R)
+  ### Display Count by gene plot using gene.count.plot() function (see function_dds.R)
   countg <- function() {
     gene.count.plot(normCountGene(), input$gene)
   }
@@ -184,7 +184,7 @@ server <- function(input, output,session) {
       dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
     }
   })
-  ### Display depth plot using depth() function from dds_function.R
+  ### Display depth plot using depth.plot() function from function_dds.R
   depthFunction <- function(){
     depth.plot(normdepth(),break.width= input$breaksDepth)
   }
@@ -204,7 +204,7 @@ server <- function(input, output,session) {
   
   
   ### Dispersion ----
-  ### Display dispersion plot using dispersion() function from dds_function.R
+  ### Display dispersion plot using dispersion() function from function_dds.R
   dispersionFunction <- function(){
     dispersion(dds$DESeq2)
   }
@@ -235,11 +235,13 @@ server <- function(input, output,session) {
       dds$TransformationPCA <- rlogTransformation(dds$DESeq2,blind=FALSE)
     }
   })
+  
+  ### Display PCA plot usin pca.plot() function from function_dds.R
   PCAfunction <- function(){
     pca.plot(dds$TransformationPCA,input$conditionpca)
     
   }
-  ### Display PCA plot
+  
   output$PCAplot <- renderPlot({
     withProgress(message = "Running PCA , please wait",{
       
@@ -259,7 +261,7 @@ server <- function(input, output,session) {
   
 
   ### MA plot ----
-  ### Display MA plot using maplot() function from dds_function.R
+  ### Display MA plot using ma.plot() function from function_dds.R
   MAplotFunction <- function(){
     ma.plot(dds$results,p.val=input$pvalueMAplot)
   }
@@ -298,7 +300,7 @@ server <- function(input, output,session) {
     }
   })
   
-  ### Display volcano plot using volcanoPlot() function from dds_function.R
+  ### Display volcano plot using volcano.plot() function from function_dds.R
   VolcanoplotFunction <- function(){
     volcano.plot(dds$results,is.anno = input$annotationVolcano, anno = anno() ,p.val=input$pvalueVolcano,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count.tb=colnames(count_table()))
   }
@@ -326,7 +328,7 @@ server <- function(input, output,session) {
       dds$TransformationMatrix <- rlogTransformation(dds$DESeq2,blind=FALSE)
     }
   })
-  ### Display distance matrix using the fonction clusterin_heatmap() from dds_function.R
+  ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
     distance.matrix.heatmap(dds$TransformationMatrix)
   }
@@ -357,7 +359,7 @@ server <- function(input, output,session) {
     }
   })
   
-  ### Display heatmap using heatmap() function from dds_function.R
+  ### Display heatmap using gene.expression.heatmap() function from function_dds.R
   heatmapCluster <- function() {
     input$RunHeatmap
     gene.expression.heatmap(dds$results,dds$TransformationHeatmap,is.anno = input$annotationHeatmap,metadata=metadata(),condition = input$conditionHeatmap,count.tb=colnames(count_table()),min=input$nbGenes[1],max=input$nbGenes[2],anno=anno())
