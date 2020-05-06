@@ -2,7 +2,10 @@
 title: "RNA-seq analysis and Shiny application"
 author: "David GALLIEN & Gabin COUDRAY"
 date: "15/04/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -318,15 +321,7 @@ plotPCA(vsdata, intgroup="dex")
 ```{r Heatmap}
 # Heatmap
 
-dists <- dist(t(assay(vsdata)))
-mat <- as.matrix(dists)
-colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
-pheatmap(mat,
-         clustering_distance_rows=dists,
-         clustering_distance_cols=dists,
-         col=colors)
-hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
-heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
+
 
 
 

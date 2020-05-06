@@ -1,0 +1,826 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={RNA-seq analysis and Shiny application},
+            pdfauthor={David GALLIEN \& Gabin COUDRAY},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{RNA-seq analysis and Shiny application}
+\author{David GALLIEN \& Gabin COUDRAY}
+\date{15/04/2020}
+
+\begin{document}
+\maketitle
+
+~
+
+\subsection{Introduction}\label{introduction}
+
+Most of biological researchers does not have time to use the tools which
+allow to analyze the data generated by new technology. It is why it is
+imperative to offer to biologist facilitate tools that can allow them to
+be more efficient and conscenrate on there research.
+
+In our project we want to be able to generate application that can help
+them to explore there data and their results in R environment. For that,
+Shiny package allows to create interactive web applications.
+
+Nevertheless to create a vizualisation interactive application we need
+to have something to show. In medical research which is the main field
+we want to explore, next generation sequencing are often use and
+generate big data which we need to be analyzed and explored. We decided
+to concentrate our work on RNA sequencing (RNA-seq), this next
+generation sequencing had the purpose to detect differential express
+between cellular type of different condition.
+
+\subsection{Objectives}\label{objectives}
+
+\subsubsection{Context}\label{context}
+
+RNA-seq is a new way for sequencig RNA fastly than previous techniques
+like Sanger. The main aim of RNA-seq is the study of the differential
+expression of genes between different conditions. RNA sequencing was
+cited for the first time in 2008. Since, the number of publication with
+RNA-seq data grown exponentially. This kind of analysis uses NGS
+(Next-Generation Sequencing) technology like Illumina, Roche 454 or Ion
+torrent.
+
+An RNA sequencing analysis presents 3 main steps :
+
+\begin{itemize}
+\item
+  Random fragmentation of mature RNA
+\item
+  Amplification of fragments by PCR
+\item
+  Sequencing of these amplified fragments making millions of reads
+\end{itemize}
+
+The number of reads obtained is proportional to the abundance of RNA in
+the cell. These reads are stored in fastQ format files and their quality
+is estimated. Then each read is mapped to the genome of the organism.
+After the mapping we got BAM files in which every lines represent an
+alignment of a read. Finally, we count the number of reads by position
+and make a table in order to analyse this.
+
+Today more and more studies use RNA sequencing then there are more and
+more data to analyze. By following this problematic we will set up an
+Rshiny application allowing to analyze the RNA-seq data as deeply as
+possible. This application aims to answer as many questions as possible
+and visualize the results intuitively.
+
+\subsubsection{Shiny application}\label{shiny-application}
+
+Shiny is an R package that permit to build easily dynamic and
+interactive web applications. An Rshiny application is separated into
+two parts :
+
+\begin{itemize}
+\item
+  A User Interface (UI) which controls the appearance of the app
+\item
+  A server function contains the build of the app\\
+\end{itemize}
+
+Our goal is to create an application which allows to visualize the data
+of an RNA-seq analysis. This application will take in input the count
+table obtained after the RNAseq, normalize the data and analyse it with
+statistical techniques. We want to display plots like MAplot, Volcano
+plot and others results from statistical analysis. All this to find a
+potential differential gene expression.
+
+~
+
+First we will explain more deeply the RNA-seq analysis then we will
+proceed to the count table analysis under R thanks to the package
+DESeq2. Finally, we will create the Shiny app to study the results of
+the analysis.
+
+\subsubsection{RNA-sequencing data
+analysis}\label{rna-sequencing-data-analysis}
+
+\paragraph{Step 1 : Data generation}\label{step-1-data-generation}
+
+Firstly, to get the dataset, RNA is extraced from cells and mRNA are
+isolated by poly-A selection. Once extracted, mRNA are fragmented and
+reverse transcribed into cDNA. Then, cDNA are sequenced with adaptadors
+sequences using NGS technologies. The most used today is the Illumina
+technologie. This technologie uses clonal amplification and sequencing
+by synthesis (SBS). The sequencing can be ``single end'' (each read is
+independant) or ``paired-end'' (reads are paired). After the sequencing,
+millions of reads are produced.
+
+\paragraph{Step 2 : Quality}\label{step-2-quality}
+
+The sequencer gives as a result some FASTQ files. In this kind of file,
+a read is represented by a block of four lines. Then we can use a
+programm like FastQC to check the fiability of the sequencing.
+
+\paragraph{Step 3 : Mapping}\label{step-3-mapping}
+
+This part of the analysis consists in aligning all the reads on the
+genome of the organism studied. One read is mapped to the region of the
+genome which is the most similar. The mean of the number of reads mapped
+on a region is called the depth. After the mapping, we get BAM files in
+which each line represent a read.
+
+\paragraph{Step 4 : Quantification}\label{step-4-quantification}
+
+The number of reads is a reflection of the RNA abundance of RNA in the
+cell then we can estimate the expression level of the gene. That's why
+it is important to count the read mapped for each gene. The aim of this
+step is to build a count table in order to import it in R and manipulate
+easily.
+
+\paragraph{Step 5 : Statistics}\label{step-5-statistics}
+
+We can visualize our data by a density signal on a genome browser like
+IGV. This allows to see the position of the exons and the level of
+expressions. We can also produce plot like MA-plot or Volcano plot in
+order to compare samples.
+
+To go further and see if there is a differential expression we have to
+normalize the data and then use differents statistical tests. We obtain
+adjusted p-value with which we can do a list of gene defirentially
+expressed.
+
+\subsubsection{DESeq2}\label{deseq2}
+
+\paragraph{What is DESeq2 ?}\label{what-is-deseq2}
+
+DESeq2 is package from R which means Differential gene expression
+analysis based on the negative binomial distribution. It is available on
+Bioconductor, a webside which provides open source software for
+bioinformatics and more specificly for the analysis and the study of
+high-throughput sequencing like RNA-seq here. With the differents tools
+of this packages, we can estimate some mean-variance relation in the
+data and test for differential expression based on a model using the
+negative binomial distribution.
+
+The negative binomial distribution is an alternative to Poisson law. It
+is a discrete probability distribution. We consider an experiment which
+can give a success of probability p or a failure and this experiment
+continue until we obtain a given number of successes. The aim is to know
+the number of fails before the given number of successes.
+
+We use te negative binomial distribution because count read data is not
+a continuous thing so they only take non-negative integer values and we
+can't use a normal distribution. In the negative binomial distribution,
+the variance is always greater than the mean, or equal. Further, in
+RNA-seq, under-expressed genes have a greater variance thant
+overexpressed genes.
+
+\paragraph{Dataset}\label{dataset}
+
+We will proceed to a differential gene expression analysis using DESeq2.
+To do this we have data from a study of Himes BE, Jiang X, Wagner P, et
+al. named RNA-Seq transcriptome profiling identifies CRISPLD2 as a
+glucocorticoid responsive gene that modulates cytokine function in
+airway smooth muscle cells. Glucocorticoid are used to treat asthma and
+the aim of this article is to understand the mechanism in the airway
+smooth muscle using RNA-seq.
+
+The experiment involve 8 samples, 4 treated samples with dexamethasone
+(synthetic glucocoricoid) and 4 control sample with no treatment. As a
+data we have a reads count table in which we can find the number of read
+mapped for each gene in each sample. We have also a metadata table in
+which we have informations for the 8 samples. And finally a gene
+annotation data in which we have informations about all the genes.
+
+\paragraph{DESeq2 analysis}\label{deseq2-analysis}
+
+Firstly we import the 3 data table which we will use during this
+analysis. The ``counts\_table'' contains the counting of read mapped on
+each genes by samples, ``airway\_metadata'' contains the information
+about the samples and ``anno'' contains the informations about the
+genes. We import these data using the tidyverse package. This makes it
+easier to manipulate and analyze big data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{counts_table <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"airway_scaledcounts.csv"}\NormalTok{) }
+\NormalTok{airway_metadata <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"airway_metadata.csv"}\NormalTok{)}
+\NormalTok{anno <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"annotables_grch38.csv"}\NormalTok{)}
+\NormalTok{anno <-}\StringTok{ }\NormalTok{anno }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(ensgene,symbol)}
+
+\CommentTok{# Sequencing factor}
+\NormalTok{airway_metadata}\OperatorTok{$}\NormalTok{format <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{,}\StringTok{"single-end"}\NormalTok{))}
+\NormalTok{counts_table <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(counts_table)}
+\NormalTok{airway_metadata<-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(airway_metadata)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Create the dds object :}\label{create-the-dds-object}
+
+This object contain the counts table and the design of the experiment
+name ``Coldata''. In this design we have at least one variable of type
+factor wich is the biological condition of the experiment, here our
+column with condition is dex and condition are ``treated'' and
+``control'' We also have a factor wich is the type of sequenccing :
+``single-read'' or ``pair-end''.\\
+We can also change the formul of our design later directly in our dds
+object. The design is used to estimate the dipersion and the log fold
+change of the model. To have create dds object we need that the colname
+of count table and the row of design are the same and in the same order.
+After we have create the dds object we need to set the reference of
+biological condition,by default DESeq2 set the reference of biological
+based on the alphabetical order so we need to set reference
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Create the dds object}
+\NormalTok{dds <-}\StringTok{ }\KeywordTok{DESeqDataSetFromMatrix}\NormalTok{(counts_table,}\DataTypeTok{colData=}\NormalTok{airway_metadata,}\DataTypeTok{design =} \OperatorTok{~}\NormalTok{dex,}\DataTypeTok{tidy =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## converting counts to integer mode
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+## design formula are characters, converting to factors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Set reference of experience, here "control"}
+\KeywordTok{colData}\NormalTok{(dds)}\OperatorTok{$}\NormalTok{dex <-}\StringTok{ }\KeywordTok{relevel}\NormalTok{(}\KeywordTok{colData}\NormalTok{(dds)}\OperatorTok{$}\NormalTok{dex , }\DataTypeTok{ref=}\StringTok{"control"}\NormalTok{)}
+\CommentTok{# To display experiment design.}
+\KeywordTok{colData}\NormalTok{(dds) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## DataFrame with 8 rows and 5 columns
+##                     id      dex    celltype      geo_id     format
+##            <character> <factor> <character> <character>   <factor>
+## SRR1039508  SRR1039508  control      N61311  GSM1275862 single-end
+## SRR1039509  SRR1039509  treated      N61311  GSM1275863 single-end
+## SRR1039512  SRR1039512  control     N052611  GSM1275866 single-end
+## SRR1039513  SRR1039513  treated     N052611  GSM1275867 single-end
+## SRR1039516  SRR1039516  control     N080611  GSM1275870 single-end
+## SRR1039517  SRR1039517  treated     N080611  GSM1275871 single-end
+## SRR1039520  SRR1039520  control     N061011  GSM1275874 single-end
+## SRR1039521  SRR1039521  treated     N061011  GSM1275875 single-end
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# To display column which biological condition is set.}
+\KeywordTok{design}\NormalTok{(dds)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## ~dex
+\end{verbatim}
+
+\section{Explorate data}\label{explorate-data}
+
+Now that we have our first dds object we can explore the data of our dds
+object. In this part we are just going to explore the count table and
+discovered our crude data, we want to know how are on the whole the
+result of RNA-seq, so we are going to counts the number of null count
+for each sample, the sequencing depth and the distribution of count for
+each sample.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# the function counts() allow to output the count table of dds }
+\NormalTok{counts_dds <-}\StringTok{ }\KeywordTok{counts}\NormalTok{(dds)}
+\CommentTok{# Number of null count for each sample.}
+\KeywordTok{apply}\NormalTok{(counts_dds, }\DecValTok{2}\NormalTok{ ,}\DataTypeTok{FUN =} \ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{sum}\NormalTok{(x}\OperatorTok{==}\DecValTok{0}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## SRR1039508 SRR1039509 SRR1039512 SRR1039513 SRR1039516 SRR1039517 SRR1039520 
+##      18684      18641      17989      19456      17998      17828      18590 
+## SRR1039521 
+##      18924
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Depth of sample.}
+\CommentTok{#colSums() allow to do sum of each value of each sample that}
+\NormalTok{depth <-}\StringTok{ }\KeywordTok{colSums}\NormalTok{(counts_dds)}
+\NormalTok{depth <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(depth)}
+\NormalTok{depth}\OperatorTok{$}\NormalTok{sample <-}\StringTok{ }\KeywordTok{row.names}\NormalTok{(depth)}
+\KeywordTok{ggplot}\NormalTok{(depth, }\KeywordTok{aes}\NormalTok{( }\DataTypeTok{x=}\NormalTok{sample ,}\DataTypeTok{y=}\NormalTok{depth))}\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{)}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Depth of each sample"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Sample"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Depth"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Explorate data-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Vizualisation of count ditribution}
+\CommentTok{# To facilitate the vizualisation we use the log-freq of each count value "log(count+1)"}
+\NormalTok{counts_dds <-}\KeywordTok{as.data.frame}\NormalTok{(counts_dds)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{8}\NormalTok{)\{}
+\NormalTok{ p <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{counts_dds, }\KeywordTok{aes}\NormalTok{(}\KeywordTok{log}\NormalTok{(counts_dds[,i]}\OperatorTok{+}\DecValTok{1}\NormalTok{))) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{col=}\StringTok{"black"}\NormalTok{,}\DataTypeTok{fill=}\StringTok{"grey"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_light}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\KeywordTok{colnames}\NormalTok{(counts_dds)[i], }\DataTypeTok{x=}\StringTok{"Count value (number of read by genes) in log(count+1)"}\NormalTok{,}\DataTypeTok{y=}\StringTok{"Count frequency"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{()}
+\NormalTok{\}}
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Explorate data-2.pdf}
+
+\section{Filtrate data}\label{filtrate-data}
+
+Once our crude count table explorate, we arbitrary decide to remove row
+wich have few reads, that allow less memory size of dds object and
+improve the speed of all functions of DESeq2 in dds. Here we keep the
+rows that have least 5 reads total(minimum treshold of coverage). After
+new dds object we do again the explorate method see above.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# keep that genes with count over 5.}
+\NormalTok{count_mean5 <-}\StringTok{ }\NormalTok{counts_dds[}\KeywordTok{rowMeans}\NormalTok{(counts_dds)}\OperatorTok{>=}\StringTok{ }\DecValTok{5}\NormalTok{ , ]}\CommentTok{#ancienne commande }
+
+\CommentTok{# New dds object with genes count over 5.}
+\NormalTok{dds_}\DecValTok{5}\NormalTok{ <-}\StringTok{ }\KeywordTok{DESeqDataSetFromMatrix}\NormalTok{(count_mean5,}\DataTypeTok{colData=}\NormalTok{airway_metadata,}\DataTypeTok{design =} \OperatorTok{~}\NormalTok{dex)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+## design formula are characters, converting to factors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{colData}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}\OperatorTok{$}\NormalTok{dex <-}\StringTok{ }\KeywordTok{relevel}\NormalTok{(}\KeywordTok{colData}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}\OperatorTok{$}\NormalTok{dex , }\DataTypeTok{ref=}\StringTok{"control"}\NormalTok{) }\CommentTok{#ancienne commande}
+
+\CommentTok{# Vizualisation of count ditribution}
+\CommentTok{# To facilitate the vizualisation we use the log-freq of each count value "log(count+1)"}
+\NormalTok{counts_dds_}\DecValTok{5}\NormalTok{ <-}\StringTok{ }\KeywordTok{counts}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}
+\NormalTok{counts_dds_}\DecValTok{5}\NormalTok{ <-}\KeywordTok{as.data.frame}\NormalTok{(counts_dds_}\DecValTok{5}\NormalTok{)}
+
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{8}\NormalTok{)\{}
+\NormalTok{p <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{counts_dds_}\DecValTok{5}\NormalTok{, }\KeywordTok{aes}\NormalTok{(}\KeywordTok{log}\NormalTok{(counts_dds_}\DecValTok{5}\NormalTok{[,i]}\OperatorTok{+}\DecValTok{1}\NormalTok{))) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{col=}\StringTok{"black"}\NormalTok{,}\DataTypeTok{fill=}\StringTok{"grey"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_light}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\KeywordTok{colnames}\NormalTok{(counts_dds_}\DecValTok{5}\NormalTok{)[i], }\DataTypeTok{x=}\StringTok{"Count value (number of read by genes) in log(count+1)"}\NormalTok{,}\DataTypeTok{y=}\StringTok{"Count frequency"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+  
+\NormalTok{\}}
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Filtrate data-1.pdf} \#
+Differential analysis and normalization Now we have our final dds
+object, we can use the function DESeq() on our dds object to generate
+the normalization and the differential analysis, DESeq() do it in one
+step.
+
+DESeq2 use the method
+
+AJOUTER EXPLICATION NORMALISATION ET ANALYSE DIFFERENTIEL PARAMETRE
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Function DESeq()}
+\NormalTok{dds_}\DecValTok{5}\NormalTok{ <-}\StringTok{ }\KeywordTok{DESeq}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## estimating size factors
+\end{verbatim}
+
+\begin{verbatim}
+## estimating dispersions
+\end{verbatim}
+
+\begin{verbatim}
+## gene-wise dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## mean-dispersion relationship
+\end{verbatim}
+
+\begin{verbatim}
+## final dispersion estimates
+\end{verbatim}
+
+\begin{verbatim}
+## fitting model and testing
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Verification that we have keep our design}
+\CommentTok{# The scale factor resulting of normalization are stock in size factor of our design.}
+\KeywordTok{colData}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## DataFrame with 8 rows and 6 columns
+##                     id      dex    celltype      geo_id     format
+##            <character> <factor> <character> <character>   <factor>
+## SRR1039508  SRR1039508  control      N61311  GSM1275862 single-end
+## SRR1039509  SRR1039509  treated      N61311  GSM1275863 single-end
+## SRR1039512  SRR1039512  control     N052611  GSM1275866 single-end
+## SRR1039513  SRR1039513  treated     N052611  GSM1275867 single-end
+## SRR1039516  SRR1039516  control     N080611  GSM1275870 single-end
+## SRR1039517  SRR1039517  treated     N080611  GSM1275871 single-end
+## SRR1039520  SRR1039520  control     N061011  GSM1275874 single-end
+## SRR1039521  SRR1039521  treated     N061011  GSM1275875 single-end
+##                   sizeFactor
+##                    <numeric>
+## SRR1039508  1.01914334098559
+## SRR1039509 0.900312177384765
+## SRR1039512   1.1767704887045
+## SRR1039513 0.670258023772873
+## SRR1039516  1.17188150802226
+## SRR1039517  1.39509724438439
+## SRR1039520 0.916639158780024
+## SRR1039521 0.950312469822101
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Verification of normalization }
+\CommentTok{# The scale factor resulting of normalization are stock on size factor of the result}
+\CommentTok{# Depth of our count table after }
+\NormalTok{depth_normalize <-}\StringTok{ }\KeywordTok{colSums}\NormalTok{(}\KeywordTok{counts}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{normalized=} \OtherTok{TRUE}\NormalTok{))}
+\NormalTok{depth_normalize <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(depth_normalize)}
+\NormalTok{depth_normalize}\OperatorTok{$}\NormalTok{sample <-}\StringTok{ }\KeywordTok{row.names}\NormalTok{(depth_normalize)}
+\KeywordTok{ggplot}\NormalTok{(depth_normalize, }\KeywordTok{aes}\NormalTok{( }\DataTypeTok{x=}\NormalTok{sample ,}\DataTypeTok{y=}\NormalTok{depth_normalize))}\OperatorTok{+}\StringTok{ }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{,}\DataTypeTok{col=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{fill=}\StringTok{"white"}\NormalTok{)}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Depth of each sample"}\NormalTok{, }\DataTypeTok{x=}\StringTok{"Sample"}\NormalTok{, }\DataTypeTok{y=}\StringTok{"Depth"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Differential analysis-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Now we see that the depth are approximatively equal, our data has been well normalize}
+
+\CommentTok{# Vizualisation of count ditribution after normalization}
+\CommentTok{# To facilitate the vizualisation we use the log-freq of each count value "log(count+1)"}
+\NormalTok{count_normalize <-}\StringTok{ }\KeywordTok{counts}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{normalized=} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{count_normalize <-}\KeywordTok{as.data.frame}\NormalTok{(count_normalize)}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{8}\NormalTok{)\{}
+\NormalTok{p <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{count_normalize, }\KeywordTok{aes}\NormalTok{(}\KeywordTok{log}\NormalTok{(count_normalize[,i]}\OperatorTok{+}\DecValTok{1}\NormalTok{))) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DataTypeTok{col=}\StringTok{"black"}\NormalTok{,}\DataTypeTok{fill=}\StringTok{"grey"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_light}\NormalTok{()}\OperatorTok{+}\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\KeywordTok{colnames}\NormalTok{(count_normalize)[i], }\DataTypeTok{x=}\StringTok{"Count value (number of read by genes) in log(count+1)"}\NormalTok{,}\DataTypeTok{y=}\StringTok{"Count frequency"}\NormalTok{)}
+  
+\NormalTok{\}}
+\NormalTok{p }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Differential analysis-2.pdf}
+\# Dispersion
+
+Dispersion is a parameters of negative binomial distribution, and
+describe how much the variance goes away from the mean. For each count a
+dispersion is calculate and we can access to this values with
+dispersions() function on dds object. The most common measures for
+dispersion are standard deviation and variance. We use it during RNA-seq
+analysis to testify to the variability of the data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Dispersion plot }
+\NormalTok{dispersion <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{dispersions}\NormalTok{(dds_}\DecValTok{5}\NormalTok{))}
+\KeywordTok{ggplot}\NormalTok{(dispersion,}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{dispersions}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)))) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{breaks=}\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{4}\NormalTok{,}\FloatTok{0.5}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Squared root of dispersion calculate by DESeq2"}\NormalTok{, }\DataTypeTok{x=} \StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Dispersion-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Relationship between dispersion and counts means.}
+\CommentTok{# DESeq2 offer a function that can directly display a plot which describe the relation ship beetween dispersion and count mean.}
+
+\NormalTok{DESeq2}\OperatorTok{::}\KeywordTok{plotDispEsts}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{main=} \StringTok{"Relationship between dispersion and counts means"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Dispersion-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We obtain a plot that show the final estimate which are obtain after shrunk of genes estimate and we finaly observe the fitted estimate. We can also observed outliers value.}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Differential expression
+analysis}\label{differential-expression-analysis}
+
+After we observe the dispersion of genes we gonna really interest about
+our differential expression analysis results. The results table is
+generated by the function results() which take as parameter the dds\_5
+object done before. In this table we have the base mean, log2 fold
+changes, p-value and adjusted p-value. We have these values for each
+gene. Once the results table obtained, we class the genes by increasing
+value and we keep only genes with a p-value lower than 0.05. It is the
+treshold which means that the gene is diferentialy expressed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res_dif <-}\StringTok{ }\KeywordTok{results}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{tidy=} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{res <-}\StringTok{ }\KeywordTok{results}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{tidy=} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(res_dif)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      row               baseMean        log2FoldChange         lfcSE        
+##  Length:16541       Min.   :     4.2   Min.   :-6.03218   Min.   :0.05185  
+##  Class :character   1st Qu.:    57.2   1st Qu.:-0.25374   1st Qu.:0.14297  
+##  Mode  :character   Median :   316.3   Median :-0.01024   Median :0.21242  
+##                     Mean   :  1334.0   Mean   :-0.01404   Mean   :0.34869  
+##                     3rd Qu.:   968.8   3rd Qu.: 0.21843   3rd Qu.:0.43245  
+##                     Max.   :329486.1   Max.   : 8.90420   Max.   :3.28821  
+##                                                                            
+##       stat               pvalue             padj       
+##  Min.   :-17.11830   Min.   :0.00000   Min.   :0.0000  
+##  1st Qu.: -0.95495   1st Qu.:0.06132   1st Qu.:0.1891  
+##  Median : -0.04057   Median :0.33198   Median :0.5963  
+##  Mean   :  0.07708   Mean   :0.38228   Mean   :0.5329  
+##  3rd Qu.:  0.97776   3rd Qu.:0.66891   3rd Qu.:0.8602  
+##  Max.   : 18.39292   Max.   :0.99993   Max.   :0.9999  
+##                      NA's   :136       NA's   :1715
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{resultsNames}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Intercept"              "dex_treated_vs_control"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{resOrdered <-}\StringTok{ }\NormalTok{res_dif[}\KeywordTok{order}\NormalTok{(res_dif}\OperatorTok{$}\NormalTok{pvalue),]}
+\KeywordTok{summary}\NormalTok{(res_dif)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      row               baseMean        log2FoldChange         lfcSE        
+##  Length:16541       Min.   :     4.2   Min.   :-6.03218   Min.   :0.05185  
+##  Class :character   1st Qu.:    57.2   1st Qu.:-0.25374   1st Qu.:0.14297  
+##  Mode  :character   Median :   316.3   Median :-0.01024   Median :0.21242  
+##                     Mean   :  1334.0   Mean   :-0.01404   Mean   :0.34869  
+##                     3rd Qu.:   968.8   3rd Qu.: 0.21843   3rd Qu.:0.43245  
+##                     Max.   :329486.1   Max.   : 8.90420   Max.   :3.28821  
+##                                                                            
+##       stat               pvalue             padj       
+##  Min.   :-17.11830   Min.   :0.00000   Min.   :0.0000  
+##  1st Qu.: -0.95495   1st Qu.:0.06132   1st Qu.:0.1891  
+##  Median : -0.04057   Median :0.33198   Median :0.5963  
+##  Mean   :  0.07708   Mean   :0.38228   Mean   :0.5329  
+##  3rd Qu.:  0.97776   3rd Qu.:0.66891   3rd Qu.:0.8602  
+##  Max.   : 18.39292   Max.   :0.99993   Max.   :0.9999  
+##                      NA's   :136       NA's   :1715
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Number of genes wich is differential express at 5%}
+\KeywordTok{table}\NormalTok{(res_dif}\OperatorTok{$}\NormalTok{padj }\OperatorTok{<=}\StringTok{ }\FloatTok{0.05}\NormalTok{, }\DataTypeTok{useNA=}\StringTok{"always"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## FALSE  TRUE  <NA> 
+## 12629  2197  1715
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Selection of genes DE at 5%}
+\NormalTok{res_Sig <-}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(res_dif)}
+\NormalTok{res_Sig <-}\StringTok{ }\NormalTok{res_Sig[res_Sig}\OperatorTok{$}\NormalTok{padj}\OperatorTok{<=}\FloatTok{0.05}\NormalTok{,]}
+\KeywordTok{nrow}\NormalTok{(res_Sig)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2197
+\end{verbatim}
+
+\subsubsection{Plot count}\label{plot-count}
+
+Then we do a plot count to visualize the number of
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotCounts}\NormalTok{(dds, }\DataTypeTok{gene=}\StringTok{"ENSG00000103196"}\NormalTok{, }\DataTypeTok{intgroup=}\StringTok{"dex"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/count Plot-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# MA plot : relationship between mean count of a gene and it log2 ratio between the two conditions}
+\CommentTok{# MA plot }
+\NormalTok{DESeq2}\OperatorTok{::}\KeywordTok{plotMA}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{main =} \StringTok{"Relationship between mean count of a gene and it log2 ratio between the two conditions"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/MA plot-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Differential express genes at 10% treshold after ajst by multiple test by procedur of Benjamini-Hochberg are in red.}
+\CommentTok{# MA plot}
+
+\NormalTok{res_dif <-}\StringTok{ }\NormalTok{res_dif }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sig=}\NormalTok{padj}\OperatorTok{<}\FloatTok{0.05}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(res_dif, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ baseMean, }\DataTypeTok{y =}\NormalTok{ log2FoldChange, }\DataTypeTok{col =}\NormalTok{ sig)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_x_log10}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =} \DecValTok{0}\NormalTok{, }\DataTypeTok{linetype =} \StringTok{"dashed"}\NormalTok{,}\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"MA plot"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{theme_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/MA plot-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Vulcano plot}
+
+\KeywordTok{ggplot}\NormalTok{(res_dif, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{log2FoldChange, }\DataTypeTok{y=}\OperatorTok{-}\KeywordTok{log10}\NormalTok{(pvalue), }\DataTypeTok{col=}\NormalTok{sig)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Volcano plot"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 136 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{rapport_files/figure-latex/Volcano plot-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# PCA}
+\NormalTok{vsdata <-}\StringTok{ }\KeywordTok{vst}\NormalTok{(dds_}\DecValTok{5}\NormalTok{, }\DataTypeTok{blind=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{rld <-}\StringTok{ }\KeywordTok{rlogTransformation}\NormalTok{(dds_}\DecValTok{5}\NormalTok{)}
+\KeywordTok{plotPCA}\NormalTok{(rld, }\DataTypeTok{intgroup=}\StringTok{"dex"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/PCA-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotPCA}\NormalTok{(vsdata, }\DataTypeTok{intgroup=}\StringTok{"dex"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/PCA-2.pdf}
+
+\section{Heatmap}\label{heatmap}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Heatmap}
+
+
+
+
+
+\CommentTok{# Heatmap}
+\NormalTok{res <-}\StringTok{ }\KeywordTok{tbl_df}\NormalTok{(res)}
+\NormalTok{res <-}\StringTok{ }\NormalTok{res }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(padj) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{inner_join}\NormalTok{(anno,}\DataTypeTok{by=}\KeywordTok{c}\NormalTok{(}\StringTok{"row"}\NormalTok{=}\StringTok{"ensgene"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(padj}\OperatorTok{<}\FloatTok{0.05}\NormalTok{)}
+\NormalTok{NMF}\OperatorTok{::}\KeywordTok{aheatmap}\NormalTok{(}\KeywordTok{assay}\NormalTok{(vsdata)[}\KeywordTok{arrange}\NormalTok{(res, padj, pvalue)}\OperatorTok{$}\NormalTok{row[}\DecValTok{1}\OperatorTok{:}\DecValTok{50}\NormalTok{],], }
+              \DataTypeTok{labRow=}\KeywordTok{arrange}\NormalTok{(res, padj, pvalue)}\OperatorTok{$}\NormalTok{symbol[}\DecValTok{1}\OperatorTok{:}\DecValTok{50}\NormalTok{], }
+              \DataTypeTok{scale=}\StringTok{"row"}\NormalTok{, }\DataTypeTok{distfun=}\StringTok{"pearson"}\NormalTok{, }
+              \DataTypeTok{annCol=}\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(airway_metadata, dex, celltype), }
+              \DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"green"}\NormalTok{,}\StringTok{"black"}\NormalTok{,}\StringTok{"black"}\NormalTok{,}\StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{rapport_files/figure-latex/Heatmap-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## null device 
+##           1
+\end{verbatim}
+
+\subsubsection{Rshiny application}\label{rshiny-application}
+
+\end{document}
