@@ -48,19 +48,7 @@ The number of reads obtained is proportional to the abundance of RNA in the cell
 Today more and more studies use RNA sequencing then there are more and more data to analyze. By following this problematic we will set up an Rshiny application allowing to analyze the RNA-seq data as deeply as possible. This application aims to answer as many questions as possible and visualize the results intuitively.
 </p>
 
-### Shiny application
-<p style="text-align:justify";>
-Shiny is an R package that permit to build easily dynamic and interactive web applications. An Rshiny application is separated into two parts :  
 
- - A User Interface (UI) which controls the appearance of the app  
- 
- - A server function contains the build of the app  
-</p>
-<p style="text-align:justify";>
-Our goal is to create an application which allows to visualize the data of an RNA-seq analysis. This application will take in input the count table obtained after the RNAseq, normalize the data and analyse it with statistical techniques. We want to display plots like MAplot, Volcano plot and others results from statistical analysis. All this to find a potential differential gene expression.
-</p>
-<p>&nbsp; </p> 
-<p> First we will explain more deeply the RNA-seq analysis then we will proceed to the count table analysis under R thanks to the package DESeq2. Finally, we will create the Shiny app to study the results of the analysis. </p>
 
 ### RNA-sequencing data analysis
 #### Step 1 : Data generation
@@ -87,6 +75,10 @@ We can visualize our data by a density signal on a genome browser like IGV. This
 To go further and see if there is a differential expression we have to normalize the data and then use differents statistical tests. We obtain adjusted p-value with which we can do a list of gene defirentially expressed.
 </p>
 
+
+### Material and methods
+
+
 ### DESeq2
 #### What is DESeq2 ?
 <p style="text-align:justify";>
@@ -109,6 +101,18 @@ As a data we have a reads count table in which we can find the number of read ma
 </p>
 
 
+### Shiny application
+<p style="text-align:justify";>
+Shiny is an R package that permit to build easily dynamic and interactive web applications. An Rshiny application is separated into two parts :  
 
+ - A User Interface (UI) which controls the appearance of the app  
+ 
+ - A server function contains the build of the app  
+</p>
+<p style="text-align:justify";>
+Our goal is to create an application which allows to visualize the data of an RNA-seq analysis. This application will take in input the count table obtained after the RNAseq, normalize the data and analyse it with statistical techniques. We want to display plots like MAplot, Volcano plot and others results from statistical analysis. All this to find a potential differential gene expression.
+</p>
+<p>&nbsp; </p> 
+<p> First we will explain more deeply the RNA-seq analysis then we will proceed to the count table analysis under R thanks to the package DESeq2. Finally, we will create the Shiny app to study the results of the analysis. </p>
 
 
