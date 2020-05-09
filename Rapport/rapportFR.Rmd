@@ -115,7 +115,37 @@ Le but de ce projet est de nous permettre d'en apprendre plus sur cette nouvelle
 # Matériels et méthodes 
 ## Packages 
 
-### Analyse RNAseq
+### Analyse d'expression différentielle RNAseq
+
+#### Jeu de données et package DESeq2
+
+<p style="text-align:justify";>
+L'analyse de l'expression différentielle de gènes ce fera à l'aide du package DESeq2 developpé par bioconductor.
+Le jeu de données utilisées sera celui de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
+</p>
+<p style="text-align:justify";>
+Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
+Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
+</p>
+<p style="text-align:justify";>
+Le package DESeq2 permet la normalisation des données ainsi que la recherche de gènes différentiellement exprimés suivant un modèle de distribution binomial négative.
+Le package nécessite d'avoir au préalable une table de comptage ainsi qu'une table contenant le design de l'expérience car
+la première étape consiste a crée un premier jeu de données DESeq contenant ces deux éléments. Une fois l'objet crée il est possible d'acceder à la table de comptage ainsi qu'au design de l'expérience à l'aide de fonction propre au jeu de données DESeq2 (annexe 1).
+La seconde étape consiste à normaliser et à réaliser l'analyse de l'expression différentielle les doonées de la table de comptage, le package DESeq2 permet de réaliser ces deux étapes d'une traite.
+Une fois cette seconde étape réaliser on peut extraire les résultats de l'analyse d'expression différentielle, et les analyser.
+
+</p>
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = counts_table,colData=airway_metadata,design = ~dex,tidy = TRUE)
+dds <- DESeq(dds)
+res <- results(dds)
+```
+<p style="text-align:justify";>
+Code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2
+</p>
+
+#### Analyse des résultats de l'analyse d'expression différentielle
+
 #### DESeq2
 #### gplot et ggrepel
 #### Tidyverse
