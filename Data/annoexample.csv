@@ -1,0 +1,7 @@
+GeneID,entrez,symbol,chr,start,end,strand,biotype,description
+ENSG00000000003,7105,TSPAN6,X,100627109,100639991,-1,protein_coding,tetraspanin 6 [Source:HGNC Symbol;Acc:HGNC:11858]
+ENSG00000000005,64102,TNMD,X,100584802,100599885,1,protein_coding,tenomodulin [Source:HGNC Symbol;Acc:HGNC:17757]
+ENSG00000000419,8813,DPM1,20,50934867,50958555,-1,protein_coding,"dolichyl-phosphate mannosyltransferase polypeptide 1, catalytic subunit [Source:HGNC Symbol;Acc:HGNC:3005]"
+ENSG00000000457,57147,SCYL3,1,169849631,169894267,-1,protein_coding,"SCY1-like, kinase-like 3 [Source:HGNC Symbol;Acc:HGNC:19285]"
+ENSG00000000460,55732,C1orf112,1,169662007,169854080,1,protein_coding,chromosome 1 open reading frame 112 [Source:HGNC Symbol;Acc:HGNC:25565]
+ENSG00000000938,2268,FGR,1,27612064,27635277,-1,protein_coding,"FGR proto-oncogene, Src family tyrosine kinase [Source:HGNC Symbol;Acc:HGNC:3697]"
