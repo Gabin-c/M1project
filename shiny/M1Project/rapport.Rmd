@@ -3,8 +3,13 @@ title: "RNA-seq analysis and Shiny application"
 author: "David GALLIEN & Gabin COUDRAY"
 date: "15/04/2020"
 output:
+<<<<<<< HEAD
   html_document: default
   pdf_document: default
+=======
+  pdf_document: default
+  html_document: default
+>>>>>>> 6c096a9d26366ec5f2d173ff2994e2378cac835e
 ---
 
 ```{r setup, include=FALSE}

@@ -44,7 +44,7 @@ depth.plot <- function(dds.count,break.width=1){
 
 
 ### Count distribution plot ----
-### count_distribution return an histogram of count values distribution in the log(count+1) format for one sample
+### count_distribution return an histogram of count values distribution in the log(count+1) (to facilitate vizualisation) format for one sample
 ### count_distribution need five arguments
 ###   - dds which is a count table of an RNAseq experience which have in column : sample, and in row :  gene
 ###   - breaksize which is width of histogram bar
