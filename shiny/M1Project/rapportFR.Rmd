@@ -1,0 +1,106 @@
+---
+# Package à installer pour LaTex : tinytex::install_tinytex()
+
+title: |
+  | \vspace{5cm} \textbf{Amélioration de l'accès aux résultats biologiques :}
+  | \textbf{Séquençage ARN et Application Shiny}
+subtitle: |
+  | Master 1 Bioinformatique
+  | Université de Rennes 1 
+  | 2019/2020
+author: 
+  \centering
+  \includegraphics[width=0.4\textwidth]{logo.png}
+date: "David GALLIEN & Gabin COUDRAY"
+output:
+  # Document pdf LaTex
+  pdf_document:
+# Taille de police
+fontsize: 12pt
+# Marge
+geometry: margin=25mm
+# Police
+mainfont: Times New Roman
+header-includes:
+    # Interligne de 1.5
+    - \renewcommand{\baselinestretch}{1.5}
+    # Remplace "Contents" par "Table des matières"
+    - \renewcommand{\contentsname}{Table des matières}
+    # Evite l'interligne de 1.5 dans le sommaire
+    - \usepackage{tocloft}
+
+
+
+
+---
+
+
+\newpage
+\begin{center}
+\includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
+\end{center}
+
+\newpage
+\begin{center}
+\includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
+\end{center}
+
+\newpage
+\setcounter{tocdepth}{4}
+\tableofcontents
+
+\newpage
+
+
+# Introduction
+## Contexte
+<p style="text-align:justify";>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Aujourd'hui, la plupart des chercheurs n'a en général pas le temps d'utiliser les outils permettant une analyse des données générées par les nouvelles technologies. C'est pour cela qu'il est important de leur offrir la possibilité d'avoir accès à des outils facilitant l'analyse et leur permettant d'être plus efficaces.
+Le but principal de notre projet est de mettre en place une application qui pourra aider ces scientifiques à explorer leurs résultats sous l'environnement R. Pour cela le package Shiny nous permet de créer une application web interactive.  
+Néanmoins, afin de créer une application interactive, nous avons besoin de quelques choses à montrer. Dans le domaine de la recherche médicale qui est le principal axe de recherche, les techniques de séquençage de seconde génération sont souvent utilisées. Ces techniques génèrent de nombreuses données qui ont besoin d'être explorées et analysées. Nous avons donc décidé de concentrer notre travail sur le séquençange ARN (RNA-seq). Cette technique de séquençage de seconde génération a pour principal but de détecter des expressions différentielles entre des types cellulaires de différentes conditions.
+<p/>
+
+
+
+## Objectifs 
+
+\newpage
+# Matériels et méthodes 
+## Packages 
+### Analyse RNAseq
+#### DESeq2
+#### ggplot
+#### autres
+### Création de l'application
+#### Shiny
+#### Shinydashboard
+#### autres
+### Création du rapport
+#### R-Markdown
+## Jeu de données 
+
+\newpage
+# Résultats
+## Analyse RNA-seq
+## Application RShiny
+
+\newpage
+# Conclusion et perspectives 
+
+\newpage
+# Bibliographie
+
+\newpage
+# Résumé
+
+# Abstract
+
+\newpage
+# Annexe 1 : Script R pour l'analyse RNAseq  via DESeq2
+
+\newpage
+# Annexe 2 : Script R pour l'application Shiny
+## ui
+## server
+## Fonctions
