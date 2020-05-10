@@ -15,20 +15,20 @@
 \contentsline {paragraph}{Tidyverse}{10}{section*.15}%
 \contentsline {paragraph}{NMF}{10}{section*.16}%
 \contentsline {subsubsection}{\large {Création de l'application}}{10}{section*.17}%
-\contentsline {paragraph}{Shiny}{10}{section*.18}%
+\contentsline {paragraph}{Shiny}{11}{section*.18}%
 \contentsline {paragraph}{Shinydashboard}{11}{section*.19}%
 \contentsline {subsubsection}{\large {Rédaction du rapport}}{11}{section*.20}%
 \contentsline {paragraph}{Markdown}{11}{section*.21}%
-\contentsline {subsection}{\Large {Jeu de données}}{11}{section*.22}%
-\contentsline {section}{\LARGE {Résultats}}{12}{section*.23}%
-\contentsline {subsection}{\Large {Analyse de données RNA-seq}}{12}{section*.24}%
-\contentsline {subsection}{\Large {Application RShiny}}{13}{section*.25}%
-\contentsline {section}{\LARGE {Conclusion et perspectives}}{14}{section*.26}%
-\contentsline {section}{\LARGE {Bibliographie}}{15}{section*.27}%
-\contentsline {section}{\LARGE {Résumé}}{16}{section*.28}%
-\contentsline {section}{\LARGE {Abstract}}{16}{section*.29}%
-\contentsline {section}{\LARGE {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{17}{section*.30}%
-\contentsline {section}{\LARGE {Annexe 2 : Scripts R pour l'application Shiny}}{18}{section*.31}%
-\contentsline {subsection}{\Large {2.1 Interface utilisateur}}{18}{section*.32}%
-\contentsline {subsection}{\Large {2.2 Serveur}}{25}{section*.33}%
-\contentsline {subsection}{\Large {2.3 Fonctions}}{32}{section*.34}%
+\contentsline {subsection}{\Large {Jeu de données}}{12}{section*.22}%
+\contentsline {section}{\LARGE {Résultats}}{13}{section*.23}%
+\contentsline {subsection}{\Large {Analyse de données RNA-seq}}{13}{section*.24}%
+\contentsline {subsection}{\Large {Application RShiny}}{14}{section*.25}%
+\contentsline {section}{\LARGE {Conclusion et perspectives}}{15}{section*.26}%
+\contentsline {section}{\LARGE {Bibliographie}}{16}{section*.27}%
+\contentsline {section}{\LARGE {Résumé}}{17}{section*.28}%
+\contentsline {section}{\LARGE {Abstract}}{17}{section*.29}%
+\contentsline {section}{\LARGE {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{18}{section*.30}%
+\contentsline {section}{\LARGE {Annexe 2 : Scripts R pour l'application Shiny}}{19}{section*.31}%
+\contentsline {subsection}{\Large {2.1 Interface utilisateur}}{19}{section*.32}%
+\contentsline {subsection}{\Large {2.2 Serveur}}{26}{section*.33}%
+\contentsline {subsection}{\Large {2.3 Fonctions}}{33}{section*.34}%

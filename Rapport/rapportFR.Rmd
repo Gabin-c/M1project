@@ -29,13 +29,6 @@ header-includes:
     - \renewcommand{\contentsname}{\huge{Table des matières}}
     # Evite l'interligne de 1.5 dans le sommaire
     - \usepackage{tocloft}
-
-
-
-
-
-
-
 ---
 
 
@@ -118,12 +111,20 @@ Durant ce projet nous avons utilisé Rstudio afin de réaliser une analyse de do
 
 Pour procéder à l'analyse de données RNA-seq, nous avons besoin de packages DESeq2, gplot, ggrepel, Tidyverse et NMF. Ces différents packages vont permettre de réaliser une étude d'expression différentielle mais aussi d'afficher des graphiques importants pour avoir des résultats et de manipuler les données.
 
+
 #### DESeq2
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 DESeq2 est un package sous R capable de procéder à une analyse de l'expression différentielle de gènes basée sur la loi binomiale négative. Ce package est disponible chez Bioconductor, un site internet qui met à disposition des utilisateurs différents logiciels bioinformatiques open source et plus spécifiquement pour l'analyse et l'étude de séquençages hauts débits comme le RNA-seq ici.  Avec les différents outils de ce package, il est possible d'estimer des relations moyenne-variance dans le jeu de données et de tester l'expression différentielle basée sur la loi binomiale négative.
 \par
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Cette loi binomiale négative est une alternative à la loi de Poisson. En effet, il s'agit d'une loi de probabilité discrete. Pour résumer, on considère une expérience qui peut aboutir à un succès de probabilité p ou un échec. Cette expérience se termine après un nombre choisi de succès. Le but est de savoir le nombre d'échecs ayant eu lieu avant le nombre de succès défini. C'est cette loi qui est utilisée car le comptage des reads n'est pas continu, on ne retrouve que des entier non nuls donc on ne peut pas utiliser une distribution normale. Dans la loi binomiale négative, la variance est toujours supérieure ou égale à la moyenne. Pour finir, dans une analyse RNA-seq, les gènes sous-exprimés ont une variance plus élevée que les gènes sur-exprimés.
+\par
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Il est donc nécessaire d'avoir au préalable une table de comptage ainsi qu'une table contenant le design de l'expérience car
+la première étape consiste a crée un premier jeu de données DESeq contenant ces deux éléments. Une fois l'objet créé, il est possible d'acceder à la table de comptage ainsi qu'au design de l'expérience à l'aide de fonctions propres au jeu de données DESeq2 (annexe 1).
+La seconde étape consiste à normaliser les doonées de la table de comptage et à réaliser l'analyse de l'expression différentielle. Le package DESeq2 permet de réaliser ces deux étapes d'une traite.
+Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les analyser.
+
 
 #### ggplot2 et ggrepel
 Disponibles sur le CRAN, ces deux packages permettent la visualisations de résultats sous la formes de graphiques élégants et optimisés. En effet, ggplot2 permet de réaliser des graphiques plus complexes qu'avec les fonctions de base sous R. Quant à ggrepel, il permet de mettre du texte sur ces graphiques.
@@ -141,8 +142,8 @@ Concernant l'application, nous utilisons toujours les packages présentés préc
 Premièrement, le package Shiny permet la création d'application web interactive capables d'utiliser toutes les fonctionnalités de R. C'est un outil permettant de créér des pages web sans forcément avoir de connaissance en HTML, css ou javascript. Cependant, c'est un plus d'avoir des connaissances dans ce domaine si on veut customiser ces pages web afin d'avoir une application plus attirante. 
 Une application shiny est composée de deux fichiers : 
 \begin{itemize}
-\item Le fichier ui.R (user interface) permet de contrôler l'apparance de l'application
-\item Le fichier sever.R contient les instruction permettant le fonctionnement de l'application.
+\item Le fichier ui.R (user interface) permet de contrôler l'apparance de l'application (annexe 2.1).
+\item Le fichier sever.R contient les instruction permettant le fonctionnement de l'application (annexe 2.2).
 \end{itemize}
 
 
