@@ -8,18 +8,18 @@
 \contentsline {subparagraph}{Etape 5 : Statistiques}{8}{section*.8}%
 \contentsline {subsection}{\Large {Objectifs}}{8}{section*.9}%
 \contentsline {section}{\LARGE {Matériels et méthodes}}{9}{section*.10}%
-\contentsline {subsection}{\Large {Packages}}{9}{section*.11}%
-\contentsline {subsubsection}{\large {Analyse RNAseq}}{9}{section*.12}%
-\contentsline {paragraph}{DESeq2}{9}{section*.13}%
-\contentsline {paragraph}{ggplot2 et ggrepel}{10}{section*.14}%
-\contentsline {paragraph}{Tidyverse}{10}{section*.15}%
-\contentsline {paragraph}{NMF}{10}{section*.16}%
-\contentsline {subsubsection}{\large {Création de l'application}}{10}{section*.17}%
-\contentsline {paragraph}{Shiny}{11}{section*.18}%
-\contentsline {paragraph}{Shinydashboard}{11}{section*.19}%
-\contentsline {subsubsection}{\large {Rédaction du rapport}}{11}{section*.20}%
-\contentsline {paragraph}{Markdown}{11}{section*.21}%
-\contentsline {subsection}{\Large {Jeu de données}}{12}{section*.22}%
+\contentsline {subsection}{\Large {Jeu de données}}{9}{section*.11}%
+\contentsline {subsection}{\Large {Packages}}{9}{section*.12}%
+\contentsline {subsubsection}{\large {Analyse RNAseq}}{9}{section*.13}%
+\contentsline {paragraph}{DESeq2}{10}{section*.14}%
+\contentsline {paragraph}{ggplot2 et ggrepel}{11}{section*.15}%
+\contentsline {paragraph}{Tidyverse}{11}{section*.16}%
+\contentsline {paragraph}{NMF}{11}{section*.17}%
+\contentsline {subsubsection}{\large {Création de l'application}}{11}{section*.18}%
+\contentsline {paragraph}{Shiny}{11}{section*.19}%
+\contentsline {paragraph}{Shinydashboard}{12}{section*.20}%
+\contentsline {subsubsection}{\large {Rédaction du rapport}}{12}{section*.21}%
+\contentsline {paragraph}{Markdown}{12}{section*.22}%
 \contentsline {section}{\LARGE {Résultats}}{13}{section*.23}%
 \contentsline {subsection}{\Large {Analyse de données RNA-seq}}{13}{section*.24}%
 \contentsline {subsection}{\Large {Application RShiny}}{14}{section*.25}%

@@ -102,6 +102,12 @@ Le but de ce projet est de nous permettre d'en apprendre plus sur cette nouvelle
 
 \newpage
 # \LARGE{Matériels et méthodes}
+## \Large{Jeu de données}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes en utilisant le package DESeq2. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
+\par
+Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
+Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
 
 ## \Large{Packages}
 Durant ce projet nous avons utilisé Rstudio afin de réaliser une analyse de données RNA-seq et de mettre en place une application interactive permettant de le faire. Pour cela nous avons donc du utiliser différents packages que nous présentons dans cette partie.
@@ -111,7 +117,7 @@ Durant ce projet nous avons utilisé Rstudio afin de réaliser une analyse de do
 
 Pour procéder à l'analyse de données RNA-seq, nous avons besoin de packages DESeq2, gplot, ggrepel, Tidyverse et NMF. Ces différents packages vont permettre de réaliser une étude d'expression différentielle mais aussi d'afficher des graphiques importants pour avoir des résultats et de manipuler les données.
 
-
+\newpage
 #### DESeq2
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 DESeq2 est un package sous R capable de procéder à une analyse de l'expression différentielle de gènes basée sur la loi binomiale négative. Ce package est développé sur la ptateforme Bioconductor qui met à disposition des utilisateurs différents logiciels bioinformatiques open source et plus spécifiquement pour l'analyse et l'étude de séquençages hauts débits comme le RNA-seq ici.  Avec les différents outils de ce package, il est possible d'estimer des relations moyenne-variance dans le jeu de données et de tester l'expression différentielle basée sur la loi binomiale négative.
@@ -126,6 +132,17 @@ La seconde étape consiste à normaliser les doonées de la table de comptage et
 Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les analyser.
 
 
+\scriptsize
+```{r message=FALSE, warnings=FALSE, eval=FALSE, tidy=FALSE}
+dds <- DESeqDataSetFromMatrix(countData = counts_table,colData=airway_metadata,design = ~dex,tidy = TRUE)
+dds <- DESeq(dds)
+res <- results(dds)
+```
+\normalsize
+\small{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2}
+\normalsize
+
+\newpage
 #### ggplot2 et ggrepel
 Disponibles sur le CRAN, ces deux packages permettent la visualisations de résultats sous la formes de graphiques élégants et optimisés. En effet, ggplot2 permet de réaliser des graphiques plus complexes qu'avec les fonctions de base sous R. Quant à ggrepel, il permet de mettre du texte sur ces graphiques.
 
@@ -154,14 +171,6 @@ Shinydashboard permet d'avoir un modèle d'application sous forme de tableau de 
 ### \large{Rédaction du rapport}
 #### Markdown
 Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire un rapport automatisé de notre travail. Les packages markdown et knitr permettent d'assembler rapport sous forme de texte et de code R. Ainsi nous pouvons intégrer notre code et les résultats obtenus lors de l'analyse. Nous avons choisi un format de sortie sous forme de PDF, ce qui nous autorise à utiliser LaTeX afin d'avoir un document final avec une mise en page optimale que nous auront définie.
-
-
-## \Large{Jeu de données}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes en utilisant le package DESeq2. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
-\par
-Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
-Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
 
 
 \newpage
