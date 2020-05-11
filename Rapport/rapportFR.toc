@@ -1,34 +1,37 @@
-\contentsline {section}{\LARGE {Introduction}}{6}{section*.1}%
-\contentsline {subsection}{\Large {Contexte}}{6}{section*.2}%
+\contentsline {section}{\Large {Introduction}}{6}{section*.1}%
+\contentsline {subsection}{\large {Contexte}}{6}{section*.2}%
 \contentsline {subparagraph}{Analyse de données RNA-seq}{7}{section*.3}%
 \contentsline {subparagraph}{Etape 1 : Les données}{7}{section*.4}%
 \contentsline {subparagraph}{Etape 2 : Contrôle qualité}{7}{section*.5}%
 \contentsline {subparagraph}{Etape 3 : Mapping}{7}{section*.6}%
 \contentsline {subparagraph}{Etape 4 : Quantification}{8}{section*.7}%
 \contentsline {subparagraph}{Etape 5 : Statistiques}{8}{section*.8}%
-\contentsline {subsection}{\Large {Objectifs}}{8}{section*.9}%
-\contentsline {section}{\LARGE {Matériels et méthodes}}{9}{section*.10}%
-\contentsline {subsection}{\Large {Jeu de données}}{9}{section*.11}%
-\contentsline {subsection}{\Large {Packages}}{9}{section*.12}%
-\contentsline {subsubsection}{\large {Analyse RNAseq}}{9}{section*.13}%
+\contentsline {subsection}{\large {Objectifs}}{8}{section*.9}%
+\contentsline {section}{\Large {Matériels et méthodes}}{9}{section*.10}%
+\contentsline {subsection}{\large {Jeu de données}}{9}{section*.11}%
+\contentsline {subsection}{\large {Packages}}{9}{section*.12}%
+\contentsline {subsubsection}{\normalsize {Analyse RNAseq}}{9}{section*.13}%
 \contentsline {paragraph}{DESeq2}{10}{section*.14}%
 \contentsline {paragraph}{ggplot2 et ggrepel}{11}{section*.15}%
 \contentsline {paragraph}{Tidyverse}{11}{section*.16}%
 \contentsline {paragraph}{NMF}{11}{section*.17}%
-\contentsline {subsubsection}{\large {Création de l'application}}{11}{section*.18}%
+\contentsline {subsubsection}{\normalsize {Création de l'application}}{11}{section*.18}%
 \contentsline {paragraph}{Shiny}{11}{section*.19}%
 \contentsline {paragraph}{Shinydashboard}{12}{section*.20}%
-\contentsline {subsubsection}{\large {Rédaction du rapport}}{12}{section*.21}%
+\contentsline {subsubsection}{\normalsize {Rédaction du rapport}}{12}{section*.21}%
 \contentsline {paragraph}{Markdown}{12}{section*.22}%
-\contentsline {section}{\LARGE {Résultats}}{13}{section*.23}%
-\contentsline {subsection}{\Large {Analyse de données RNA-seq}}{13}{section*.24}%
-\contentsline {subsection}{\Large {Application RShiny}}{14}{section*.25}%
-\contentsline {section}{\LARGE {Conclusion et perspectives}}{15}{section*.26}%
-\contentsline {section}{\LARGE {Bibliographie}}{16}{section*.27}%
-\contentsline {section}{\LARGE {Résumé}}{17}{section*.28}%
-\contentsline {section}{\LARGE {Abstract}}{17}{section*.29}%
-\contentsline {section}{\LARGE {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{18}{section*.30}%
-\contentsline {section}{\LARGE {Annexe 2 : Scripts R pour l'application Shiny}}{19}{section*.31}%
-\contentsline {subsection}{\Large {2.1 Interface utilisateur}}{19}{section*.32}%
-\contentsline {subsection}{\Large {2.2 Serveur}}{26}{section*.33}%
-\contentsline {subsection}{\Large {2.3 Fonctions}}{33}{section*.34}%
+\contentsline {section}{\Large {Résultats}}{13}{section*.23}%
+\contentsline {subsection}{\large {Analyse de données RNA-seq}}{13}{section*.24}%
+\contentsline {subsection}{\large {Application RShiny}}{14}{section*.25}%
+\contentsline {subsubsection}{\normalsize {Import des données}}{14}{section*.26}%
+\contentsline {subsubsection}{\normalsize {DESeq2}}{14}{section*.27}%
+\contentsline {subsubsection}{\normalsize {Résultats}}{14}{section*.28}%
+\contentsline {section}{\Large {Conclusion et perspectives}}{15}{section*.29}%
+\contentsline {section}{\Large {Bibliographie}}{16}{section*.30}%
+\contentsline {section}{\Large {Résumé}}{17}{section*.31}%
+\contentsline {section}{\Large {Abstract}}{17}{section*.32}%
+\contentsline {section}{\Large {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{18}{section*.33}%
+\contentsline {section}{\Large {Annexe 2 : Scripts R pour l'application Shiny}}{19}{section*.34}%
+\contentsline {subsection}{\large {2.1 Interface utilisateur}}{19}{section*.35}%
+\contentsline {subsection}{\large {2.2 Serveur}}{26}{section*.36}%
+\contentsline {subsection}{\large {2.3 Fonctions}}{33}{section*.37}%

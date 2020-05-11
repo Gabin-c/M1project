@@ -12,7 +12,7 @@ author:
   \centering
   \includegraphics[width=0.4\textwidth]{logo.png}
 date: "David GALLIEN & Gabin COUDRAY"
-output:
+output: 
   # Document pdf LaTex
   pdf_document:
     latex_engine: xelatex
@@ -26,12 +26,14 @@ header-includes:
     # Interligne de 1.5
     - \renewcommand{\baselinestretch}{1.5}
     # Remplace "Contents" par "Table des matières"
-    - \renewcommand{\contentsname}{\huge{Table des matières}}
+    - \renewcommand{\contentsname}{\Huge{Table des matières}}
     # Evite l'interligne de 1.5 dans le sommaire
     - \usepackage{tocloft}
+
 ---
 
 
+
 \newpage
 \begin{center}
 \includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
@@ -41,17 +43,18 @@ header-includes:
 \begin{center}
 \includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
 \end{center}
+
+
 
 \newpage
 \setcounter{tocdepth}{4}
-\normalsize{\tableofcontents}
-
-
+\tableofcontents
 \newpage
 
 
-# \LARGE{Introduction}
-## \Large{Contexte}
+
+# \Large{Introduction}
+## \large{Contexte}
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Aujourd'hui, la plupart des chercheurs n'ont en général pas le temps d'utiliser les outils permettant une analyse des données générées par les nouvelles technologies. C'est pour cela qu'il est important de leur offrir la possibilité d'avoir accès à des outils facilitant l'analyse et leur permettant d'être plus efficaces.
 Le but principal de notre projet est de mettre en place une application qui pourra aider ces scientifiques à explorer leurs résultats sous l'environnement R. Pour cela le package Shiny nous permet de créer une application web interactive. 
@@ -94,26 +97,26 @@ Le nombre de reads est un témoin de l'abondance d'ARN dans la cellule. Ainsi, i
 Différents résultats statistiques peuvent être obtenus ainsi que des graphiques ou encore des carte de densité pour les exons. Il est important de normaliser les données et de comparer les p-value ajustées obtenues après différents tests. Tout ceci permet d'établir une liste de gène différentiellement exprimés.
 
 
-## \Large{Objectifs}
+## \large{Objectifs}
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Aujourd'hui, de plus en plus d'études utilisent le séquençage de l'ARN, il en résulte de plus en plus de données à analyser. Pour essayer de répondre à cette problématique nous avons décidé d'élaborer une application interactive grâce au package RShiny. Cette application a pour but d'aider à l'analyse de données RNA-seq le plus profondément possible en répondant aux plus de questions possibles et permettre une visualisation intuitive des résultats.
 Le but de ce projet est de nous permettre d'en apprendre plus sur cette nouvelle technique de séquençage de l'ARN et son analyse. Cela nous permettra aussi d'apprendre à utiliser différents packages disponibles sous R comme Shiny pour la conception de l'application ou Markdown pour la rédaction du rapport.
 
 
 \newpage
-# \LARGE{Matériels et méthodes}
-## \Large{Jeu de données}
+# \Large{Matériels et méthodes}
+## \large{Jeu de données}
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes en utilisant le package DESeq2. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
 \par
 Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
 Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
 
-## \Large{Packages}
+## \large{Packages}
 Durant ce projet nous avons utilisé Rstudio afin de réaliser une analyse de données RNA-seq et de mettre en place une application interactive permettant de le faire. Pour cela nous avons donc du utiliser différents packages que nous présentons dans cette partie.
 
 
-### \large{Analyse RNAseq}
+### \normalsize{Analyse RNAseq}
 
 Pour procéder à l'analyse de données RNA-seq, nous avons besoin de packages DESeq2, gplot, ggrepel, Tidyverse et NMF. Ces différents packages vont permettre de réaliser une étude d'expression différentielle mais aussi d'afficher des graphiques importants pour avoir des résultats et de manipuler les données.
 
@@ -152,7 +155,7 @@ Tidyverse est un package également disponible sur le CRAN et regroupant plusieu
 #### NMF
 Le package NMF pour "Non negative Matrix Factorization" est aussi disponible sur le CRAN et va nous être utile pour réaliser des heatmaps.
 
-### \large{Création de l'application}
+### \normalsize{Création de l'application}
 Concernant l'application, nous utilisons toujours les packages présentés précédemment pour l'analyse de données RNA-seq. Mais nous utilisons également des packages propres à la création d'une application comme Shiny ou Shinydashboard.
 
 #### Shiny
@@ -168,23 +171,27 @@ Une application shiny est composée de deux fichiers :
 Shinydashboard permet d'avoir un modèle d'application sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
 
 
-### \large{Rédaction du rapport}
+### \normalsize{Rédaction du rapport}
 #### Markdown
 Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire un rapport automatisé de notre travail. Les packages markdown et knitr permettent d'assembler rapport sous forme de texte et de code R. Ainsi nous pouvons intégrer notre code et les résultats obtenus lors de l'analyse. Nous avons choisi un format de sortie sous forme de PDF, ce qui nous autorise à utiliser LaTeX afin d'avoir un document final avec une mise en page optimale que nous auront définie.
 
 
 \newpage
-# \LARGE{Résultats}
-## \Large{Analyse de données RNA-seq}
-\newpage
-## \Large{Application RShiny}
+# \Large{Résultats}
+## \large{Analyse de données RNA-seq}
 
 \newpage
-# \LARGE{Conclusion et perspectives}
+## \large{Application RShiny}
+### \normalsize{Import des données}
+### \normalsize{DESeq2}
+### \normalsize{Résultats}
+
+\newpage
+# \Large{Conclusion et perspectives}
 
 
 \newpage
-# \LARGE{Bibliographie}
+# \Large{Bibliographie}
 \begin{enumerate}
 \item Himes BE, Jiang X, Wagner P, et al. RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells. PLoS One. 2014;9(6):e99625. Published 2014 Jun 13. doi: \href{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625}{\underline{10.1371/journal.pone.0099625}}
 
@@ -199,18 +206,18 @@ Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire
 
 \end{enumerate}
 \newpage
-# \LARGE{Résumé}
+# \Large{Résumé}
 
-# \LARGE{Abstract}
-
-
-\newpage
-# \LARGE{Annexe 1 : Script R pour l'analyse RNAseq  via DESeq2}
+# \Large{Abstract}
 
 
 \newpage
-# \LARGE{Annexe 2 : Scripts R pour l'application Shiny}
-## \Large{2.1 Interface utilisateur}
+# \Large{Annexe 1 : Script R pour l'analyse RNAseq  via DESeq2}
+
+
+\newpage
+# \Large{Annexe 2 : Scripts R pour l'application Shiny}
+## \large{2.1 Interface utilisateur}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warnings=FALSE, eval=FALSE}
@@ -747,7 +754,7 @@ in Rennes. </p>
 
 
 \newpage
-## \Large{2.2 Serveur}
+## \large{2.2 Serveur}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warnings=FALSE, eval=FALSE, tidy=FALSE}
@@ -1250,7 +1257,7 @@ server <- function(input, output,session) {
 
 
 \newpage
-## \Large{2.3 Fonctions}
+## \large{2.3 Fonctions}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warnings=FALSE, eval=FALSE, tidy=FALSE}
