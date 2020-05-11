@@ -78,8 +78,12 @@ dispersion <- function(dds){
 ###   - p.val which is pvalue accept un DE analysis, padje is set at 0.05
 
 number.DE.gene <- function(dds.result,p.val = 0.05){
-  tb.DE <- as.data.frame(table(dds.result$padj <= p.val ,useNA="always"))
-  colnames(tb.DE) = c("DE","Genes")
+  
+  up_regulated <- dds.result %>% filter(padj <= p.val & log2FoldChange > 0) %>% nrow()
+  down_regulated <- dds.result %>% filter(padj <= p.val & log2FoldChange < 0) %>% nrow()
+  tb <-table(dds.result$padj <= p.val ,useNA="always")
+  tb.DE <- data.frame("No DE" = tb[1], "Down regulated" = down_regulated, "Up regulated" = up_regulated, "NA" = tb[3]  )
+  row.names(tb.DE) <- ""
   return(tb.DE)
 }
 
@@ -147,10 +151,10 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
   if(is.anno == TRUE){
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(pvalue), col=sig)) +
+    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
              geom_point() +
              ggtitle("Volcano plot labelling top significant genes") +
-             geom_text_repel(data = subset(dds.res, (-log10(pvalue) > minlogP | log2FoldChange > maxlogF | log2FoldChange < minlogF)),
+             geom_text_repel(data = subset(dds.res, (-log10(padj) > minlogP | log2FoldChange > maxlogF | log2FoldChange < minlogF)),
                              aes(label = symbol),
                              size = 4,
                              box.padding = unit(0.35, "lines"),
@@ -164,7 +168,7 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
              theme(axis.title.y = element_text(size=14)))
   }else{
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj)
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(pvalue), col=sig)) +
+    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
              geom_point()+
              scale_colour_discrete(name="",
                                    labels=c("Not significative", "Significative", "NA")) +
