@@ -230,9 +230,7 @@ res_v <- res %>% mutate(sig=padj<0.05) %>%  arrange(padj) %>%
 
 
 ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
-  geom_point() +
-  ggtitle("Volcano plot labelling top significant genes") +
-  geom_text_repel(data = subset(res_v, (-log10(padj) > 30 | log2FoldChange > 6 | log2FoldChange < -6)),
+  geom_point() + geom_text_repel(data = subset(res_v, (-log10(padj) > 30 | log2FoldChange > 6 | log2FoldChange < -6)),
                   aes(label = symbol),
                   size = 4,
                   box.padding = unit(0.35, "lines"),
