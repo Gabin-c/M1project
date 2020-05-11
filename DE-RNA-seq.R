@@ -123,6 +123,7 @@ plotPCA(rld, intgroup="dex")
 #Distance matrix for sample
 library(RColorBrewer)
 library(gplots)
+#assay() used to extracting matrix of normalized values
 dists <- dist(t(assay(vsdata)))
 mat <- as.matrix(dists)
 hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)

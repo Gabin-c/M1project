@@ -22,16 +22,16 @@
 \contentsline {paragraph}{Markdown}{12}{section*.22}%
 \contentsline {section}{\Large {Résultats}}{13}{section*.23}%
 \contentsline {subsection}{\large {Analyse de données RNA-seq}}{13}{section*.24}%
-\contentsline {subsection}{\large {Application RShiny}}{14}{section*.25}%
-\contentsline {subsubsection}{\normalsize {Import des données}}{14}{section*.26}%
-\contentsline {subsubsection}{\normalsize {DESeq2}}{14}{section*.27}%
-\contentsline {subsubsection}{\normalsize {Résultats}}{14}{section*.28}%
-\contentsline {section}{\Large {Conclusion et perspectives}}{15}{section*.29}%
-\contentsline {section}{\Large {Bibliographie}}{16}{section*.30}%
-\contentsline {section}{\Large {Résumé}}{17}{section*.31}%
-\contentsline {section}{\Large {Abstract}}{17}{section*.32}%
-\contentsline {section}{\Large {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{18}{section*.33}%
-\contentsline {section}{\Large {Annexe 2 : Scripts R pour l'application Shiny}}{19}{section*.34}%
-\contentsline {subsection}{\large {2.1 Interface utilisateur}}{19}{section*.35}%
-\contentsline {subsection}{\large {2.2 Serveur}}{26}{section*.36}%
-\contentsline {subsection}{\large {2.3 Fonctions}}{33}{section*.37}%
+\contentsline {subsection}{\large {Application RShiny}}{15}{section*.25}%
+\contentsline {subsubsection}{\normalsize {Import des données}}{15}{section*.26}%
+\contentsline {subsubsection}{\normalsize {DESeq2}}{15}{section*.27}%
+\contentsline {subsubsection}{\normalsize {Résultats}}{15}{section*.28}%
+\contentsline {section}{\Large {Conclusion et perspectives}}{16}{section*.29}%
+\contentsline {section}{\Large {Bibliographie}}{17}{section*.30}%
+\contentsline {section}{\Large {Résumé}}{18}{section*.31}%
+\contentsline {section}{\Large {Abstract}}{18}{section*.32}%
+\contentsline {section}{\Large {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{19}{section*.33}%
+\contentsline {section}{\Large {Annexe 2 : Scripts R pour l'application Shiny}}{20}{section*.34}%
+\contentsline {subsection}{\large {2.1 Interface utilisateur}}{20}{section*.35}%
+\contentsline {subsection}{\large {2.2 Serveur}}{27}{section*.36}%
+\contentsline {subsection}{\large {2.3 Fonctions}}{34}{section*.37}%
