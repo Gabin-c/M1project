@@ -1,6 +1,7 @@
-#During all this analyse we gonna use function made in function_dds
-source("function_dds.R")
-
+#Library
+library(DESeq2)
+library(Biobase)
+library(tidyverse)
 
 ### import data ----
 #Firstly we import the 3 data table which we will use during this analysis. 
@@ -127,5 +128,18 @@ mat <- as.matrix(dists)
 hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
 heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
 
-#Heatmap of gene expression
+#Heatmap of gene expression for 50 better DE gene
 library(NMF)
+res <- tbl_df(res)
+res <- res %>% 
+  arrange(padj) %>% 
+  inner_join(anno,by=c("row"="ensgene")) %>%
+  filter(padj<0.05)
+NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],], 
+              labRow=arrange(res, padj, pvalue)$symbol[1:50], 
+              scale="row", distfun="pearson", 
+              annCol=dplyr::select(airway_metadata, dex, celltype), 
+              col=c("green","black","black","red"))
+
+
+
