@@ -293,9 +293,15 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],],
 
 \newpage
 ## \large{Application RShiny}
-### \normalsize{Import des données}
-### \normalsize{DESeq2}
-### \normalsize{Résultats}
+Notre but était donc de mettre en place une application Shiny capable de faire l'analyse de données RNA-seq faite peécédemment. Pour cela nous utilisons les packages Shiny et Shinydashboard afin de créer une application ergonomique et agréable à prendre en main. Pour ce faire, nous avons décidé de diviser l'application en 4 principales parties : 
+\begin{enumerate}
+\item Une première partie de présentation de l'application.
+\item Une partie pour l'import des données nécessaires.
+\item Une partie permettant l'utilisation de DESeq2
+\item Une dernière partie avec tous les résultats
+\end{enumerate}
+
+
 
 \newpage
 # \Large{Conclusion et perspectives}
