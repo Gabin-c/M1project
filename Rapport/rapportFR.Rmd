@@ -98,6 +98,12 @@ Différents résultats statistiques peuvent être obtenus ainsi que des graphiqu
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Aujourd'hui, de plus en plus d'études utilisent le séquençage de l'ARN, il en résulte de plus en plus de données à analyser. Pour essayer de répondre à cette problématique nous avons décidé d'élaborer une application interactive grâce au package RShiny. Cette application a pour but d'aider à l'analyse de données RNA-seq le plus profondément possible en répondant aux plus de questions possibles et permettre une visualisation intuitive des résultats.
 Le but de ce projet est de nous permettre d'en apprendre plus sur cette nouvelle technique de séquençage de l'ARN et son analyse. Cela nous permettra aussi d'apprendre à utiliser différents packages disponibles sous R comme Shiny pour la conception de l'application ou Markdown pour la rédaction du rapport.
+```{r message=FALSE, warnings=FALSE, eval=TRUE, tidy=FALSE , echo =FALSE}
+counts_table <- read.csv("Data/airway_scaledcounts.csv") 
+airway_metadata <- read.csv("Data/airway_metadata.csv")
+anno <- read.csv("Data/annotables_grch38.csv")
+anno <- anno %>% select(ensgene,symbol)
+```
 
 
 \newpage
@@ -133,10 +139,16 @@ Une fois cette seconde étape réalisée on peut extraire les résultats de l'an
 
 
 \scriptsize
-```{r message=FALSE, warnings=FALSE, eval=FALSE, tidy=FALSE}
-dds <- DESeqDataSetFromMatrix(countData = counts_table,colData=airway_metadata,design = ~dex,tidy = TRUE)
+```{r message=FALSE, warnings=FALSE, eval=TRUE, tidy=FALSE}
+### Create dds object ---
+dds <- DESeqDataSetFromMatrix(counts_table,colData=airway_metadata,design = ~dex,tidy = TRUE)
+# Set reference of experience, here "control"
+colData(dds)$dex <- relevel(colData(dds)$dex , ref="control")
+# Differential expression analysis and normalization ----
 dds <- DESeq(dds)
-res <- results(dds)
+# Extraction of DE results
+res <- results(dds,tidy = TRUE)
+
 ```
 \normalsize
 \small{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2}
@@ -176,6 +188,84 @@ Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire
 \newpage
 # \LARGE{Résultats}
 ## \Large{Analyse de données RNA-seq}
+
+```{r message=FALSE, warnings=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
+# Number of genes wich is differential express at 5%
+up_regulated <- res %>% filter(padj <= 0.05 & log2FoldChange > 0) %>% nrow()
+down_regulated <- res %>% filter(padj <= 0.05 & log2FoldChange < 0) %>% nrow()
+tb <- table(res$padj <= 0.05, useNA="always")
+tb.DE <- data.frame("No DE" = tb[1], "Down regulated" = down_regulated, "Up regulated" = up_regulated, "NA" = tb[3]  )
+row.names(tb.DE) <- ""
+tb.DE
+```
+\normalsize
+\small{Figure ? : Table des résultats de l'analyse d'expression différentielle
+}
+\normalsize
+
+```{r message=FALSE, warnings=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE }
+res_v <- res %>% mutate(sig=padj<0.05) %>%  arrange(padj) %>%
+  inner_join(anno,by=c("row"= "ensgene"))
+
+
+ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
+  geom_point() +
+  ggtitle("Volcano plot labelling top significant genes") +
+  geom_text_repel(data = subset(res_v, (-log10(padj) > 30 | log2FoldChange > 6 | log2FoldChange < -6)),
+                  aes(label = symbol),
+                  size = 4,
+                  box.padding = unit(0.35, "lines"),
+                  point.padding = unit(0.3, "lines"), color = "darkblue") +
+  scale_colour_discrete(name="",
+                        labels=c("Not significative", "Significative", "NA")) +
+  guides(color = guide_legend(override.aes = list(size=5))) +
+  geom_vline(xintercept=0,linetype="dashed", color = "red")+
+  theme(legend.text=element_text(size=13)) +
+  theme(axis.title.x = element_text(size=14)) +
+  theme(axis.title.y = element_text(size=14))
+
+```
+\normalsize
+\small{Figure ? : Volcano plot de l'analyse d'expression différentielle.
+En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.o5 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes surexprimés par rapport à la réference et les points à gauche correspondent aux gènes sous exprimés par rapport à la référence. }
+\normalsize
+```{r message=FALSE, warnings=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE }
+#PCA
+vsdata <- vst(dds, blind=FALSE)
+plotPCA(vsdata, intgroup="dex")
+library(RColorBrewer)
+library(gplots)
+#assay() used to extracting matrix of normalized values
+dists <- dist(t(assay(vsdata)))
+mat <- as.matrix(dists)
+hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
+heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
+```
+\normalsize
+\small{Figure ? : Analyse en composante principale et matrice de distance sur les 8 échantillons avec une transformation selon la méthode vsdata.
+Un gradient de couleur bleu est utilisée, plus la couleur vire au bleu plus la distance calculée est proche.
+}
+\normalsize
+
+```{r}
+#Heatmap of gene expression for 50 better DE gene
+library(NMF)
+res <- tbl_df(res)
+res <- res %>% 
+  arrange(padj) %>% 
+  inner_join(anno,by=c("row"="ensgene")) %>%
+  filter(padj<0.05)
+NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],], 
+              labRow=arrange(res, padj, pvalue)$symbol[1:50], 
+              scale="row", distfun="pearson", 
+              annCol=dplyr::select(airway_metadata, dex, celltype), 
+              col=c("green","black","black","red"))
+```
+\normalsize
+\small{Figure ? : Heatmap de l'expression des 50 gènes ayant la plus la meilleur p.value. Le gradient utilisé est un gradient rouge-vert, plus l'expression est importante plus cela vire au rouge et inversement plus cela vire au vert plus l'expression est faible.  
+}
+\normalsize
+
 \newpage
 ## \Large{Application RShiny}
 
