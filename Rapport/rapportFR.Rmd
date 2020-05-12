@@ -172,7 +172,8 @@ res <- results(dds,tidy = TRUE)
 \newpage
 #### Analyse d'expression différentielle
 Avant d'analyser les résultats de l'analyse DE nous avons préalablement visualiser la distribution du comptage des reads pour chaque echantillon avant et après normalisation en  utilisant la methode du log-frequence afin de faciliter la visualisation, en parallèle nous avons visualiser la profondeur de séquençage de chaque echantillon avant et après normalisation ce qui a permis de vérifier visuellement la bonne normalisation des données, pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages ggplot2 et ggrepel disponible sur le CRAN.
-Suite a cette première approche nous nous sommes intérressé aux résultats propres de  l'analyse DE, la fonction intégré au package DESeq2 nous a permis de sortir une table contenant les résultats de cette analyse, cette table contient x colonnes correspondant à : le nom des gènes, logFoldChange, p.value, p.value ajusté ....
+Suite a cette première approche nous nous sommes intérressé aux résultats propres de  l'analyse DE, la fonction intégré au package DESeq2 nous a permis de sortir une table contenant les résultats de cette analyse, cette table contient x colonnes correspondant à : ID des gènes, logFoldChange, p.value, p.value ajusté .....
+A partir de cette table on ressort les gènes DE au risque alpha = 0.05 à l'aide de p.value ajusté, le LogFoldChange nous permet de différencié les gènes surégulé ou sous régulé par rapport à la référence (LFC > 0 = surrégulé, LFC < 0 sous régulés )
 
 #### NMF
 Le package NMF pour "Non negative Matrix Factorization" est aussi disponible sur le CRAN et va nous être utile pour réaliser des heatmaps.
