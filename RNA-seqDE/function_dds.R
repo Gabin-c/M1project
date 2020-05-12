@@ -266,7 +266,7 @@ shinyDashboardThemeDIYDG <- function(
   textboxBackColor, textboxBorderColor, textboxBorderRadius, textboxBackColorSelect, textboxBorderColorSelect,
   textboxHeight = 34, textboxPadding = "6px 12px", tableBackColor, tableBorderColor,
   tableBorderTopSize, tableBorderRowSize, primaryFontColor = "auto", successFontColor = "auto",
-  warningFontColor = "auto", dangerFontColor = "auto", infoFontColor = "auto", boxInfoColor = "auto",tabFontColor
+  warningFontColor = "auto", dangerFontColor = "auto", infoFontColor = "auto", boxInfoColor = "auto"
 ) {
   
   htmltools::tags$head(
@@ -688,24 +688,26 @@ shinyDashboardThemeDIYDG <- function(
           }
           /* datatable: page control */
           .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: ', tabFontColor, ' !important;
+            color: ', "rgb(255, 255, 255)", ' !important;
           }
           /* datatable: table info */
           .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
           .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
           .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
-            color: ', tabFontColor, ' !important;
+            color: ', "rgb(255, 255, 255)", ' !important;
           }
           .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
           .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing,
           .dataTables_wrapper .dataTables_paginate {
-            color: ', tabFontColor, ' !important;
+            color: ', "rgb(255, 255, 255)", ' !important;
           }
           .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
           .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing,
           .dataTables_wrapper .dataTables_paginate {
-            color: ', tabFontColor, ' !important;
-          }
+            color: ', "rgb(255, 255, 255)", ' !important;
+          } thead {color: ', "rgb(255, 255, 255)", '; } tbody {color: ', "rgb(255, 255, 255)", '; }
+                        
+          
           /* datatable search box */
           .dataTables_wrapper .dataTables_filter input {
             background-color: ', textboxBackColor, ';
@@ -854,6 +856,6 @@ theme_grey_dark2 <- shinyDashboardThemeDIYDG(
   ,tableBorderColor = "rgb(70,80,90)"
   ,tableBorderTopSize = 1
   ,tableBorderRowSize = 1
-  ,tabFontColor = "rgb(255, 255, 255)"
+  
   
 )
