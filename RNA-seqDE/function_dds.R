@@ -846,7 +846,7 @@ theme_grey_dark2 <- shinyDashboardThemeDIYDG(
   ,buttonTextColorHover = "rgb(50,50,50)"
   ,buttonBorderColorHover = "rgb(50,50,50)"
   
-  ,textboxBackColor = "rgb(68,80,90)"
+  ,textboxBackColor = "rgb(255,255,255)"
   ,textboxBorderColor = "rgb(76,90,103)"
   ,textboxBorderRadius = 5
   ,textboxBackColorSelect = "rgb(80,90,100)"
