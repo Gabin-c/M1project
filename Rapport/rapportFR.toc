@@ -7,28 +7,31 @@
 \contentsline {subparagraph}{Etape 4 : Quantification}{8}{section*.7}%
 \contentsline {subparagraph}{Etape 5 : Statistiques}{8}{section*.8}%
 \contentsline {subsection}{\large {Objectifs}}{8}{section*.9}%
-\contentsline {section}{\Large {Matériels et méthodes}}{9}{section*.10}%
-\contentsline {subsection}{\large {Jeu de données}}{9}{section*.11}%
+\contentsline {section}{\Large Matériels et méthodes}{9}{section*.10}%
+\contentsline {subsection}{\large {Jeu de données et package DESeq2}}{9}{section*.11}%
 \contentsline {subsection}{\large {Packages}}{9}{section*.12}%
-\contentsline {subsubsection}{\normalsize {Analyse RNAseq}}{9}{section*.13}%
-\contentsline {paragraph}{DESeq2}{10}{section*.14}%
-\contentsline {paragraph}{ggplot2 et ggrepel}{11}{section*.15}%
-\contentsline {paragraph}{Tidyverse}{11}{section*.16}%
-\contentsline {paragraph}{NMF}{11}{section*.17}%
-\contentsline {subsubsection}{\normalsize {Création de l'application}}{11}{section*.18}%
-\contentsline {paragraph}{Shiny}{11}{section*.19}%
-\contentsline {paragraph}{Shinydashboard}{12}{section*.20}%
-\contentsline {subsubsection}{\normalsize {Rédaction du rapport}}{12}{section*.21}%
-\contentsline {paragraph}{Markdown}{12}{section*.22}%
-\contentsline {section}{\Large {Résultats}}{13}{section*.23}%
-\contentsline {subsection}{\large {Analyse de données RNA-seq}}{13}{section*.24}%
-\contentsline {subsection}{\large {Application RShiny}}{15}{section*.25}%
-\contentsline {section}{\Large {Conclusion et perspectives}}{16}{section*.26}%
-\contentsline {section}{\Large {Bibliographie}}{17}{section*.27}%
-\contentsline {section}{\Large {Résumé}}{18}{section*.28}%
-\contentsline {section}{\Large {Abstract}}{18}{section*.29}%
-\contentsline {section}{\Large {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{19}{section*.30}%
-\contentsline {section}{\Large {Annexe 2 : Scripts R pour l'application Shiny}}{22}{section*.31}%
-\contentsline {subsection}{\large {2.1 Interface utilisateur}}{22}{section*.32}%
-\contentsline {subsection}{\large {2.2 Serveur}}{29}{section*.33}%
-\contentsline {subsection}{\large {2.3 Fonctions}}{36}{section*.34}%
+\contentsline {paragraph}{DESeq2}{10}{section*.13}%
+\contentsline {paragraph}{Analyse d'expression différentielle}{11}{section*.14}%
+\contentsline {subsubsection}{\normalsize {Création de l'application}}{11}{section*.15}%
+\contentsline {paragraph}{Shiny}{12}{section*.16}%
+\contentsline {paragraph}{Shinydashboard}{12}{section*.17}%
+\contentsline {subsubsection}{\normalsize {Rédaction du rapport}}{12}{section*.18}%
+\contentsline {paragraph}{Markdown}{12}{section*.19}%
+\contentsline {section}{\Large {Résultats}}{14}{section*.20}%
+\contentsline {subsection}{\large {Analyse de données RNA-seq}}{14}{section*.21}%
+\contentsline {subsection}{\large {Application RShiny}}{16}{section*.22}%
+\contentsline {subsection}{\large {Application RShiny}}{16}{section*.23}%
+\contentsline {subsubsection}{\normalsize {Partie 1 : Informations}}{16}{section*.24}%
+\contentsline {subsubsection}{\normalsize {Partie 2 : Importation des données}}{16}{section*.25}%
+\contentsline {subsubsection}{\normalsize {Partie 3 : DESeq2}}{17}{section*.26}%
+\contentsline {subsubsection}{\normalsize {Partie 4 : Résultats}}{18}{section*.27}%
+\contentsline {subsubsection}{\normalsize {Customisation}}{20}{section*.28}%
+\contentsline {section}{\Large {Conclusion et perspectives}}{21}{section*.29}%
+\contentsline {section}{\Large {Bibliographie}}{22}{section*.30}%
+\contentsline {section}{\Large {Résumé}}{23}{section*.31}%
+\contentsline {section}{\Large {Abstract}}{23}{section*.32}%
+\contentsline {section}{\Large {Annexe 1 : Script R pour l'analyse RNAseq via DESeq2}}{24}{section*.33}%
+\contentsline {section}{\Large {Annexe 2 : Scripts R pour l'application Shiny}}{27}{section*.34}%
+\contentsline {subsection}{\large {2.1 Interface utilisateur}}{27}{section*.35}%
+\contentsline {subsection}{\large {2.2 Serveur}}{34}{section*.36}%
+\contentsline {subsection}{\large {2.3 Fonctions}}{41}{section*.37}%
