@@ -33,6 +33,8 @@ header-includes:
 
 ---
 
+\begin{document}
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(DESeq2)
@@ -56,13 +58,13 @@ library(ggrepel)
 \includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
 \end{center}
 
+\setstretch{1.5}
 
 \newpage
 \setcounter{tocdepth}{4}
 \tableofcontents
 \newpage
 
-\setstretch{1.5}
 
 
 # \Large{Introduction}
@@ -303,7 +305,6 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],],
 
 
 \newpage
-## \large{Application RShiny}
 ## \large{Application RShiny}
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Notre but était donc de mettre en place une application Shiny capable de faire l'analyse de données RNA-seq faite peécédemment. Pour cela nous utilisons les packages  \emph{Shiny} et \emph{Shinydashboard} afin de créer une application ergonomique et agréable à prendre en main. Pour ce faire, nous avons décidé de diviser l'application en 4 principales parties : 
@@ -1938,3 +1939,5 @@ gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,ann
 
 ```
 \normalsize
+
+\end{document}
