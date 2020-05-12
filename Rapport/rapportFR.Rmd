@@ -202,7 +202,7 @@ Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire
 \newpage
 # \Large{Résultats}
 ## \large{Analyse de données RNA-seq}
-
+Les résultats de l'analyse d'expression différentielle a mis en valeur 2181 gènes differentiellement exprimés au risque alpha = 0.05 (figure ?), 1242 gènes sont surégulés et 939 sous régulés par rapport à la condition de réference "control". 
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
 # Number of genes wich is differential express at 5%
 up_regulated <- res %>% filter(padj <= 0.05 & log2FoldChange > 0) %>% nrow()
@@ -215,7 +215,7 @@ tb.DE
 \sffamily\small{Figure ? : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
 \normalsize
 \setromanfont{Times New Roman}
-
+On remarque que les gènes les plus différentiellement exprimés sont SPACL1, PER1, ARHGEF2,et MAOA, la plus part des gènes les plus différentiellement exprimés sont surexprimés par rapport à la réference (figure ?)
 
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE }
 res_v <- res %>% mutate(sig=padj<0.05) %>%  arrange(padj) %>%
@@ -241,8 +241,7 @@ ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
 En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.05 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes surexprimés par rapport à la réference et les points à gauche correspondent aux gènes sous exprimés par rapport à la référence.}
 \normalsize
 \setromanfont{Times New Roman}
-
-
+Entre les échantillons deux groupes ce distinque un groupe contenant les échantillons traités 
 
 
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, out.width='8cm', out.height='10cm', fig.show='hold'}
