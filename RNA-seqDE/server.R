@@ -381,11 +381,16 @@ server <- function(input, output,session) {
   )
   
   ### Theme ----
+
+  
+  
+  
+  
   ### Choice between dark or light theme with a switcher button
   observeEvent(input$theme,{
     if(input$theme==TRUE){
       output$themes <- renderUI({
-        shinyDashboardThemes("grey_dark")
+        shinyDashboardThemes("grey_dark") 
       })
     }else{
       output$themes <-renderUI({
@@ -393,6 +398,9 @@ server <- function(input, output,session) {
       })
     }
   })
+  
+  
+
   
   ### "Input count table" menu in the sidebar
   ### Change the icon with a check icon when the counts file is imported
