@@ -385,7 +385,7 @@ server <- function(input, output,session) {
   observeEvent(input$theme,{
     if(input$theme==TRUE){
       output$themes <- renderUI({
-        shinyDashboardThemes("grey_dark")
+        theme_grey_dark2
       })
     }else{
       output$themes <-renderUI({
