@@ -5,8 +5,7 @@ library(RColorBrewer)
 library(tidyverse)
 library(NMF)
 library(ggrepel)
-
-
+library(factoextra)
 ### Preamble ----
 ### All of this function can be use after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
@@ -204,7 +203,7 @@ pca.plot <- function(dds.resTransf,intgroup){
 ### distance.matrix.heatmap need just one argument
 ###   - dds.resTransf which is an DESeq2 transformate object with vst() or rLogtransformation()
 distance.matrix.heatmap <- function(dds.resTransf){
-  dists <- dist(t(assay(dds.resTransf)))
+  dists <- get_dist(t(assay(dds.resTransf)),method = "pearson")
   mat <- as.matrix(dists)
   hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
   return(heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13)))
