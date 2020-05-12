@@ -178,7 +178,9 @@ Une fois les résultats de l'analyse DE sur les gènes analysé et visualisé, n
 Enfin nous avons finis par réaliser une clustering heatmap de l'expression des 50 gènes les plus significativement DE couplé au fichier d'annotation afin de visualiser les ID des gènes, cette dernière heatmap a été réaliser à l'aide du package NMF  pour "Non negative Matrix Factorization"
 
 ### \normalsize{Création de l'application}
-Concernant l'application, nous utilisons toujours les packages présentés précédemment pour l'analyse de données RNA-seq. Mais nous utilisons également des packages propres à la création d'une application comme Shiny ou Shinydashboard.
+
+Concernant la réalisation de l'application, nous avons préalablement à l'aide du script de l'analyse DE crée un script contenant des créations de fonctions générant les visualisations et résultats que nous souhaitions avoir dans l'application (annexe 2.3). Nous avons réaliser ces fonctions car pour la plus grande partie des résultats et leurs visualisations les lignes de codes correspondantes étaient imposantes ce qui aurait apporté une perte de lisibilité dans les scripts de l'application.
+En plus de ce script contenant les fonctions nécessaire au fonctionnement de l'application nous utilisons lres packages propres à la création d'une application que sont Shiny et Shinydashboard.
 
 #### Shiny
 Premièrement, le package Shiny permet la création d'application web interactive capables d'utiliser toutes les fonctionnalités de R. C'est un outil permettant de créér des pages web sans forcément avoir de connaissance en HTML, css ou javascript. Cependant, c'est un plus d'avoir des connaissances dans ce domaine si on veut customiser ces pages web afin d'avoir une application plus attirante. 
@@ -188,9 +190,8 @@ Une application shiny est composée de deux fichiers :
 \item Le fichier sever.R contient les instruction permettant le fonctionnement de l'application (annexe 2.2).
 \end{itemize}
 
-
 #### Shinydashboard
-Shinydashboard permet d'avoir un modèle d'application sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
+Pour l'aspect esthétique et la facilité de navigation nous avons décider de faire un dashboard à l'aide du package Shinydashboard. Ce package permet donc de générer un corps d'application sous forme de dashboard. Ce  modèle d'application ce présente sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
 
 
 ### \normalsize{Rédaction du rapport}
