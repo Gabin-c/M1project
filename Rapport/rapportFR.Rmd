@@ -405,7 +405,8 @@ Pour finir, nous avons mis en place un bouton accueil grâce au langage HTML. Ce
 
 \item Wickham, H. (2016). Mastering Shiny. Consulté à l’adresse \href{https://mastering-shiny.org/}{\underline{https://mastering-shiny.org/}} 
 
-\item Nik. L. (2018, mars 4). nik01010/dashboardthemes. Consulté à l’adresse 
+\item Nik. L. (2018, mars 4). nik01010/dashboardthemes. Consulté à l’adresse
+\par
 \href{https://github.com/nik01010/dashboardthemes}{\underline{https://github.com/nik01010/dashboardthemes}}
 \end{enumerate}
 \newpage
