@@ -23,8 +23,8 @@ geometry: margin=25mm
 # Police
 mainfont: Times New Roman
 header-includes:
-    # Interligne de 1.5
-    - \renewcommand{\baselinestretch}{1.5}
+    # Interligne package
+    - \usepackage{setspace}
     # Remplace "Contents" par "Table des matières"
     - \renewcommand{\contentsname}{\Huge{Table des matières}}
     # Evite l'interligne de 1.5 dans le sommaire
@@ -62,6 +62,7 @@ library(ggrepel)
 \tableofcontents
 \newpage
 
+\setstretch{1.5}
 
 
 # \Large{Introduction}
@@ -146,8 +147,7 @@ la première étape consiste a crée un premier jeu de données DESeq contenant 
 La seconde étape consiste à normaliser les doonées de la table de comptage et à réaliser l'analyse de l'expression différentielle. Le package DESeq2 permet de réaliser ces deux étapes d'une traite.
 Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les étudiers.
 
-\renewcommand{\baselinestretch}{1}
-
+\singlespacing
 \scriptsize
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE}
 ### Create dds object ---
@@ -160,12 +160,11 @@ dds <- DESeq(dds)
 res <- results(dds,tidy = TRUE)
 
 ```
-\renewcommand{\baselinestretch}{1.5}
 \normalsize
 \sffamily\small{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2}
 \normalsize
 
-
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 
@@ -203,6 +202,8 @@ Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire
 # \Large{Résultats}
 ## \large{Analyse de données RNA-seq}
 Les résultats de l'analyse d'expression différentielle a mis en valeur 2181 gènes differentiellement exprimés au risque alpha = 0.05 (figure ?), 1242 gènes sont surégulés et 939 sous régulés par rapport à la condition de réference "control". 
+
+\singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
 # Number of genes wich is differential express at 5%
 up_regulated <- res %>% filter(padj <= 0.05 & log2FoldChange > 0) %>% nrow()
@@ -215,8 +216,11 @@ tb.DE
 \sffamily\small{Figure ? : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
 \normalsize
 \setromanfont{Times New Roman}
+\setstretch{1.5}
+\par
 On remarque que les gènes les plus différentiellement exprimés sont SPACL1, PER1, ARHGEF2,et MAOA, la plus part des gènes les plus différentiellement exprimés sont surexprimés par rapport à la réference (figure ?)
 
+\singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE }
 res_v <- res %>% mutate(sig=padj<0.05) %>%  arrange(padj) %>%
   inner_join(anno,by=c("row"= "ensgene"))
@@ -240,10 +244,13 @@ ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
 \sffamily\small{Figure ? : Volcano plot de l'analyse d'expression différentielle.
 En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.05 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes surexprimés par rapport à la réference et les points à gauche correspondent aux gènes sous exprimés par rapport à la référence.}
 \normalsize
+
+\setstretch{1.5}
 \setromanfont{Times New Roman}
+\par
 Entre les échantillons on remarque à l'aide de la PCA (figure ?) que deux groupes ce distinque selon la première dimension qui donne le plus gros pourcentage d'information, un groupe contenant les échantillons traités et un groupe contenant les echantillons contrôle, le suivi de la seconde dimension qui a un pourcentage d'information moins important on remarque là aussi deux groupes l'un contenant les tous les échantillons sauf les échantillons SRR1039517 et SRR1039516 ce qui laisse pensé que ces deux echanillons sont les plus éloignés des autres du fait de la différence du type cellulaire, on aurait 3 types cellulaires proches (N05261,N06101,N61311) et l'un plus éloignés (N08061), on remarque d'ailleurs sur la matrice de distance obtenu avec la méthode de corrélation de pearson (figure ?) que les l'échantillon SRR1039517 est le plus eloigné de ses homologues treated et que sa plus forte corrélation est avec son "control" associé. La matrice de distance pour les échantillons montre tous de même bien deux groupes l'un contenant les echantillons traités et l'autre les échantillons controles, d'ailleurs la clustering heatmap (figure ? ) sur l'expression des gènes montrent cette fois bien clairement deux groupes l'un contenant les echantillons traités et l'autre les echantillons controles, cette visualisation montre aussi comme nous l'avions identifié que les gènes les plus différentiellement exprimées sont le plus souvent surexprimés dans les echantillons traités.
 
-
+\singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, out.width='8cm', out.height='10cm', fig.show='hold'}
 #PCA
 vsdata <- vst(dds, blind=FALSE)
@@ -267,11 +274,13 @@ heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
 \sffamily\small{Figure ? : Analyse en composante principale et matrice de distance sur les 8 échantillons avec une transformation selon la méthode VST.
 Un gradient de couleur bleu est utilisée, plus la couleur vire au bleu plus la distance calculée est proche.}
 \normalsize
+
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 
 
-
+\singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
 #Heatmap of gene expression for 50 better DE gene
 library(NMF)
@@ -288,6 +297,8 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],],
 ```
 \sffamily\small{Figure ? : Heatmap de l'expression des 50 gènes ayant la plus la meilleur p.value. Le gradient utilisé est un gradient rouge-vert, plus l'expression est importante plus cela vire au rouge et inversement plus cela vire au vert plus l'expression est faible.}
 \normalsize
+
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 
@@ -318,10 +329,12 @@ Les 3 types de fichiers cités dans le paragraphe précédent peuvent être impo
 Tous les fichiers importés doivent être au format .csv, .tsv ou .txt avec pour séparation des tabulations, des virgules ou des points-virgules. Les fichiers doivent avoir des compositions spécifiques. Concernant le fichier de comptage de reads, la première colonne doit correspondre à l'identifiant du gène et toutes les autres aux comptages de reads par échantillons. Pour le fichier metadata, la première colonne doit correspondre aux échantillons de la table de comptages et une autre colonne minimum est nécessaire. Celle-ci doit être une colonne qui sépare les échantillons en 2 conditions (e.g. control et treated). Pour finir le fichier d'annotation doit répondre à une obligation : une des colonnes doit être nommées "symbol". Cette colonne correspond au symbole des gènes et est nécessaire pour pouvoir afficher ces symboles sur le volcano plot ou le heatmap.
 Enfin, chaque fichier importé est affiché sur sa page pour permettre à l'utilisateur de parcourir les tableaux.
 
+\singlespacing
   \includegraphics[width=\textwidth]{exTable.png}
 \sffamily\small{Figure ? : Exemple de l'importation de la table de comptage. L'utilisateur peut parcourir les pages de 20 entités du tableaux par une recherche ou en choisissant la page.}
 
 \normalsize
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 ### \normalsize{Partie 3 : DESeq2}
@@ -346,12 +359,14 @@ On retrouve plusieurs sortes de résultats sous forme de graphiques. Tous les gr
 \par
 Le premier disponible est un graphique de comptage de données ("count distribution") qui montre la fréquence de reads par échantillons. Il est possible de choisir l'échantillon que nous voulons visualiser ainsi que la porté de l'axe de abscisses et la dimension des barres sur le graphique. Ensuite, on retrouve un graphique permettant de visualiser le nombre de reads par échantillons et par gènes. Il y a donc la possibilité de choisir le gène que l'on veut visualiser. Pour continuer, nous trouvons un barplot témoignant de la profondeur pour chaque échantillon avec la possibilité de choisir la largeur des barres. Chacun de ces trois graphiques proposent une option pour visualiser les données avant et après normalisation.
 
+\singlespacing
 ```{r, echo=FALSE,out.width="100%", out.height="30%",fig.show='hold',fig.align='center', fig.height=20}
 
 knitr::include_graphics(c("countdistImage.png","countGene.png"))
 ```
 \sffamily\small{Figure ? : Exemple de pages pour les graphiques de count distribution (gauche) et du comptage de reads par gènes (droite). On remarques les options comme la normalisation, la taille des barres ou le choix de l'échantillon ou du gène.}
 
+\setstretch{1.5}
 \normalsize
 \setromanfont{Times New Roman}
 
