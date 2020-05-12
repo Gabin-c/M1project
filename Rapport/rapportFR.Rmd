@@ -174,7 +174,7 @@ res <- results(dds,tidy = TRUE)
 Avant d'analyser les résultats de l'analyse DE nous avons préalablement visualiser la distribution du comptage des reads pour chaque echantillon avant et après normalisation en  utilisant la methode du log-frequence afin de faciliter la visualisation, en parallèle nous avons visualiser la profondeur de séquençage de chaque echantillon avant et après normalisation ce qui a permis de vérifier visuellement la bonne normalisation des données, pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages ggplot2 et ggrepel disponible sur le CRAN.
 Suite a cette première approche nous nous sommes intérressé aux résultats propres de  l'analyse DE, la fonction intégré au package DESeq2 nous a permis de sortir une table contenant les résultats de cette analyse, cette table contient x colonnes correspondant à : ID des gènes, logFoldChange, p.value, p.value ajusté .....
 A partir de cette table on ressort les gènes DE au risque alpha = 0.05 à l'aide de p.value ajusté, le LogFoldChange nous permet de différencié les gènes surégulé ou sous régulé par rapport à la référence (LFC > 0 : surrégulé, LFC < 0 : sous régulés), afin de visualiser les résultats de l'analyse DE à alpha = 0.05 on réalise un MA plot ainsi qu'un volcano plot, pour le volcano plot on lui associera le fichier d'annotation afin d'observer les ID des gènes les plus différenciellement exprimés directement sur le graphique.
-Une fois les résultats de l'analyse DE sur les gènes analysé et visualisé, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de réference et la condition testé, pour cela nous avons réaliser une PCA ainsi qu'une matrice de distance représenté sous forme de heatmap à l'aide de la fonction PCA intégrer au package DESeq2 et le package gplots couplé au package RcolorBrewer pour le gradient de couleur, pour ces deux visualisatin nous avons utilisé la matrice des comptage transformés selon la méthode VST "Variance stabilization transformation"
+Une fois les résultats de l'analyse DE sur les gènes analysé et visualisé, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de réference et la condition testé, pour cela nous avons réaliser une PCA ainsi qu'une matrice de distance représenté sous forme de heatmap à l'aide de la fonction PCA intégrer au package DESeq2 et le package gplots couplé au package RcolorBrewer pour le gradient de couleur, pour ces deux visualisations nous avons utilisé la matrice de comptage transformés selon la méthode VST "Variance stabilization transformation".
 Enfin nous avons finis par réaliser une clustering heatmap de l'expression des 50 gènes les plus significativement DE couplé au fichier d'annotation afin de visualiser les ID des gènes, cette dernière heatmap a été réaliser à l'aide du package NMF  pour "Non negative Matrix Factorization"
 
 ### \normalsize{Création de l'application}
@@ -248,7 +248,17 @@ En bleu on retrouve les gènes dont l'expression diffère de la condition de ré
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, out.width='8cm', out.height='10cm', fig.show='hold'}
 #PCA
 vsdata <- vst(dds, blind=FALSE)
-plotPCA(vsdata, intgroup="dex")
+plotPCA(vsdata, intgroup="dex")+
+      theme(axis.title.x = element_text(size=14)) +
+      theme(axis.title.y = element_text(size=14)) +
+      scale_colour_discrete(name="")+
+      guides(colour = guide_legend(override.aes = list(size = 5))) +
+      theme(legend.text=element_text(size=13))+
+      geom_text_repel(
+        aes(label = colnames(vsdata)),
+        size = 3,
+        box.padding = unit(0.35, "lines"),
+        point.padding = unit(0.3, "lines"), color = "darkblue")
 #assay() used to extracting matrix of normalized values
 dists <- dist(t(assay(vsdata)))
 mat <- as.matrix(dists)
