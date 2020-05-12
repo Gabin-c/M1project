@@ -121,21 +121,16 @@ anno <- anno %>% select(ensgene,symbol)
 
 
 \newpage
-# \Large{Matériels et méthodes}
-## \large{Jeu de données}
+# \Large 
+## \large{Jeu de données et package DESeq2}
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes en utilisant le package DESeq2. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
+Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
 \par
 Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
 Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
 
 ## \large{Packages}
-Durant ce projet nous avons utilisé Rstudio afin de réaliser une analyse de données RNA-seq et de mettre en place une application interactive permettant de le faire. Pour cela nous avons donc du utiliser différents packages que nous présentons dans cette partie.
-
-
-### \normalsize{Analyse RNAseq}
-
-Pour procéder à l'analyse de données RNA-seq, nous avons besoin de packages DESeq2, gplot, ggrepel, Tidyverse et NMF. Ces différents packages vont permettre de réaliser une étude d'expression différentielle mais aussi d'afficher des graphiques importants pour avoir des résultats et de manipuler les données.
+Pour effectuer cette analyse nous allons travailler sous R et nottament sous l'IDE R-studio. Afin d'effectuer l'analyse differentielle nous allons utiliser le package DESeq2 proposé et développé par Bioconductor.
 
 \newpage
 #### DESeq2
@@ -149,7 +144,7 @@ Cette loi binomiale négative est une alternative à la loi de Poisson. En effet
 Il est donc nécessaire d'avoir au préalable une table de comptage ainsi qu'une table contenant le design de l'expérience car
 la première étape consiste a crée un premier jeu de données DESeq contenant ces deux éléments. Une fois l'objet créé, il est possible d'acceder à la table de comptage ainsi qu'au design de l'expérience à l'aide de fonctions propres au jeu de données DESeq2 (annexe 1).
 La seconde étape consiste à normaliser les doonées de la table de comptage et à réaliser l'analyse de l'expression différentielle. Le package DESeq2 permet de réaliser ces deux étapes d'une traite.
-Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les analyser.
+Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les étudiers.
 
 \renewcommand{\baselinestretch}{1}
 
@@ -175,12 +170,9 @@ res <- results(dds,tidy = TRUE)
 
 
 \newpage
-
-#### ggplot2 et ggrepel
-Disponibles sur le CRAN, ces deux packages permettent la visualisations de résultats sous la formes de graphiques élégants et optimisés. En effet, ggplot2 permet de réaliser des graphiques plus complexes qu'avec les fonctions de base sous R. Quant à ggrepel, il permet de mettre du texte sur ces graphiques.
-
-#### Tidyverse
-Tidyverse est un package également disponible sur le CRAN et regroupant plusieurs packages comme ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, ou forcats. Tous ces packages vont permettre de modéliser, transformer et visualiser les données.
+#### Analyse d'expression différentielle
+Avant d'analyser les résultats de l'analyse DE nous avons préalablement visualiser la distribution du comptage des reads pour chaque echantillon avant et après normalisation en  utilisant la methode du log-frequence afin de faciliter la visualisation, en parallèle nous avons visualiser la profondeur de séquençage de chaque echantillon avant et après normalisation ce qui a permis de vérifier visuellement la bonne normalisation des données, pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages ggplot2 et ggrepel disponible sur le CRAN.
+Suite a cette première approche nous nous sommes intérressé aux résultats propres de  l'analyse DE, la fonction intégré au package DESeq2 nous a permis de sortir une table contenant les résultats de cette analyse, cette table contient x colonnes correspondant à : le nom des gènes, logFoldChange, p.value, p.value ajusté ....
 
 #### NMF
 Le package NMF pour "Non negative Matrix Factorization" est aussi disponible sur le CRAN et va nous être utile pour réaliser des heatmaps.
@@ -219,7 +211,7 @@ tb.DE <- data.frame("No DE" = tb[1], "Down regulated" = down_regulated, "Up regu
 row.names(tb.DE) <- ""
 tb.DE
 ```
-\sffamily\small{Figure ? : Table des résultats de l'analyse d'expression différentielle}
+\sffamily\small{Figure ? : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
 \normalsize
 \setromanfont{Times New Roman}
 
