@@ -241,7 +241,7 @@ ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
 En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.05 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes surexprimés par rapport à la réference et les points à gauche correspondent aux gènes sous exprimés par rapport à la référence.}
 \normalsize
 \setromanfont{Times New Roman}
-Entre les échantillons deux groupes ce distinque un groupe contenant les échantillons traités 
+Entre les échantillons on remarque à l'aide de la PCA (figure ?) que deux groupes ce distinque selon la première dimension qui donne le plus gros pourcentage d'information, un groupe contenant les échantillons traités et un groupe contenant les echantillons contrôle, le suivi de la seconde dimension qui a un pourcentage d'information moins important on remarque là aussi deux groupes l'un contenant les tous les échantillons sauf les échantillons SRR1039517 et SRR1039516 ce qui laisse pensé que ces deux echanillons sont les plus éloignés des autres du fait de la différence du type cellulaire, on aurait 3 types cellulaires proches (N05261,N06101,N61311) et l'un plus éloignés (N08061), on remarque d'ailleurs sur la matrice de distance obtenu avec la méthode de corrélation de pearson (figure ?) que les l'échantillon SRR1039517 est le plus eloigné de ses homologues treated et que sa plus forte corrélation est avec son "control" associé. La matrice de distance pour les échantillons montre tous de même bien deux groupes l'un contenant les echantillons traités et l'autre les échantillons controles, d'ailleurs la clustering heatmap (figure ? ) sur l'expression des gènes montrent cette fois bien clairement deux groupes l'un contenant les echantillons traités et l'autre les echantillons controles, cette visualisation montre aussi comme nous l'avions identifié que les gènes les plus différentiellement exprimées sont le plus souvent surexprimés dans les echantillons traités.
 
 
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, out.width='8cm', out.height='10cm', fig.show='hold'}
@@ -264,7 +264,7 @@ mat <- as.matrix(dists)
 hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
 heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
 ```
-\sffamily\small{Figure ? : Analyse en composante principale et matrice de distance sur les 8 échantillons avec une transformation selon la méthode vsdata.
+\sffamily\small{Figure ? : Analyse en composante principale et matrice de distance sur les 8 échantillons avec une transformation selon la méthode VST.
 Un gradient de couleur bleu est utilisée, plus la couleur vire au bleu plus la distance calculée est proche.}
 \normalsize
 \setromanfont{Times New Roman}
@@ -299,6 +299,11 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],],
 
 \newpage
 # \Large{Conclusion et perspectives}
+
+Tout d'abord avant de conclure il est important de replacé le projet dans son contexte. Le but principal était d'aborder de nouveaux outils nous permettant d'evoluer et progresser sous l'environnement R ainsi que trouver des outils permettant l'accessibilité à ces mêmes outils. Dans ce sens ce projet nous a permis de découvrir le depot de package bioconductor qui fournis de nombreux package destinés à la bioinformatique et nous avons pu nous concentrer sur l'un de ces packages DESeq2. Nous avons grâce a ce package appris dans un premier temps à mieux comprendre l'analyse d'expression differentielle de données RNA-seq pour ensuite réalisé avec ce package notre propre analyse d'expression différentielle.
+Et c'est à partir de cette analyse que nous avons pu repondre à notre problématique de l'accessibilité, et nous avons donc réaliser une application simple suivant le workflow de notre analyse d'expression différentielle sour DESeq2, cette application permet à tous possesseur d'une table de comptage et de son design associé de réaliser un workflow de manière automatisé tous en ayant la possibilité de choisir ses propres paramètres. Toutes la partie création de cette application nous a permis de découvrir le package shiny et d'apprendre son utilisation, au dela du package en lui même cette démarche a permis l'apprentissage de base importante dans le language html ainsi que quelque point dans le language CSS.
+La finalité de ce projet est donc l'acquisition de nouvelles compétences dans l'analyse de données RNA-seq sous R ainsi que de nouvelles compétences dans différentes formes de mise en forme de résultats et leurs accessibilités à d'autres.
+Maintenant que nous nous sommes familiarisés à ces différents outils nous pourrions allé plus loin dans notre application et dans l'analyse de données RNA-seq en étudiant les autres outils permettant de completer notre analyse nottament en apprenant à utiliser les packages permettant de réaliser les etapes précedent l'optention de la table de comptage, ce qui permettra d'avoir une application prête à l'utilisation dés l'optention des fichier fastQ. 
 
 
 \newpage
