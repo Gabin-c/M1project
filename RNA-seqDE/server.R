@@ -389,7 +389,7 @@ server <- function(input, output,session) {
       })
     }else{
       output$themes <-renderUI({
-        shinyDashboardThemes("grey_light")
+        theme_grey_light
       })
     }
   })
