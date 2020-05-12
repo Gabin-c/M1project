@@ -19,6 +19,9 @@ source("function_dds.R")
 
 
 
+
+
+
 ### Annotation pannel ----
 parameters_Annotation <- tagList(
   tags$style("#paramsAnno { display:none; }"),
@@ -60,7 +63,10 @@ parameters_Annotation <- tagList(
 ###   - a Header
 ###   - a sidebar
 ###   - a body 
-ui <- tagList(
+ui <- 
+  
+  tagList(
+  
   
   ### Parameters of the dashboard ----
   
@@ -118,15 +124,17 @@ ui <- tagList(
       ),
       ### Dashboard body ----
       ### Organization of the differents pages associate with their menuItem
+      
+      
       dashboardBody(
-        
         useShinyjs(),
         fluidRow(
           tabItems(
             ### Introduction ----
             ### introduction page associate with menuItem "Informations"
             ### In this page we find all information about application
-            ### in particular how it works and different tool used to generate DE analysis
+       
+                 ### in particular how it works and different tool used to generate DE analysis
             ### to generate layout html tag provide by shiny library are used 
             ### withSpinner() of shinycssloaders library is use to generate waiting screen during load of img
             tabItem(tabName = "Intro",
