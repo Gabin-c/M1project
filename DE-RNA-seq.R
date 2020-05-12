@@ -123,9 +123,13 @@ plotPCA(rld, intgroup="dex")
 #Distance matrix for sample
 library(RColorBrewer)
 library(gplots)
+<<<<<<< HEAD
 library(factoextra)
 #assay() used to extracting matrix of normalized values
 dists <- get_dist(t(assay(vsdata)),method="pearson")
+=======
+dists <- dist(t(assay(vsdata)))
+>>>>>>> cf00a07996766ccf374e7df8a89a86e694d70032
 mat <- as.matrix(dists)
 hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
 heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
