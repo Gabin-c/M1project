@@ -142,7 +142,7 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],],
               labRow=arrange(res, padj, pvalue)$symbol[1:50], 
               scale="row", distfun="pearson", 
               annCol=dplyr::select(airway_metadata, dex, celltype), 
-              col=c("green","black","black","red"))
-
+              col=c("green","black","black","red"),
+              filename = "heatmappp.png", width = 1000, height = 1000)
 
 
