@@ -172,6 +172,7 @@ res <- results(dds,tidy = TRUE)
 
 \newpage
 #### Analyse d'expression différentielle
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons préalablement visualiser la distribution du comptage des reads pour chaque echantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation, en parallèle nous avons visualiser la profondeur de séquençage de chaque echantillon avant et après normalisation ce qui a permis de vérifier visuellement la bonne normalisation des données, pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages ggplot2 et ggrepel disponible sur le CRAN.
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE}
 # Extraction of count table
@@ -183,18 +184,22 @@ ggplot(data=count_table_dds, aes(log(count_table_dds[,"SRR1039517"]+1))) + geom_
 \sffamily\small{Figure 2 : code de la visulization de la distribution des comptages non normalisé pour l'échantillon SRR1039517}
 \normalsize
 \par
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Suite a cette première approche nous nous sommes intérressé aux résultats propres de  l'analyse DE, la fonction intégré au package DESeq2 nous a permis de sortir une table contenant les résultats de cette analyse, cette table contient 7 colonnes correspondant à : ID des gènes,baseMean, logFoldChange, lfcSE, stats, p.value et la p.value ajusté.
 A partir de cette table on ressort les gènes differentiellement exprimés au risque alpha = 0.05 à l'aide de la p.value ajusté, le LogFoldChange nous permet de différencié les gènes surexprimés ou sousexprimés par rapport à la référence (LFC > 0 : surrégulé, LFC < 0 : sous régulés), afin de visualiser les résultats de l'analyse d'expression differentielle à alpha = 0.05 on réalise un MA plot ainsi qu'un volcano plot, pour le volcano plot on lui associera le fichier d'annotation afin d'observer les ID des gènes les plus différenciellement exprimés directement sur le graphique ainsi que les gènes les plus surexprimés ou sous exprimés.
 \par
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Une fois les résultats de l'analyse d'expression differentielle sur les gènes analysé et visualisé, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de réference et la condition testé, pour cela nous avons réaliser une PCA ainsi qu'une matrice de distance représenté sous forme de heatmap à l'aide de la fonction PCA intégrer au package DESeq2 et le package gplots couplé au package RcolorBrewer pour le gradient de couleur, pour ces deux visualisations nous avons utilisé la matrice de comptage transformés selon la méthode VST "Variance stabilization transformation".
 Enfin nous avons finis par réaliser une clustering heatmap de l'expression des 50 gènes les plus significativement DE couplé au fichier d'annotation afin de visualiser les ID des gènes, cette dernière heatmap a été réaliser à l'aide du package NMF  pour "Non negative Matrix Factorization". La methode utilisé pour les matrices de distances des deux heatmaps est la methode dite de pearson.
 
 ### \normalsize{Création de l'application}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 Concernant la réalisation de l'application, nous avons préalablement à l'aide du script de l'analyse DE crée un script contenant des créations de fonctions générant les visualisations et résultats que nous souhaitions avoir dans l'application (annexe 2.3). Nous avons réaliser ces fonctions car pour la plus grande partie des résultats et leurs visualisations les lignes de codes correspondantes étaient imposantes ce qui aurait apporté une perte de lisibilité dans les scripts de l'application.
 En plus de ce script contenant les fonctions nécessaire au fonctionnement de l'application nous utilisons lres packages propres à la création d'une application que sont Shiny et Shinydashboard.
 
 #### Shiny
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Premièrement, le package Shiny permet la création d'application web interactive capables d'utiliser toutes les fonctionnalités de R. C'est un outil permettant de créér des pages web sans forcément avoir de connaissance en HTML, css ou javascript. Cependant, c'est un plus d'avoir des connaissances dans ce domaine si on veut customiser ces pages web afin d'avoir une application plus attirante. 
 Une application shiny est composée de deux fichiers : 
 \begin{itemize}
@@ -203,18 +208,21 @@ Une application shiny est composée de deux fichiers :
 \end{itemize}
 
 #### Shinydashboard
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Pour l'aspect esthétique et la facilité de navigation nous avons décider de faire un dashboard à l'aide du package Shinydashboard. Ce package permet donc de générer un corps d'application sous forme de dashboard. Ce  modèle d'application ce présente sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
 
 
 ### \normalsize{Rédaction du rapport}
 #### Markdown
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire un rapport automatisé de notre travail. Les packages markdown et knitr permettent d'assembler rapport sous forme de texte et de code R. Ainsi nous pouvons intégrer notre code et les résultats obtenus lors de l'analyse. Nous avons choisi un format de sortie sous forme de PDF, ce qui nous autorise à utiliser LaTeX afin d'avoir un document final avec une mise en page optimale que nous auront définie.
 
 
 \newpage
 # \Large{Résultats}
 ## \large{Analyse de données RNA-seq}
-Les résultats de l'analyse d'expression différentielle a mis en valeur 2181 gènes differentiellement exprimés au risque alpha = 0.05 (figure ?), 1242 gènes sont surégulés et 939 sous régulés par rapport à la condition de réference "control". 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Les résultats de l'analyse d'expression différentielle a mis en valeur 2181 gènes differentiellement exprimés au risque alpha = 0.05 (figure 3), 1242 gènes sont sur  exprimés et 939 sous exprimés par rapport à la condition de réference "control". 
 
 \singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
@@ -226,12 +234,12 @@ tb.DE <- data.frame("No DE" = tb[1], "Down regulated" = down_regulated, "Up regu
 row.names(tb.DE) <- ""
 tb.DE
 ```
-\sffamily\small{Figure ? : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
+\sffamily\small{Figure 3 : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
 \normalsize
 \setromanfont{Times New Roman}
 \setstretch{1.5}
-\par
-On remarque que les gènes les plus différentiellement exprimés sont SPACL1, PER1, ARHGEF2,et MAOA, la plus part des gènes les plus différentiellement exprimés sont surexprimés par rapport à la réference (figure ?)
+
+On remarque que les gènes les plus significativement différentiellement exprimés sont SPACL1, PER1, ARHGEF2,et MAOA, la plus part des gènes les plus différentiellement exprimés sont surexprimés par rapport à la réference, on note d'ailleurs que les deux gènes les plus sur exprimés sont ALOX15B et AC007325.2 (figure 4)
 
 \singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE }
@@ -254,7 +262,7 @@ ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
   theme(axis.title.y = element_text(size=14))
 
 ```
-\sffamily\small{Figure ? : Volcano plot de l'analyse d'expression différentielle.
+\sffamily\small{Figure 4 : Volcano plot de l'analyse d'expression différentielle.
 En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.05 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes surexprimés par rapport à la réference et les points à gauche correspondent aux gènes sous exprimés par rapport à la référence.}
 \normalsize
 
