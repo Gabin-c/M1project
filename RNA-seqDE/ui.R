@@ -447,7 +447,7 @@ ui <-
             ),
             
             
-            ### distance matrix heat map ----
+            ### sample distance matrix heat map ----
             ### On this page we find distance matrix heat map and it parameters after running DESeq
             ### We find :
             ###     - a box() which countain :

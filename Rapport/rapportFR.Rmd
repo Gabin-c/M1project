@@ -364,7 +364,7 @@ Nous avons fait le choix de faire cette application en anlgais et nous allons do
 
 ### \normalsize{Partie 1 : Informations}
  
-La première partie sert de page d'accueil pour l'application. Elle présente rapidement le but et les fonctionnalités de cette application. Comme l'analyse de données RNA-seq faite précédemment, cette application se base sur l'utilisation du package DESeq2 afin d'obtenir des resultats pouvant être interprétés à partir d'une table de comptage et d'un fichier metadata au minimum. On retrouve donc aussi sur cette page d'accueil les types de fichiers autorisés pour permettre l'analyse ainsi que des exemples de ceux ci. 3 sortes de fichiers sont autorisés : une table de comptage de reads (count table), un fichier metadata (metdata table) et un fichier d'annotation de gènes (annotation file). 
+La première partie sert de page d'accueil pour l'application. Elle présente rapidement le but et les fonctionnalités de cette application. Comme l'analyse de l'expression différentielle RNA-seq faite précédemment, cette application se base sur l'utilisation du package DESeq2 afin d'obtenir des resultats pouvant être interprétés à partir d'une table de comptage et d'un fichier metadata au minimum. On retrouve donc aussi sur cette page d'accueil les types de fichiers autorisés pour permettre l'analyse ainsi que des exemples de ceux ci. 3 sortes de fichiers sont autorisés : une table de comptage de reads (count table), un fichier metadata (metdata table) et un fichier d'annotation de gènes (annotation file). 
 
 ### \normalsize{Partie 2 : Importation des données}
  
@@ -385,7 +385,7 @@ Enfin, chaque fichier importé est affiché sur sa page pour permettre à l'util
 ### \normalsize{Partie 3 : DESeq2}
  
 DESeq2 est lancé grâce à un bouton "Run DESeq2 workflow". En appuyant sur sur ce bouton, un écran d'attente va s'afficher le temps que le processus se termine. Durant cette attente, la fonction DESeqDataSetFromMatrix() va permettre de stocker les valeurs d'entrée, les calculs intermédiaires et les résultats d'une analyse de l'expression différentielle.
-Afin de faire fonctionner correctement cette partie, un design est demandé lors de l'importation du fichier metadata. Ce design doit correspondre à un facteur permettant de distinguer les deux groupes différents d'échantillons. Il faut donc faire le bon choix lors de l'élaboration du design garder la ou les bonnes colonnes du fichier metadata. On appelle une "colonne linéaire" une colonne dont toutes les valeurs en lignes sont différentes. Si une colonnes dite "linéaire" se trouve dans le design, alors l'application risque de crash au moment du lancement du processus DESeq2. Il sera donc nécessaire de la redémarer. 
+Afin de faire fonctionner correctement cette partie, un design est demandé lors de l'importation du fichier metadata. Ce design doit correspondre à un facteur permettant de distinguer les deux groupes différents des échantillons. Il faut donc faire le bon choix lors de l'élaboration du design garder la ou les bonnes colonnes du fichier metadata. On appelle une "colonne linéaire" une colonne dont toutes les valeurs en lignes sont différentes. Si une colonnes dite "linéaire" se trouve dans le design, alors l'application risque de crash au moment du lancement du processus DESeq2. Il sera donc nécessaire de la redémarer. 
 Avec un bon design, le DESeq2 est lancé et les résultats s'affichent après une dizaine de secondes d'attente. 
 \par
 Ensuite, la fonction DESeq() permet de faire une analyse en 3 étapes :
@@ -396,13 +396,13 @@ Ensuite, la fonction DESeq() permet de faire une analyse en 3 étapes :
 \end{itemize}
 
 La statistique de Wald est un test de significativité du coefficient de régression  ; elle est basée sur la propriété de normalité asymptotique de l'estimation du maximum de vraisemblance. 
-Pour finir le processus DESeq2, les résultats sont extraits sous forme de tableau grâce à la fonction results(). Dans ce tableau on retrouve les moyennes des échantillons, les log2foldchange, les erreurs standards, les statistiques de tests, les p-values et les p-values ajustées. Ces résultats vont être importants pour permettre d'établir les graphiques de la section "Résultats".
+Pour finir le processus DESeq2, les résultats sont extraits sous forme de tableau grâce à la fonction results(). Dans ce tableau on retrouve les moyennes des échantillons, les log2foldchange, les erreurs standards, les statistiques de tests, les p-values et les p-values ajustées. Ces résultats vont être importants pour permettre d'établir les graphiques et autres résultats de la section "Résultats".
 
 ### \normalsize{Partie 4 : Résultats}
  
 On retrouve plusieurs sortes de résultats sous forme de graphiques. Tous les graphiques sont faits grâce au package ggplot2 mais aussi DESeq2 pour le graphique de dispersion et l'ACP et NMF pour les heatmaps. Tous ces graphiques sont directement disponible dès la fin du processus de DESeq2 sauf 3. En effet, l'ACP et les deux heatmaps sont affichés après une seconde étape qui va permettre de lancer les fonctions capables de réaliser ces graphiques. 
 \par
-Le premier disponible est un graphique de comptage de données ("count distribution") qui montre la fréquence de reads par échantillons. Il est possible de choisir l'échantillon que nous voulons visualiser ainsi que la porté de l'axe de abscisses et la dimension des barres sur le graphique. Ensuite, on retrouve un graphique permettant de visualiser le nombre de reads par échantillons et par gènes. Il y a donc la possibilité de choisir le gène que l'on veut visualiser. Pour continuer, nous trouvons un barplot témoignant de la profondeur pour chaque échantillon avec la possibilité de choisir la largeur des barres. Chacun de ces trois graphiques proposent une option pour visualiser les données avant et après normalisation.
+Le premier disponible est un graphique de comptage de données ("count distribution") qui montre la fréquence de reads par échantillons. Il est possible de choisir l'échantillon que nous voulons visualiser ainsi que la porté de l'axe de abscisses et la dimension des barres sur le graphique. Ensuite, on retrouve un graphique permettant de visualiser le nombre de reads par échantillons et par gènes. Il y a donc la possibilité de choisir le gène que l'on veut visualiser. Pour continuer, nous trouvons un barplot témoignant de la profondeur de séquençage pour chaque échantillon avec la possibilité de choisir la largeur des barres. Chacun de ces trois graphiques proposent une option pour visualiser les données avant et après normalisation.
 
 \singlespacing
 ```{r, echo=FALSE,out.width="100%", out.height="30%",fig.show='hold',fig.align='center', fig.height=20}
@@ -416,8 +416,8 @@ knitr::include_graphics(c("countdistImage.png","countGene.png"))
 \normalsize
 \setromanfont{Times New Roman}
 
-La dispersion est un paramètre décrivant la déviation de la variance par rapport à la moyenne. Le graphique de dispersion permet d'avoir une idée de la dispersion des données, on peut y distinguer une valeur intermédiaire (en bleu) entre la dispersion individuelle (en noir) et la dispersion ajustée (en rouge). Ces valeurs de dispersion sont utilisées pour le calculdes tests statistiques d'expression différentielle.
-Il reste alors 5 graphiques à voir dont 4 vus dans l'analyse de données RNA-seq de la partie précédente. En effet, l'Analyse en Composante Principale et la matrice de distance sont aussi disponibles avec des options permettant de choisir le mode de transformation entre Log transformation et Variance-stabilizing transformation. Il est aussi possible de choisir le groupe pour l'ACP. De plus, il y a aussi la heatmap d'expression de gènes qui est visualisée avec le choix de la transformation (VTS ou LogT) ainsi que le choix de la condition pour la séparation des échantillons dans la heatmap et le nombre de gènes à afficher. Enfin, on retrouve le volcano plot. Comme pour la heatmap d'expression de gènes, le volcano plot offre la possibilité d'afficher les symboles des gènes sur le graphique pour une visualisation plus explicite (comme sur la figure 4). 
+La dispersion est un paramètre décrivant la déviation de la variance par rapport à la moyenne. Le graphique de dispersion permet d'avoir une idée de la dispersion des données, on peut y distinguer une valeur intermédiaire (en bleu) entre la dispersion individuelle (en noir) et la dispersion ajustée (en rouge). Ces valeurs de dispersion sont utilisées pour le calcul des tests statistiques d'expression différentielle.
+Il reste alors 5 graphiques à voir dont 4 vus dans l'analyse de données RNA-seq de la partie précédente. En effet, l'Analyse en Composante Principale et la matrice de distance sont aussi disponibles avec des options permettant de choisir le mode de transformation entre Log transformation et Variance-stabilizing transformation. Il est aussi possible de choisir le groupe pour l'ACP. De plus, il y a aussi la clustering heatmap d'expression de gènes qui est visualisée avec le choix de la transformation (VTS ou LogT) ainsi que le choix de la condition pour la séparation des échantillons dans la heatmap et le nombre de gènes à afficher. Enfin, on retrouve le volcano plot. Comme pour la heatmap d'expression de gènes, le volcano plot offre la possibilité d'afficher les symboles des gènes sur le graphique pour une visualisation plus explicite (comme sur la figure 4). 
 
 \singlespacing
   \includegraphics[width=\textwidth]{optionVolcano.png}
@@ -441,10 +441,10 @@ Pour finir, un MA plot est disponible avec un tableau présentant le nombre de g
 
 ### \normalsize{Customisation}
  
-Nous avons utilisé différents outils pour rendre plus agréable l'utilisation de l'application sur le plan visuel. A l'aide du langage HTML nous avons pu modifier des thèmes déjà existants. En effet, nous avons décidé de créer un bouton permettant de choisir entre 2 thèmes : un thème foncé et un thème clair selon les préférences de l'utilisateur. Pour cela nous avons utilisé le package \emph{dashboardthemes} qui propose différents thèmes dont ceux utilisés : grey_dark et grey_light. Il a fallu modifier le thème grey_dark car il affichait une police noire sur un fond foncé dans les tableaux. C'était donc difficilement lisible. Pour se faire, nous avons du récupérer le code du thème sur le \href{https://github.com/nik01010/dashboardthemes}{\underline{git}} de Nik. L. présentant le package et modifier ou ajouter certains codes HTML directement sur R de façon à ce que tout soit optimisé.
+Nous avons utilisé différents outils pour rendre plus agréable l'utilisation de l'application sur le plan visuel. A l'aide du langage HTML nous avons pu modifier des thèmes déjà existants. En effet, nous avons décidé de créer un bouton permettant de choisir entre 2 thèmes : un thème foncé et un thème clair selon les préférences de l'utilisateur. Pour cela nous avons utilisé le package \emph{dashboardthemes} qui propose différents thèmes dont ceux utilisés : grey_dark et grey_light. Il a fallu modifier le thème grey_dark car il affichait une police noire sur un fond foncé dans les tableaux. C'était donc difficilement lisible. Pour se faire, nous avons du récupérer le code du thème sur le \href{https://github.com/nik01010/dashboardthemes}{\underline{git}} de Nik. L. présentant le package afin de pouvoir modifier ou ajouter certains codes HTML directement sur R de façon à ce que tout soit optimisé.
 \par
  
-Nous avons aussi fait en sorte d'améliorer le visuel de nos graphiques. Pour cela nous avons donc utilisé ggplot2, le package permettant de faire des graphiques plus élégants. Ainsi les couleurs, les tailes des titres et des légendes et le texte sur les graphiques on pu être modifiés ou ajoutés pour compléter et améliorer au mieux chacun des graphiques.
+Nous avons aussi fait en sorte d'améliorer le visuel de nos graphiques. Pour cela nous avons donc utilisé ggplot2, le package permettant de faire des graphiques plus élégants. Ainsi les couleurs, les tailles des titres et des légendes et le texte sur les graphiques on pu être modifiés ou ajoutés pour compléter et améliorer au mieux chacun des graphiques.
 \par
  
 Pour finir, nous avons mis en place un bouton accueil grâce au langage HTML. Ce bouton est placé en haut à droite de l'écran, dans l'en-tête et permet à tout moment de retourner sur la page d'accueil qui est la page d'information sur l'application. De plus, toujours grâce au langage HTML, nous avons ajouté un pied de page dans lequel on retrouve des information sur les développeurs de l'application ainsi que le git sur lequel on retrouve tout le travail réalisé.
@@ -1532,7 +1532,7 @@ server <- function(input, output,session) {
   })
   ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
-    distance.matrix.heatmap(dds$TransformationMatrix)
+    sample.distance.matrix.heatmap(dds$TransformationMatrix)
   }
   output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
@@ -1683,9 +1683,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuDistanceMatrix <- reactive({
     if(input$RunMatrix){
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix")
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix")
     }
   })
   
@@ -1693,9 +1693,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuHeatmap <- reactive({
     if(input$RunHeatmap){
-      menuSubItem("Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Heatmap",tabName = "Heatmap")
+      menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
     }
   })
 }
@@ -1723,19 +1723,19 @@ library(ggrepel)
 ### All of this function can be use after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
 ###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
-###      - depth()
-###      - count_distribution()
-###      - plotcount()
+###      - depth.plot()
+###      - count.distribution.plot()
+###      - gene.count.plot()
 ###   - DESeq2 : results object after run DESeq() on your DESeq2 dataset and results() on
 ###              DESeq() object 
-###      - maplot()
-###      - volcanoplot()
-###      - number_of_DE 
+###      - ma.plot()
+###      - volcano.plot()
+###      - number.DE.gene 
 ###   - DESeq2 : after run DESeq() on your DESeq2 datasetn and do vst() or rlogtransformation() on 
 ###              DESeq() object
-###      - pca()
-###      - heatmap()
-###      - clustering_heatmap()
+###      - pca.plot()
+###      - distance.matrix.heatmap()
+###      - gene.expression.heatmap
 ###      - dispersion()
 
 ### Depth plot ----
@@ -1933,11 +1933,11 @@ pca.plot <- function(dds.resTransf,intgroup){
   )
 }
 
-### Distance matrix ----
+### Sample Distance matrix ----
 ### distance.matrix.heatmap generate a heatmap of dist between different sample
 ### distance.matrix.heatmap need just one argument
 ###   - dds.resTransf which is an DESeq2 transformate object with vst() or rLogtransformation()
-distance.matrix.heatmap <- function(dds.resTransf){
+sample.distance.matrix.heatmap <- function(dds.resTransf){
   dists <- dist(t(assay(dds.resTransf)))
   mat <- as.matrix(dists)
   hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)

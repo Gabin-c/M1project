@@ -186,11 +186,11 @@ pca.plot <- function(dds.resTransf,intgroup){
   )
 }
 
-### Distance matrix ----
+### Sample Distance matrix ----
 ### distance.matrix.heatmap generate a heatmap of dist between different sample
 ### distance.matrix.heatmap need just one argument
 ###   - dds.resTransf which is an DESeq2 transformate object with vst() or rLogtransformation()
-distance.matrix.heatmap <- function(dds.resTransf){
+sample.distance.matrix.heatmap <- function(dds.resTransf){
   dists <- get_dist(t(assay(dds.resTransf)),method = "pearson")
   mat <- as.matrix(dists)
   hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
