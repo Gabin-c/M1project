@@ -197,7 +197,7 @@ res <- results(dds,tidy = TRUE)
 \normalsize
 \squeezeup
 
-\sffamily\footnotesize{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2}
+\sffamily\footnotesize{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2.}
 \normalsize
 
 \setstretch{1.5}
@@ -206,7 +206,7 @@ res <- results(dds,tidy = TRUE)
 
 \newpage
 #### Analyse d'expression différentielle
-Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons préalablement visualiser la distribution du comptage des reads pour chaque echantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation, en parallèle nous avons visualiser la profondeur de séquençage de chaque echantillon avant et après normalisation ce qui a permis de vérifier visuellement la bonne normalisation des données, pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponible sur le CRAN.
+Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons visualisé la distribution du comptage des reads pour chaque échantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation. En parallèle nous avons visualisé la profondeur de séquençage de chaque échantillon avant et après normalisation. Cela a permis de vérifier visuellement la bonne normalisation des données. Pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponibles sur le CRAN. 
 
 \singlespacing
 \scriptsize
@@ -224,16 +224,17 @@ ggplot(data=count_table_dds, aes(log(count_table_dds[,"SRR1039517"]+1))) +
 \normalsize
 \singlespacing
 \squeezeup
-\sffamily\footnotesize{Figure 2 : Visulisation de la distribution des comptages non normalisés pour l'échantillon SRR1039517}
+\sffamily\footnotesize{Figure 2 : Visulisation de la distribution des comptages non normalisés pour l'échantillon SRR1039517.}
 \setstretch{1.5}
 \setromanfont{Times New Roman}
 \normalsize
 
-\newpage
+
 Suite a cette première approche nous nous sommes intérressés aux résultats propres de l'analyse d'expression différentielle (DE), la fonction intégrée au package \emph{DESeq2} nous a permis de sortir une table contenant les résultats de cette analyse. Cette table contient 7 colonnes correspondant à : ID des gènes, baseMean, logFoldChange, lfcSE, stats, p.value et la p.value ajusté.
 A partir de cette table Nous avons ressorti les gènes differentiellement exprimés au risque alpha de 0.05 à l'aide de la p.value ajusté. Le LogFoldChange nous permet de différencier les gènes sur-exprimés ou sous-exprimés par rapport à la référence (LFC > 0 : surrégulé, LFC < 0 : sous régulés). Afin de visualiser les résultats de l'analyse d'expression differentielle au risque alpha de 0.05 nous réalisons un MA plot ainsi qu'un volcano plot. Pour le volcano plot nous lui associerons le fichier d'annotation afin d'observer les ID des gènes les plus différenciellement exprimés directement sur le graphique ainsi que les gènes les plus sur-exprimés ou sous-exprimés.
 \par
-Une fois les résultats de l'analyse d'expression differentielle sur les gènes visualisés, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de référence et la condition testée. Pour cela nous avons réalisé une PCA ainsi qu'une matrice de distance représentée sous forme de heatmap. Ces 2 représentation sont faites à l'aide de la fonction PCA intégrée au package \emph{DESeq2} et au package \emph{gplots} couplé au package \emph{RcolorBrewer} pour le gradient de couleur. Pour ces deux visualisations nous avons utilisé la matrice de comptage transformées selon la méthode VST "Variance stabilization transformation".
+Une fois les résultats de l'analyse d'expression differentielle sur les gènes visualisés, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de référence et la condition testée. Pour cela nous avons réalisé une PCA ainsi qu'une matrice de distance représentée sous forme de heatmap. Ces 2 représentation sont faites à l'aide de la fonction PCA intégrée au package \emph{DESeq2} et au package \emph{gplots} couplé au package \emph{RcolorBrewer} pour le gradient de couleur. 
+\par Pour ces deux visualisations nous avons utilisé la matrice de comptage transformées selon la méthode VST "Variance stabilization transformation".
 Enfin nous avons finis par réaliser une clustering heatmap de l'expression des 50 gènes les plus significativement différentiellement exprimés couplée au fichier d'annotation afin de visualiser les ID des gènes. Cette dernière heatmap a été réalisée à l'aide du package \emph{NMF}  pour "Non negative Matrix Factorization". La methode utilisée pour les matrices de distances des deux heatmaps est la méthode dite de pearson.
 
 ### \normalsize{Création de l'application}
@@ -252,6 +253,7 @@ Une application shiny est composée de deux fichiers :
 \item Le fichier sever.R contient les instruction permettant le fonctionnement de l'application (annexe 2.2).
 \end{itemize}
 
+\newpage
 #### Shinydashboard
  
 Pour l'aspect esthétique et la facilité de navigation nous avons décidé de faire un tableau de bord à l'aide du package \emph{Shinydashboard}. Ce package permet donc de générer un corps d'application sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
@@ -281,7 +283,7 @@ row.names(tb.DE) <- ""
 tb.DE
 ```
 \squeezeup
-\sffamily\footnotesize{Figure 3 : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
+\sffamily\footnotesize{Figure 3 : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05.}
 
 \normalsize
 \setromanfont{Times New Roman}
@@ -435,7 +437,7 @@ Il reste alors 5 graphiques à voir dont 4 vus dans l'analyse de données RNA-se
 
 \singlespacing
   \includegraphics[width=\textwidth]{optionVolcano.png}
-\sffamily\footnotesize{Figure 9 : Options d'affichage des symboles de gènes sur le volcano plot. "Choose your fold" permet de choisir la portée des gènes à afficher selon l'axe de abscisses afin de voir les gènes sur et sous-exprimés. "Choose your log10" permet de choisir les gènes à afficher selon l'axe des ordonnées afin de voir les gènes le plus significativement différentiellement exprimés}
+\sffamily\footnotesize{Figure 9 : Options d'affichage des symboles de gènes sur le volcano plot. "Choose your fold" permet de choisir la portée des gènes à afficher selon l'axe de abscisses afin de voir les gènes sur et sous-exprimés. "Choose your log10" permet de choisir les gènes à afficher selon l'axe des ordonnées afin de voir les gènes le plus significativement différentiellement exprimés.}
 
 \normalsize
 \setstretch{1.5}
@@ -446,7 +448,7 @@ Pour finir, un MA plot est disponible avec un tableau présentant le nombre de g
 
 \singlespacing
   \includegraphics[width=\textwidth]{MAplot.png}
-\sffamily\footnotesize{Figure 10 : MA plot obtenu sur l'application avec le jeu de données présenté dans la partie matériels et méthodes}
+\sffamily\footnotesize{Figure 10 : MA plot obtenu sur l'application avec le jeu de données présenté dans la partie matériels et méthodes.}
 
 \normalsize
 \setstretch{1.5}
