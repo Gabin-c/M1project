@@ -172,8 +172,8 @@ ui <-
                         br(), "- PCA",
                         br(), "- MA plot",
                         br(), "- Volcano plot",
-                        br(), "- Distance matrix",
-                        br(), "- Heatmap",style="padding-left: 5em", align = "justify"),
+                        br(), "- Sample distance matrix",
+                        br(), "- Gene expression Heatmap",style="padding-left: 5em", align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       
                       )
