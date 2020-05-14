@@ -176,7 +176,7 @@ Avant d'analyser les résultats de l'analyse d'expression differentielle nous av
 
 \singlespacing
 \scriptsize
-```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE}
+```{r message=FALSE, warning=FALSE, eval=FALSE, tidy=FALSE,}
 # Extraction of count table
 count_table_dds <- as.data.frame(counts(dds))
 # Visualization of count distribution
