@@ -380,7 +380,7 @@ ui <-
                         selectInput("conditionpca","Choose your intgroup for PCA ?", choices = c()),
                         actionButton("runPCA","Run PCA")
                     ),
-                    box(solidHeader = F, status = "primary",width = 12,
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("PCAplot",height = 650))
                     ),
                     column(width= 4,
@@ -437,6 +437,7 @@ ui <-
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotationVolcano","Do you have an annotation file ?",value=FALSE),
                           sliderInput("pvalueVolcano", "Choose your pvalue", min=0, max=1, value=0.05),
+                          uiOutput("AnnoVolcano"),
                           uiOutput("SliderFoldVolcano"),
                           uiOutput("SliderLogVolcano")
                       ),
@@ -462,7 +463,7 @@ ui <-
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         selectInput("TransformationMatrix",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         actionButton("RunMatrix","Run Heat map")),
-                    box(solidHeader = F, status = "primary",width = 12,
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("DistanceMatrixMap",height = 650))
                     ),
                     column(width= 4,
@@ -496,7 +497,8 @@ ui <-
                         column(width=12,
                                sliderInput("nbGenes",label="Choose the number of genes you want to display", min = 0, 
                                            max = 200, value = c(0, 60)))),
-                    box(solidHeader = F, status = "primary",width = 12, align = "center", background = "aqua",
+                    uiOutput("Annoheatmap"),
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("Heatmap", height = 1000, width = 1000))
                     ),
                     column(width= 4,

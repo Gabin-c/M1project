@@ -287,17 +287,29 @@ server <- function(input, output,session) {
   ### Display parameters for volcano 
   ### If there is an annotation file, display sliders to choose parameters 
   observeEvent(input$annotationVolcano,{
-    if(input$annotationVolcano== TRUE){
+    if(input$CheckAnnotation== TRUE){
+      if(input$annotationVolcano==TRUE){
       output$SliderFoldVolcano <- renderUI({ 
         sliderInput("sliderfold", "Choose your fold", min=-20, max=20, value=c(-6,6))
       })
       output$SliderLogVolcano <- renderUI({ 
         sliderInput("sliderlog", "Choose your log10", min=0, max=300, value=30)
       })
-    }else{
+    }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationVolcano==TRUE){
       output$SliderFoldVolcano <- renderUI({})
       output$SliderLogVolcano <- renderUI({})
-    }
+      output$AnnoVolcano <- renderUI({
+        HTML("<center><h3> You don't have annotation file. </h3></center>")
+      })
+      }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationVolcano==FALSE){
+        output$SliderFoldVolcano <- renderUI({})
+        output$SliderLogVolcano <- renderUI({})
+        output$AnnoVolcano <- renderUI({})
+      }}
   })
   
   ### Display volcano plot using volcano.plot() function from function_dds.R
@@ -356,6 +368,18 @@ server <- function(input, output,session) {
       dds$TransformationHeatmap <- vst(dds$DESeq2, blind=FALSE)
     }else{
       dds$TransformationHeatmap <- rlogTransformation(dds$DESeq2,blind=FALSE)
+    }
+  })
+  
+  observeEvent(input$annotationHeatmap,{
+    if(input$annotationHeatmap==TRUE){
+      if(input$CheckAnnotation==FALSE){
+        output$Annoheatmap <- renderUI(
+          box(width = 12, solidHeader = F,
+            HTML("<center><h3> You don't have annotation file. </h3></center>")))
+      }}
+    else{
+      output$Annoheatmap <- renderUI({})
     }
   })
   
