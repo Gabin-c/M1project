@@ -48,22 +48,36 @@ library(NMF)
 library(ggrepel)
 ```
 
+\setstretch{1.5}
+\setromanfont{Times New Roman}
+
 \newpage
-\Large Résumé
+\LARGE Résumé
 \normalsize
 \par
-résumé........
+L'accessibilité à l’analyse des données et à leurs résultats issus de technologies générant des données en masse est un enjeu essentiel pour la recherche de demain. En tant que futurs bioinformaticiens notre rôle est de permettre cela. Il nous faut donc acquérir les compétences nécessaires à la réalisation d’outils permettant cet accès facilité. Un grand nombre de ces analyses se déroule sous R, c’est pourquoi nous avons axé notre projet sous cette environnement.
+\par
+Toutefois pour avoir des résultats à analyser, il faut une analyse et des données. Nous avons donc porté notre dévolu sur l’analyse de données issue de séquençages de l’ARN et plus spécialement sur l’analyse d’expression différentielle. 
+Dans un premier  temps un jeu de données d’une analyse RNA-seq de l'étude \emph{RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al.} a été utilisé afin de prendre en main et d’apprendre l’utilisation du package DESeq2 développé par Bioconductor. Ce package est un package sous R permettant de réaliser une analyse d’expression différentielle de données RNA-seq.
+\par
+Une fois ce package compris et maîtrisé, nous nous sommes attaqués à l’accessibilité de ce type d’analyses avec DESeq2. Pour cela nous avons décidé de créer une application permettant d'exécuter simplement le workflow DESeq2. Afin de réaliser cette application nous avons utilisé le package Shiny qui permet de créer une application web interactive en associant des fonctionnalités de R, tout en y associant des fonctionnalités utilisant les langages HTML, javaScript ou encore CSS.
 
 \par
 \emph{mots clés : }
 
-\par
-\Large Abstract
+
+\newpage
+\LARGE Abstract
 \normalsize
 \par
-abstract.......
+Accessibility to data analysis and results from technologies generating big data is a key issue for tomorrow's research. As future bioinformaticians our role is to enable this. We therefore need to acquire the skills to create tools that allow this facilitated access. Many of these analyses take place under R, which is why we have focused our project under this environment. However, in order to have results to analyze, analysis and data are needed.
+\par
+We have therefore focused on the analysis of data from RNA-seq experiments and more specifically on differential expression analysis. As a first step, a dataset from an RNA-seq analysis of the study 
+\emph{RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells from Himes BE, Jiang X, Wagner P, and al.} was used in order to learn how to handle and use the DESeq2 package developed by Bioconductor. This package is a package under R allowing to perform a differential expression analysis of RNA-seq data.
+\par
+Once this package was understood and mastered, we tackled the accessibility of this type of analysis with DESeq2. To do this we decided to create an application to simply run the DESeq2 workflow. In order to realize this application we used the Shiny package which allows to create an interactive web application by associating R functionalities, while associating functionalities using HTML, javaScript or CSS.
 
-\par\par
+\par
 \emph{keywords : }
 
 
