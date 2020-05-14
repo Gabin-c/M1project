@@ -172,8 +172,8 @@ ui <-
                         br(), "- PCA",
                         br(), "- MA plot",
                         br(), "- Volcano plot",
-                        br(), "- Distance matrix",
-                        br(), "- Heatmap",style="padding-left: 5em", align = "justify"),
+                        br(), "- Sample distance matrix",
+                        br(), "- Gene expression Heatmap",style="padding-left: 5em", align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       
                       )
@@ -447,7 +447,7 @@ ui <-
             ),
             
             
-            ### distance matrix heat map ----
+            ### sample distance matrix heat map ----
             ### On this page we find distance matrix heat map and it parameters after running DESeq
             ### We find :
             ###     - a box() which countain :

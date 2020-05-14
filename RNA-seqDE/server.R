@@ -319,7 +319,7 @@ server <- function(input, output,session) {
   )
   
 
-  ### Distance matrix heatmap ----
+  ### Sample distance matrix heatmap ----
   ### Chose vst or rlog transformation
   observeEvent(input$RunMatrix,{
     if(input$TransformationMatrix=="vst"){
@@ -330,7 +330,7 @@ server <- function(input, output,session) {
   })
   ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
-    distance.matrix.heatmap(dds$TransformationMatrix)
+    sample.distance.matrix.heatmap(dds$TransformationMatrix)
   }
   output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
@@ -476,9 +476,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuDistanceMatrix <- reactive({
     if(input$RunMatrix){
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix")
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix")
     }
   })
   
@@ -486,9 +486,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuHeatmap <- reactive({
     if(input$RunHeatmap){
-      menuSubItem("Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Heatmap",tabName = "Heatmap")
+      menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
     }
   })
   
