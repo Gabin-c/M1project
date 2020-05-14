@@ -232,7 +232,7 @@ gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,ann
                   labRow=arrange(res, padj, pvalue)$symbol[min:max], 
                   scale="row", distfun="pearson", 
                   annCol=dplyr::select(metadata, condition), 
-                  col=c("green","black","black","red"),treeheight = c(500,100))
+                  col=c("green","black","black","red"))
   }
 }
 

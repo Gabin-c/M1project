@@ -496,7 +496,7 @@ ui <-
                         column(width=12,
                                sliderInput("nbGenes",label="Choose the number of genes you want to display", min = 0, 
                                            max = 200, value = c(0, 60)))),
-                    box(solidHeader = F, status = "primary",width = 12, align = "center",
+                    box(solidHeader = F, status = "primary",width = 12, align = "center", background = "aqua",
                         withSpinner(plotOutput("Heatmap", height = 1000, width = 1000))
                     ),
                     column(width= 4,
