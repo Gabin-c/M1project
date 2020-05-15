@@ -109,8 +109,7 @@ ui <-
                              menuItemOutput("CountTable"),
                              menuItemOutput("MetadataTable"),
                              menuItemOutput("AnnotationTable")),
-
-                    menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
+                    menuItemOutput("menuDESeq2"),
                     
                     menuItemOutput("menuResults"),
 

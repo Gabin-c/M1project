@@ -94,12 +94,18 @@ server <- function(input, output,session) {
   })
   output$AnnoTable <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
+  ### Display DESeq2 page after count table uploaded and a message to upload metadata file and choose design
+  observeEvent(input$CountDataTable,{
+    output$menuDESeq2 <- renderMenu({
+      if(input$DesignDESeq2 == ""){
+        showNotification("Upload a metadata file and choose a design.")
+      }
+      menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle"))
+    })
+  })
 
   ### Running DESeq2 clicking on the button  ---- 
   observeEvent(input$RunDESeq2,{
-    if(is.null(input$CountDataTable)){
-      showNotification("Upload a count data table.")
-    }
     if(input$DesignDESeq2 == ""){
       showNotification("Upload a metadata file and choose a design.")
     }
@@ -162,6 +168,7 @@ server <- function(input, output,session) {
     on.exit(waiter$hide())
   }})
   
+
 
   
   ### Count distribution ----
