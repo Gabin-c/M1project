@@ -522,6 +522,7 @@ ui <-
         "
       position:relative;
       width:100%;
-      background-color: #2d3741;"
+      background-color: rgb(70,80,90);
+      color: rgb(205,205,205);"
       ))
   )

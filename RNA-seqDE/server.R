@@ -94,12 +94,14 @@ server <- function(input, output,session) {
   })
   output$AnnoTable <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
-  
-  
+
   ### Running DESeq2 clicking on the button  ---- 
   observeEvent(input$RunDESeq2,{
+    if(is.null(input$CountDataTable)){
+      showNotification("Upload a count data table.")
+    }
     if(input$DesignDESeq2 == ""){
-      showNotification("Input a metadata file and choose a design.")
+      showNotification("Upload a metadata file and choose a design.")
     }
     else{
     req(input$RunDESeq2)
@@ -458,7 +460,7 @@ server <- function(input, output,session) {
       })
     }else{
       output$themes <-renderUI({
-        theme_grey_light
+        theme_grey_light2
       })
     }
   })
