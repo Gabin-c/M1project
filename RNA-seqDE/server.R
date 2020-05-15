@@ -48,20 +48,30 @@ server <- function(input, output,session) {
   
   ### Design condition for DESeq2 ----
   ### Corresponds to the columns of the metadata table
-  metadata2 <- reactive({
+  
+  ### Verify for each column of metadata() if the values of each row are differents or not
+  allValuesDifferent <- reactive({
     apply(metadata(), 2, function(a) length(unique(a))==nrow(metadata()))
   })
-  metadata3 <- reactive({
-    metadata()[metadata2() == FALSE]
+  
+  ### Select the FALSE of "allValuesDifferent" so the columns with equal values
+  notAllValuesDifferent <- reactive({
+    metadata()[allValuesDifferent() == FALSE]
   })
-  metadata4 <- reactive({
-    apply(metadata3(), 2, function(a) length(unique(a))==1)
+  
+  ### Verify for each column notAllValuesDifferent if the values of each row are equals
+  uniqueValue <- reactive({
+    apply(notAllValuesDifferent(), 2, function(a) length(unique(a))==1)
   })
-  metadata5<- reactive({
-    metadata3()[metadata4() == FALSE]
+  
+  ### Select the false of "uniqueValue" so tje columns without unique values 
+  notUniqueValue <- reactive({
+    notAllValuesDifferent()[uniqueValue() == FALSE]
   })
+  
+  ### Update selectinput with columns of notUniqueValue() for the DESeq2 design
   observeEvent(input$MetadataFile,{
-    updateSelectInput(session,"DesignDESeq2", choices = paste("~ ",paste(colnames(metadata5()))))
+    updateSelectInput(session,"DesignDESeq2", choices = paste("~ ",paste(colnames(notUniqueValue()))))
   })
   
   

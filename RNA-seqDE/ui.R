@@ -219,7 +219,7 @@ ui <-
             ###   - a box which countain :
             ###       - information about file accepted in fileInput
             ###   - a box which countain :
-            ###       - a text input to chose design formula to set for DESeq2 dataset object
+            ###       - a select input to chose design formula to set for DESeq2 dataset object
             ###   - a dataTableOutput of metadata input in fileInput
             
                   tabItem(tabName = "Metadata",
@@ -279,8 +279,8 @@ ui <-
                       box(width = 12, solidHeader = F,
                           HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
                                <br><p> Check if your design chosen previously is correct.
-                               <br>If it is not, the application will crash.</p>
-                               <br><h7>This will take a few seconds.</h7></center>")),
+                                  <br>
+                               <br><h7>The process will take a few seconds.</h7></center>")),
                       box(width = 12,
 
                           actionButton("RunDESeq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
