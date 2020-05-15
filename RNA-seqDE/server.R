@@ -74,6 +74,8 @@ server <- function(input, output,session) {
     updateSelectInput(session,"DesignDESeq2", choices = paste("~ ",paste(colnames(notUniqueValue()))))
   })
   
+
+  
   
   ### Check if the user has annotation file to upload 
   observeEvent(input$CheckAnnotation, {
@@ -96,6 +98,10 @@ server <- function(input, output,session) {
   
   ### Running DESeq2 clicking on the button  ---- 
   observeEvent(input$RunDESeq2,{
+    if(input$DesignDESeq2 == ""){
+      showNotification("Input a metadata file and choose a design.")
+    }
+    else{
     req(input$RunDESeq2)
     ### Waiting screen 
     waiter <- waiter::Waiter$new(html = spin_ball())
@@ -133,9 +139,26 @@ server <- function(input, output,session) {
     dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
     dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
     
+    
+    ### Display "Results" menu when DESeq2 is successfully run
+    ### Put a check icon for the menu where the plots are already display
+    ### The others (PCA and both heatmap) needs to be run
+    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
+                                                 menuSubItem("Count distribution",tabName = "Count_Distribution",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Count by gene", tabName = "Count_Gene",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Depth of sample",tabName = "Depth",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Dispersion",tabName = "Dispersion",icon = icon("far fa-check-square")),
+                                                 menuPCA(),
+                                                 menuSubItem("MA Plot",tabName = "MAplot",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Volcano Plot",tabName = "Volcanoplot",icon = icon("far fa-check-square")),
+                                                 menuDistanceMatrix(),
+                                                 menuHeatmap()
+    )  
+    })
+    
     ### End of the waiting screen
     on.exit(waiter$hide())
-  })
+  }})
   
 
   
@@ -427,11 +450,6 @@ server <- function(input, output,session) {
   )
   
   ### Theme ----
-
-  
-  
-  
-  
   ### Choice between dark or light theme with a switcher button
   observeEvent(input$theme,{
     if(input$theme==TRUE){
@@ -490,23 +508,7 @@ server <- function(input, output,session) {
     menuAnnotation()
   })
   
-  ### Display "Results" menu when DESeq2 is successfully run
-  ### Put a check icon for the menu where the plots are already display
-  ### The others (PCA and both heatmap) needs to be run
-  observeEvent(input$RunDESeq2,{
-    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
-                                                 menuSubItem("Count distribution",tabName = "Count_Distribution",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Count by gene", tabName = "Count_Gene",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Depth of sample",tabName = "Depth",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Dispersion",tabName = "Dispersion",icon = icon("far fa-check-square")),
-                                                 menuPCA(),
-                                                 menuSubItem("MA Plot",tabName = "MAplot",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Volcano Plot",tabName = "Volcanoplot",icon = icon("far fa-check-square")),
-                                                 menuDistanceMatrix(),
-                                                 menuHeatmap()
-    )  
-    })
-  })
+
   
   ### Menu for PCA menu in sidebar
   ### Change the icon with check icon when pca is run successfully
