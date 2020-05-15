@@ -241,7 +241,7 @@ ui <-
                              )),
                     column(width = 12,
                            box(width = 12,
-                               textInput("DesignDESeq2","Choose your design without linear combination", placeholder = "Conditions"))),
+                               selectInput("DesignDESeq2","Choose your design without linear combination", c()))),
                     dataTableOutput("MetaTable")
                     ),
 

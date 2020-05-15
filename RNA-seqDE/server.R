@@ -48,8 +48,20 @@ server <- function(input, output,session) {
   
   ### Design condition for DESeq2 ----
   ### Corresponds to the columns of the metadata table
+  metadata2 <- reactive({
+    apply(metadata(), 2, function(a) length(unique(a))==nrow(metadata()))
+  })
+  metadata3 <- reactive({
+    metadata()[metadata2() == FALSE]
+  })
+  metadata4 <- reactive({
+    apply(metadata3(), 2, function(a) length(unique(a))==1)
+  })
+  metadata5<- reactive({
+    metadata3()[metadata4() == FALSE]
+  })
   observeEvent(input$MetadataFile,{
-    updateTextInput(session,"DesignDESeq2", value = paste("~ ",paste(colnames(metadata()), collapse=" + ")))
+    updateSelectInput(session,"DesignDESeq2", choices = paste("~ ",paste(colnames(metadata5()))))
   })
   
   
