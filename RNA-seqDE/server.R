@@ -48,9 +48,33 @@ server <- function(input, output,session) {
   
   ### Design condition for DESeq2 ----
   ### Corresponds to the columns of the metadata table
-  observeEvent(input$MetadataFile,{
-    updateTextInput(session,"DesignDESeq2", value = paste("~ ",paste(colnames(metadata()), collapse=" + ")))
+  
+  ### Verify for each column of metadata() if the values of each row are differents or not
+  allValuesDifferent <- reactive({
+    apply(metadata(), 2, function(a) length(unique(a))==nrow(metadata()))
   })
+  
+  ### Select the FALSE of "allValuesDifferent" so the columns with equal values
+  notAllValuesDifferent <- reactive({
+    metadata()[allValuesDifferent() == FALSE]
+  })
+  
+  ### Verify for each column notAllValuesDifferent if the values of each row are equals
+  uniqueValue <- reactive({
+    apply(notAllValuesDifferent(), 2, function(a) length(unique(a))==1)
+  })
+  
+  ### Select the false of "uniqueValue" so tje columns without unique values 
+  notUniqueValue <- reactive({
+    notAllValuesDifferent()[uniqueValue() == FALSE]
+  })
+  
+  ### Update selectinput with columns of notUniqueValue() for the DESeq2 design
+  observeEvent(input$MetadataFile,{
+    updateSelectInput(session,"DesignDESeq2", choices = paste("~ ",paste(colnames(notUniqueValue()))))
+  })
+  
+
   
   
   ### Check if the user has annotation file to upload 
@@ -70,10 +94,22 @@ server <- function(input, output,session) {
   })
   output$AnnoTable <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
   
-  
-  
+  ### Display DESeq2 page after count table uploaded and a message to upload metadata file and choose design
+  observeEvent(input$CountDataTable,{
+    output$menuDESeq2 <- renderMenu({
+      if(input$DesignDESeq2 == ""){
+        showNotification("Upload a metadata file and choose a design.")
+      }
+      menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle"))
+    })
+  })
+
   ### Running DESeq2 clicking on the button  ---- 
   observeEvent(input$RunDESeq2,{
+    if(input$DesignDESeq2 == ""){
+      showNotification("Upload a metadata file and choose a design.")
+    }
+    else{
     req(input$RunDESeq2)
     ### Waiting screen 
     waiter <- waiter::Waiter$new(html = spin_ball())
@@ -111,10 +147,28 @@ server <- function(input, output,session) {
     dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
     dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
     
+    
+    ### Display "Results" menu when DESeq2 is successfully run
+    ### Put a check icon for the menu where the plots are already display
+    ### The others (PCA and both heatmap) needs to be run
+    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
+                                                 menuSubItem("Count distribution",tabName = "Count_Distribution",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Count by gene", tabName = "Count_Gene",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Depth of sample",tabName = "Depth",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Dispersion",tabName = "Dispersion",icon = icon("far fa-check-square")),
+                                                 menuPCA(),
+                                                 menuSubItem("MA Plot",tabName = "MAplot",icon = icon("far fa-check-square")),
+                                                 menuSubItem("Volcano Plot",tabName = "Volcanoplot",icon = icon("far fa-check-square")),
+                                                 menuDistanceMatrix(),
+                                                 menuHeatmap()
+    )  
+    })
+    
     ### End of the waiting screen
     on.exit(waiter$hide())
-  })
+  }})
   
+
 
   
   ### Count distribution ----
@@ -287,17 +341,29 @@ server <- function(input, output,session) {
   ### Display parameters for volcano 
   ### If there is an annotation file, display sliders to choose parameters 
   observeEvent(input$annotationVolcano,{
-    if(input$annotationVolcano== TRUE){
+    if(input$CheckAnnotation== TRUE){
+      if(input$annotationVolcano==TRUE){
       output$SliderFoldVolcano <- renderUI({ 
         sliderInput("sliderfold", "Choose your fold", min=-20, max=20, value=c(-6,6))
       })
       output$SliderLogVolcano <- renderUI({ 
         sliderInput("sliderlog", "Choose your log10", min=0, max=300, value=30)
       })
-    }else{
+    }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationVolcano==TRUE){
       output$SliderFoldVolcano <- renderUI({})
       output$SliderLogVolcano <- renderUI({})
-    }
+      output$AnnoVolcano <- renderUI({
+        HTML("<center><h3> You don't have annotation file. </h3></center>")
+      })
+      }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationVolcano==FALSE){
+        output$SliderFoldVolcano <- renderUI({})
+        output$SliderLogVolcano <- renderUI({})
+        output$AnnoVolcano <- renderUI({})
+      }}
   })
   
   ### Display volcano plot using volcano.plot() function from function_dds.R
@@ -319,7 +385,7 @@ server <- function(input, output,session) {
   )
   
 
-  ### Distance matrix heatmap ----
+  ### Sample distance matrix heatmap ----
   ### Chose vst or rlog transformation
   observeEvent(input$RunMatrix,{
     if(input$TransformationMatrix=="vst"){
@@ -330,7 +396,7 @@ server <- function(input, output,session) {
   })
   ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
-    distance.matrix.heatmap(dds$TransformationMatrix)
+    sample.distance.matrix.heatmap(dds$TransformationMatrix)
   }
   output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
@@ -359,6 +425,18 @@ server <- function(input, output,session) {
     }
   })
   
+  observeEvent(input$annotationHeatmap,{
+    if(input$annotationHeatmap==TRUE){
+      if(input$CheckAnnotation==FALSE){
+        output$Annoheatmap <- renderUI(
+          box(width = 12, solidHeader = F,
+            HTML("<center><h3> You don't have annotation file. </h3></center>")))
+      }}
+    else{
+      output$Annoheatmap <- renderUI({})
+    }
+  })
+  
   ### Display heatmap using gene.expression.heatmap() function from function_dds.R
   heatmapCluster <- function() {
     input$RunHeatmap
@@ -381,11 +459,6 @@ server <- function(input, output,session) {
   )
   
   ### Theme ----
-
-  
-  
-  
-  
   ### Choice between dark or light theme with a switcher button
   observeEvent(input$theme,{
     if(input$theme==TRUE){
@@ -394,7 +467,7 @@ server <- function(input, output,session) {
       })
     }else{
       output$themes <-renderUI({
-        theme_grey_light
+        theme_grey_light2
       })
     }
   })
@@ -444,23 +517,7 @@ server <- function(input, output,session) {
     menuAnnotation()
   })
   
-  ### Display "Results" menu when DESeq2 is successfully run
-  ### Put a check icon for the menu where the plots are already display
-  ### The others (PCA and both heatmap) needs to be run
-  observeEvent(input$RunDESeq2,{
-    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),startExpanded = TRUE,
-                                                 menuSubItem("Count distribution",tabName = "Count_Distribution",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Count by gene", tabName = "Count_Gene",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Depth of sample",tabName = "Depth",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Dispersion",tabName = "Dispersion",icon = icon("far fa-check-square")),
-                                                 menuPCA(),
-                                                 menuSubItem("MA Plot",tabName = "MAplot",icon = icon("far fa-check-square")),
-                                                 menuSubItem("Volcano Plot",tabName = "Volcanoplot",icon = icon("far fa-check-square")),
-                                                 menuDistanceMatrix(),
-                                                 menuHeatmap()
-    )  
-    })
-  })
+
   
   ### Menu for PCA menu in sidebar
   ### Change the icon with check icon when pca is run successfully
@@ -476,9 +533,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuDistanceMatrix <- reactive({
     if(input$RunMatrix){
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix")
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix")
     }
   })
   
@@ -486,9 +543,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuHeatmap <- reactive({
     if(input$RunHeatmap){
-      menuSubItem("Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Heatmap",tabName = "Heatmap")
+      menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
     }
   })
   

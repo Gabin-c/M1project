@@ -109,8 +109,7 @@ ui <-
                              menuItemOutput("CountTable"),
                              menuItemOutput("MetadataTable"),
                              menuItemOutput("AnnotationTable")),
-
-                    menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
+                    menuItemOutput("menuDESeq2"),
                     
                     menuItemOutput("menuResults"),
 
@@ -172,8 +171,8 @@ ui <-
                         br(), "- PCA",
                         br(), "- MA plot",
                         br(), "- Volcano plot",
-                        br(), "- Distance matrix",
-                        br(), "- Heatmap",style="padding-left: 5em", align = "justify"),
+                        br(), "- Sample distance matrix",
+                        br(), "- Gene expression Heatmap",style="padding-left: 5em", align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       
                       )
@@ -219,7 +218,7 @@ ui <-
             ###   - a box which countain :
             ###       - information about file accepted in fileInput
             ###   - a box which countain :
-            ###       - a text input to chose design formula to set for DESeq2 dataset object
+            ###       - a select input to chose design formula to set for DESeq2 dataset object
             ###   - a dataTableOutput of metadata input in fileInput
             
                   tabItem(tabName = "Metadata",
@@ -241,7 +240,7 @@ ui <-
                              )),
                     column(width = 12,
                            box(width = 12,
-                               textInput("DesignDESeq2","Choose your design without linear combination", placeholder = "Conditions"))),
+                               selectInput("DesignDESeq2","Choose your design without linear combination", c("")))),
                     dataTableOutput("MetaTable")
                     ),
 
@@ -279,8 +278,8 @@ ui <-
                       box(width = 12, solidHeader = F,
                           HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
                                <br><p> Check if your design chosen previously is correct.
-                               <br>If it is not, the application will crash.</p>
-                               <br><h7>This will take a few seconds.</h7></center>")),
+                                  <br>
+                               <br><h7>The process will take a few seconds.</h7></center>")),
                       box(width = 12,
 
                           actionButton("RunDESeq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), class="btn btn-danger btn-lg btn-block ")),
@@ -380,7 +379,7 @@ ui <-
                         selectInput("conditionpca","Choose your intgroup for PCA ?", choices = c()),
                         actionButton("runPCA","Run PCA")
                     ),
-                    box(solidHeader = F, status = "primary",width = 12,
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("PCAplot",height = 650))
                     ),
                     column(width= 4,
@@ -437,6 +436,7 @@ ui <-
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotationVolcano","Do you have an annotation file ?",value=FALSE),
                           sliderInput("pvalueVolcano", "Choose your pvalue", min=0, max=1, value=0.05),
+                          uiOutput("AnnoVolcano"),
                           uiOutput("SliderFoldVolcano"),
                           uiOutput("SliderLogVolcano")
                       ),
@@ -447,7 +447,7 @@ ui <-
             ),
             
             
-            ### distance matrix heat map ----
+            ### sample distance matrix heat map ----
             ### On this page we find distance matrix heat map and it parameters after running DESeq
             ### We find :
             ###     - a box() which countain :
@@ -462,7 +462,7 @@ ui <-
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         selectInput("TransformationMatrix",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         actionButton("RunMatrix","Run Heat map")),
-                    box(solidHeader = F, status = "primary",width = 12,
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("DistanceMatrixMap",height = 650))
                     ),
                     column(width= 4,
@@ -496,7 +496,8 @@ ui <-
                         column(width=12,
                                sliderInput("nbGenes",label="Choose the number of genes you want to display", min = 0, 
                                            max = 200, value = c(0, 60)))),
-                    box(solidHeader = F, status = "primary",width = 12,
+                    uiOutput("Annoheatmap"),
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("Heatmap", height = 1000, width = 1000))
                     ),
                     column(width= 4,
@@ -520,6 +521,7 @@ ui <-
         "
       position:relative;
       width:100%;
-      background-color: #2d3741;"
+      background-color: rgb(70,80,90);
+      color: rgb(205,205,205);"
       ))
   )

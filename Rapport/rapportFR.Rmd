@@ -23,15 +23,18 @@ geometry: margin=25mm
 # Police
 mainfont: Times New Roman
 header-includes:
-    # Interligne de 1.5
-    - \renewcommand{\baselinestretch}{1.5}
+    # Interligne package
+    - \usepackage{setspace}
     # Remplace "Contents" par "Table des matières"
     - \renewcommand{\contentsname}{\Huge{Table des matières}}
     # Evite l'interligne de 1.5 dans le sommaire
     - \usepackage{tocloft}
+    - \usepackage{float}
+    - \newcommand{\squeezeup}{\vspace{-7mm}}
 
 
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -45,6 +48,38 @@ library(NMF)
 library(ggrepel)
 ```
 
+\setstretch{1.5}
+\setromanfont{Times New Roman}
+
+\newpage
+\LARGE Résumé
+\normalsize
+\par
+L'accessibilité à l’analyse des données et à leurs résultats issus de technologies générant des données en masse est un enjeu essentiel pour la recherche de demain. En tant que futurs bioinformaticiens notre rôle est de le permettre. Il nous faut donc acquérir les compétences nécessaires à la réalisation d’outils permettant cet accès facilité. Un grand nombre de ces analyses se déroule sous R, c’est pourquoi nous avons axé notre projet sous cet environnement.
+\par
+Toutefois pour avoir des résultats à analyser, il faut une analyse et des données. Nous avons donc porté notre choix sur l’analyse de données issues de séquençages de l’ARN et plus spécialement sur l’analyse d’expression différentielle. 
+Dans un premier  temps un jeu de données d’une analyse RNA-seq de l'étude \emph{RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al.} a été utilisé afin de prendre en main et d’apprendre l’utilisation du package DESeq2 développé par Bioconductor. Ce package est un package sous R permettant de réaliser une analyse d’expression différentielle de données RNA-seq.
+\par
+Une fois ce package compris et maîtrisé, nous nous sommes attaqués à l’accessibilité à ce type d’analyses avec DESeq2. Pour cela nous avons décidé de créer une application permettant d'exécuter simplement le workflow DESeq2. Afin de réaliser cette application nous avons utilisé le package Shiny qui permet de créer une application web interactive en associant des fonctionnalités de R, tout en y associant des fonctionnalités utilisant les langages HTML, javaScript ou encore CSS.
+
+\par
+\emph{mots clés : }
+
+
+\newpage
+\LARGE Abstract
+\normalsize
+\par
+Accessibility to data analysis and results from technologies generating big data is a key issue for tomorrow's research. As future bioinformaticians our role is to enable this. We therefore need to acquire the skills to create tools that allow this facilitated access. Many of these analyses take place under R, which is why we have focused our project under this environment. However, in order to have results to analyze, analysis and data are needed.
+\par
+We have therefore focused on the analysis of data from RNA-seq experiments and more specifically on differential expression analysis. As a first step, a dataset from an RNA-seq analysis of the study 
+\emph{RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells from Himes BE, Jiang X, Wagner P, and al.} was used in order to learn how to handle and use the DESeq2 package developed by Bioconductor. This package is a package under R allowing to perform a differential expression analysis of RNA-seq data.
+\par
+Once this package was understood and mastered, we tackled the accessibility of this type of analysis with DESeq2. To do this we decided to create an application to simply run the DESeq2 workflow. In order to realize this application we used the Shiny package which allows to create an interactive web application by associating R functionalities, while associating functionalities using HTML, javaScript or CSS.
+
+\par
+\emph{keywords : }
+
 
 \newpage
 \begin{center}
@@ -56,6 +91,7 @@ library(ggrepel)
 \includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
 \end{center}
 
+\setstretch{1.5}
 
 \newpage
 \setcounter{tocdepth}{4}
@@ -66,15 +102,15 @@ library(ggrepel)
 
 # \Large{Introduction}
 ## \large{Contexte}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
 De nos jours, la plupart des chercheurs n'ont en général pas le temps d'utiliser les outils permettant une analyse des données générées par les nouvelles technologies. C'est pour cela qu'il est important de leur offrir la possibilité d'avoir accès à des outils facilitant l'analyse et leur permettant d'être plus efficaces.
 Le but principal de notre projet est de mettre en place une application qui pourra aider ces scientifiques à explorer leurs résultats sous l'environnement R. Pour cela le package Shiny nous permet de créer une application web interactive. 
 \par
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Néanmoins, afin de créer une application interactive, nous avons besoin de quelques choses à montrer. Dans le domaine de la recherche médicale qui est le principal axe de recherche, les techniques de séquençage de seconde génération sont souvent utilisées. Ces techniques génèrent de nombreuses données qui ont besoin d'être explorées et analysées. Nous avons donc décidé de concentrer notre travail sur le séquençange de l'ARN (RNA-seq). Cette technique de séquençage de seconde génération a pour principal but de détecter des expressions différentielles entre des types cellulaires de différentes conditions.
+ 
+Néanmoins, afin de créer une application interactive, nous avons eu besoin d'un support d'experimention. Dans le domaine de la recherche médicale qui est le principal axe de recherche, les techniques de séquençage de seconde génération sont souvent utilisées. Ces techniques génèrent de nombreuses données qui ont besoin d'être explorées et analysées. Nous avons donc décidé de concentrer notre travail sur le séquençange de l'ARN (RNA-seq). Cette technique de séquençage de seconde génération a pour principal but de détecter des expressions différentielles entre des types cellulaires dans différentes conditions.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Le RNA-seq est un nouveau moyen permettant un séquençage de l'ARN plus rapide que les techniques qui existaienet précédemment comme la méthode de Sanger. Le but principal du RNA-seq est d'étudier l'expression différentielle de gènes entre différentes conditions. Le séquançage de l'ARN a été cité pour la première en 2008, et depuis, le nombre de publication contenant des données de RNA-seq augmentent d'années en années. Ce genre d'analyses utilises les technologies de séquançage de nouvelles génération (NGS) comme Illumina, Roche 454 ou encore Ion Torrent.
+ 
+Le RNA-seq est un nouveau moyen permettant un séquençage de l'ARN plus rapide que les techniques qui existaient précédemment comme la méthode de Sanger. Le but principal du RNA-seq est d'étudier l'expression différentielle de gènes dans différentes conditions. Le séquençage de l'ARN a été cité pour la première fois en 2008, et depuis, le nombre de publications contenant des données de RNA-seq augmente d'années en années. Ce genre d'analyse utilise les technologies de séquençage de nouvelles générations (NGS) comme Illumina, Roche 454 ou encore Ion Torrent.
 
 Une analyse RNA-seq présente 3 grandes étapes : 
 \begin{itemize}
@@ -85,32 +121,32 @@ Une analyse RNA-seq présente 3 grandes étapes :
 
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Le nombre de reads obtenu est proportionnel à l'abondance des ARN dans la cellules. Ces reads sont stockés dans des fichiers au format fastQ et leur qualité est estimé grâce à des outils spécifiques. Ensuite, chaque read est mappé sur le génome de référence de l'organisme étudié. Après ce mapping, des fichiers BAM sont obtenus. Dans ces fichiers, chaques ligne représante un alignement d'un read. Pour finir, un comptage des reads pour chaque position est realisé afin de remplir une table de comptage permettant l'analyse des données RNA-seq.
+ 
+Le nombre de reads obtenu est proportionnel à l'abondance des ARN dans la cellules. Ces reads sont stockés dans des fichiers au format fastQ et leur qualitée est estimé grâce à des outils spécifiques. Ensuite, chaque read est mappé sur le génome de référence de l'organisme étudié. Après ce mapping, des fichiers BAM sont obtenus. Dans ces fichiers, chaque ligne représant un alignement d'un read. Pour finir, un comptage des reads pour chaque position est realisé afin de remplir une table de comptage permettant l'analyse des données RNA-seq.
 
 
 ##### Analyse de données RNA-seq
 Les étapes de l'analyse RNA-seq présentées ci-dessous sont inspirées du mode d'emploi d'analyse de données RNA-seq sur le site [\underline{bioinfo-fr.net}](https://bioinfo-fr.net/lanalyse-de-donnees-rna-seq-mode-demploi).
 
-##### Etape 1 : Les données
-Premièrement, pour obtenir le jeu de données, l'ARN est extrait des cellules et l'ARNm est isolé grâce à sa queue poly-adénylée. Une fois extrait, l'ARNm est fragmenté et subit une reverse transcription en ADNc. Ensuite, l'ADNc est séquencé grâce aux NGS. Aujourd'hui, le plus utilisé est la technologie Illumina qui utilise une amplification clonale et un séquençage par synthèse. Le séquençage peut être "single end" (chaque read est indépendant) ou "paired-end" (les reads sont pairés). Après le séquençage, des millions de reads sont obtenus.
+##### Etape 1 : Acquisition des données
+Dans un premier temps, l'ARN est extrait des cellules et l'ARNm est isolé grâce à sa queue poly-adénylée. Une fois extrait, l'ARNm est fragmenté et subit une reverse transcription en ADNc. Ensuite, l'ADNc est séquencé grâce aux sequenceurs de nouvelles générations. Aujourd'hui, le plus utilisé est la technologie Illumina qui utilise une amplification clonale et un séquençage par synthèse. Le séquençage peut être "single end" (chaque read est indépendant) ou "paired-end" (les reads sont pairés). Après le séquençage, des millions de reads sont obtenus.
 
 ##### Etape 2 : Contrôle qualité
-A la sortie du séquenceur on retrouve des fichiers fastQ. Ce genre de fichier est composé de blocs de 4 lignes représentants un read. Grâce aux fichiers fastQ, la qualité du séquençage peut être estimée à l'aide de programmes comme FastQC.
+A la sortie du séquenceur on obtient des fichiers fastQ. Ce genre de fichier est composé de blocs de 4 lignes représentants un read. Grâce aux fichiers fastQ, la qualité du séquençage peut être estimée à l'aide de programmes comme FastQC.
 
 ##### Etape 3 : Mapping
-Cette partie de l'analyse consiste à aligner tous les reads sur le génome de l'organisme étudié. Un read est mappé sur la régions du génome qui lui est la plus similaire. Cette étape permet d'obtenir des fichiers BAM dans lesquels chaque ligne correspond à un read. De plus, la moyenne du nombre de reads mappés sur une régions est appelée la profondeur.
+Cette partie de l'analyse consiste à aligner tous les reads sur le génome de l'organisme étudié. Un read est mappé sur la région du génome qui lui est la plus similaire. Cette étape permet d'obtenir des fichiers BAM dans lesquels chaque ligne correspond à un read. La moyenne du nombre de reads mappés sur une régions est appelée la profondeur.
 
 ##### Etape 4 : Quantification
-Le nombre de reads est un témoin de l'abondance d'ARN dans la cellule. Ainsi, il est possible d'estimer le niveau d'expression d'un gène. C'est pourquoi il est important de compter les reads mappés pour chaque gène. Le but de cette étape est de remplir une table de comptage afin de pouvoir la manipuler facilement avec R par exemple.
+Le nombre de reads est un témoin de l'abondance de l'ARN dans la cellule. Ainsi, il est possible d'estimer le niveau d'expression d'un gène. C'est pourquoi il est important de compter les reads mappés pour chaque gène. Le but de cette étape est de remplir une table de comptage afin de pouvoir la manipuler facilement avec R par exemple.
 
 ##### Etape 5 : Statistiques
-Différents résultats statistiques peuvent être obtenus ainsi que des graphiques ou encore des carte de densité pour les exons. Il est important de normaliser les données et de comparer les p-value ajustées obtenues après différents tests. Tout ceci permet d'établir une liste de gène différentiellement exprimés.
+Différents résultats statistiques peuvent être obtenus ainsi que des graphiques ou encore des cartes de densité pour les exons. Il est important de normaliser les données et de comparer les p-value ajustées obtenues après différents tests. Tout ceci permet d'établir une liste de gènes différentiellement exprimés.
 
 
 ## \large{Objectifs}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Aujourd'hui, de plus en plus d'études utilisent le séquençage de l'ARN, il en résulte de plus en plus de données à analyser. Pour essayer de répondre à cette problématique nous avons décidé d'élaborer une application interactive grâce au package RShiny. Cette application a pour but d'aider à l'analyse de données RNA-seq le plus profondément possible en répondant aux plus de questions possibles et permettre une visualisation intuitive des résultats.
+ 
+Aujourd'hui, de plus en plus d'études utilisent le séquençage de l'ARN, il en résulte de plus en plus de données à analyser. Pour essayer de répondre à cette problématique nous avons décidé d'élaborer une application interactive grâce au package RShiny. Cette application a pour but d'aider à l'analyse de l'expression différentielle de données RNA-seq le plus profondément possible en répondant aux plus de questions possibles et permettre une visualisation intuitive des résultats.
 Le but de ce projet est de nous permettre d'en apprendre plus sur cette nouvelle technique de séquençage de l'ARN et son analyse. Cela nous permettra aussi d'apprendre à utiliser différents packages disponibles sous R comme Shiny pour la conception de l'application ou Markdown pour la rédaction du rapport.
 ```{r message=FALSE, warning=FALSE, echo =FALSE}
 counts_table <- read.csv("airway_scaledcounts.csv") 
@@ -122,32 +158,30 @@ anno <- anno %>% select(ensgene,symbol)
 
 \newpage
 # \Large Matériels et méthodes
-## \large{Jeu de données et package DESeq2}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires en utilisant la technologie RNA-seq.
+## \large{Analyse de l'expression différentielle de données RNA-seq}
+#### Jeu de données
+Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires ainsi que l'impact du traitement sur l'expression génétique dans différent types cellulaires en utilisant la technologie RNA-seq.
 \par
 Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
 Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
 
-## \large{Packages}
-Pour effectuer cette analyse nous allons travailler sous R et nottament sous l'IDE R-studio. Afin d'effectuer l'analyse differentielle nous allons utiliser le package DESeq2 proposé et développé par Bioconductor.
+\par 
+Pour effectuer cette analyse nous allons travailler sous R et notamment sous l'IDE R-studio. Afin d'effectuer l'analyse differentielle nous allons utiliser le package \emph{DESeq2} proposé et développé par Bioconductor.
 
-\newpage
 #### DESeq2
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-DESeq2 est un package sous R capable de procéder à une analyse de l'expression différentielle de gènes basée sur la loi binomiale négative. Ce package est développé sur la ptateforme Bioconductor qui met à disposition des utilisateurs différents logiciels bioinformatiques open source et plus spécifiquement pour l'analyse et l'étude de séquençages hauts débits comme le RNA-seq ici.  Avec les différents outils de ce package, il est possible d'estimer des relations moyenne-variance dans le jeu de données et de tester l'expression différentielle basée sur la loi binomiale négative.
-\par
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Cette loi binomiale négative est une alternative à la loi de Poisson. En effet, il s'agit d'une loi de probabilité discrete. Pour résumer, on considère une expérience qui peut aboutir à un succès de probabilité p ou un échec. Cette expérience se termine après un nombre choisi de succès. Le but est de savoir le nombre d'échecs ayant eu lieu avant le nombre de succès défini. C'est cette loi qui est utilisée car le comptage des reads n'est pas continu, on ne retrouve que des entier non nuls donc on ne peut pas utiliser une distribution normale. Dans la loi binomiale négative, la variance est toujours supérieure ou égale à la moyenne. Pour finir, dans une analyse RNA-seq, les gènes sous-exprimés ont une variance plus élevée que les gènes sur-exprimés.
-\par
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Il est donc nécessaire d'avoir au préalable une table de comptage ainsi qu'une table contenant le design de l'expérience car
-la première étape consiste a crée un premier jeu de données DESeq contenant ces deux éléments. Une fois l'objet créé, il est possible d'acceder à la table de comptage ainsi qu'au design de l'expérience à l'aide de fonctions propres au jeu de données DESeq2 (annexe 1).
-La seconde étape consiste à normaliser les doonées de la table de comptage et à réaliser l'analyse de l'expression différentielle. Le package DESeq2 permet de réaliser ces deux étapes d'une traite.
-Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les étudiers.
+ 
+\emph{DESeq2} est un package sous R capable de procéder à une analyse de l'expression différentielle de gènes basée sur la loi binomiale négative. Ce package est développé par la ptateforme Bioconductor qui met à disposition des utilisateurs différents packages et outils destinés à la bioinformatique open source et plus spécifiquement pour l'analyse et l'étude de séquençages hauts débits comme le RNA-seq ici.  Avec les différents outils de ce package, il est possible d'estimer des relations moyenne-variance dans le jeu de données et de tester l'expression différentielle basée sur la loi binomiale négative.
 
-\renewcommand{\baselinestretch}{1}
+\newpage 
+Cette loi binomiale négative est une alternative à la loi de Poisson. En effet, il s'agit d'une loi de probabilité discrete. Pour résumer, on considère une expérience qui peut aboutir à un succès de probabilité p ou un échec. Cette expérience se termine après un nombre choisi de succès. L'objectif est de connaitre le nombre d'échecs ayant eu lieu avant le nombre de succès défini. Cette loi est utilisée car le comptage des reads n'est pas continu, on ne retrouve que des entiers non nuls et on ne peut donc pas utiliser une distribution normale. Dans la loi binomiale négative, la variance est toujours supérieure ou égale à la moyenne. Pour finir, dans une analyse RNA-seq, les gènes sous-exprimés ont une variance plus élevée que les gènes sur-exprimés.
+\par
+ 
+Pour le bon fonctionnement du package DESeq2 Il est nécessaire d'avoir au préalable une table de comptage ainsi qu'une table contenant le design de l'expérience.
+La première étape consiste à créer un premier jeu de données DESeq contenant ces deux éléments. Une fois l'objet créé, il est possible d'acceder à la table de comptage ainsi qu'au design de l'expérience à l'aide de fonctions propres au jeu de données DESeq2 (annexe 1).
+La seconde étape consiste à normaliser les données de la table de comptage et à réaliser l'analyse de l'expression différentielle. Le package \emph{DESeq2} permet de réaliser ces deux étapes d'une traite.
+Une fois cette seconde étape réalisée on peut extraire les résultats de l'analyse d'expression différentielle, et commencer à les étudier.
 
+\singlespacing
 \scriptsize
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE}
 ### Create dds object ---
@@ -160,49 +194,85 @@ dds <- DESeq(dds)
 res <- results(dds,tidy = TRUE)
 
 ```
-\renewcommand{\baselinestretch}{1.5}
 \normalsize
-\sffamily\small{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2}
+\squeezeup
+
+\sffamily\footnotesize{Figure 1 : code des trois étapes principales de l'analyse d'expression différentielle avec le package DESeq2.}
 \normalsize
 
-
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 
 \newpage
-#### Analyse d'expression différentielle
-Avant d'analyser les résultats de l'analyse DE nous avons préalablement visualiser la distribution du comptage des reads pour chaque echantillon avant et après normalisation en  utilisant la methode du log-frequence afin de faciliter la visualisation, en parallèle nous avons visualiser la profondeur de séquençage de chaque echantillon avant et après normalisation ce qui a permis de vérifier visuellement la bonne normalisation des données, pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages ggplot2 et ggrepel disponible sur le CRAN.
-Suite a cette première approche nous nous sommes intérressé aux résultats propres de  l'analyse DE, la fonction intégré au package DESeq2 nous a permis de sortir une table contenant les résultats de cette analyse, cette table contient x colonnes correspondant à : ID des gènes, logFoldChange, p.value, p.value ajusté .....
-A partir de cette table on ressort les gènes DE au risque alpha = 0.05 à l'aide de p.value ajusté, le LogFoldChange nous permet de différencié les gènes surégulé ou sous régulé par rapport à la référence (LFC > 0 : surrégulé, LFC < 0 : sous régulés), afin de visualiser les résultats de l'analyse DE à alpha = 0.05 on réalise un MA plot ainsi qu'un volcano plot, pour le volcano plot on lui associera le fichier d'annotation afin d'observer les ID des gènes les plus différenciellement exprimés directement sur le graphique.
-Une fois les résultats de l'analyse DE sur les gènes analysé et visualisé, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de réference et la condition testé, pour cela nous avons réaliser une PCA ainsi qu'une matrice de distance représenté sous forme de heatmap à l'aide de la fonction PCA intégrer au package DESeq2 et le package gplots couplé au package RcolorBrewer pour le gradient de couleur, pour ces deux visualisations nous avons utilisé la matrice de comptage transformés selon la méthode VST "Variance stabilization transformation".
-Enfin nous avons finis par réaliser une clustering heatmap de l'expression des 50 gènes les plus significativement DE couplé au fichier d'annotation afin de visualiser les ID des gènes, cette dernière heatmap a été réaliser à l'aide du package NMF  pour "Non negative Matrix Factorization"
+#### Analyse de l'expression différentielle sous DESeq2
+Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons visualisé la distribution du comptage des reads pour chaque échantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation. En parallèle nous avons visualisé la profondeur de séquençage de chaque échantillon avant et après normalisation. Cela a permis de vérifier visuellement la bonne normalisation des données. Pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponibles sur le CRAN. 
 
-### \normalsize{Création de l'application}
+\singlespacing
+\scriptsize
+```{r message=FALSE, warning=FALSE, eval=FALSE, tidy=FALSE,}
+# Extraction of count table
+count_table_dds <- as.data.frame(counts(dds))
+# Visualization of count distribution
+ggplot(data=count_table_dds, aes(log(count_table_dds[,"SRR1039517"]+1))) + 
+  geom_histogram(breaks=seq(0,14,1),col="black",fill="grey") +
+  theme_light()+labs(title="SRR1039517", 
+                     x="Count value (number of read by genes) in log(count+1)",
+                     y="Count frequency") + 
+  theme_bw()
+```
+\normalsize
+\singlespacing
+\squeezeup
+\sffamily\footnotesize{Figure 2 : Visulisation de la distribution des comptages non normalisés pour l'échantillon SRR1039517.}
+\setstretch{1.5}
+\setromanfont{Times New Roman}
+\normalsize
 
-Concernant la réalisation de l'application, nous avons préalablement à l'aide du script de l'analyse DE crée un script contenant des créations de fonctions générant les visualisations et résultats que nous souhaitions avoir dans l'application (annexe 2.3). Nous avons réaliser ces fonctions car pour la plus grande partie des résultats et leurs visualisations les lignes de codes correspondantes étaient imposantes ce qui aurait apporté une perte de lisibilité dans les scripts de l'application.
-En plus de ce script contenant les fonctions nécessaire au fonctionnement de l'application nous utilisons lres packages propres à la création d'une application que sont Shiny et Shinydashboard.
+
+Suite à cette première approche nous nous sommes intéressés aux résultats propres de l'analyse de l'expression différentielle (DE), la fonction intégrée au package \emph{DESeq2} (figure 1) nous a permis de sortir une table contenant les résultats de cette analyse. Cette table contient 7 colonnes correspondant aux : moyennes des échantillons, log2foldchange, erreurs standards, statistiques de tests, p-values et p-values ajustées.
+A partir de cette table Nous avons ressorti les gènes differentiellement exprimés au risque alpha de 0.05 à l'aide de la p.value ajusté. Le LogFoldChange nous permet de différencier les gènes sur-exprimés ou sous-exprimés par rapport à la référence (LFC > 0 : surrégulé, LFC < 0 : sous régulés). Afin de visualiser les résultats de l'analyse d'expression differentielle au risque alpha de 0.05 nous réalisons un MA plot ainsi qu'un volcano plot. Pour le volcano plot nous lui associerons le fichier d'annotation afin d'observer les ID des gènes les plus différenciellement exprimés directement sur le graphique ainsi que les gènes les plus sur-exprimés ou sous-exprimés.
+\par
+Une fois les résultats de l'analyse de l'expression différentielle sur les gènes visualisés, nous avons analysé la différence des expressions entre les différents échantillons et non entre la condition de référence et la condition testée. Pour cela nous avons réalisé une analyse en composante principale ainsi qu'une matrice de distance représentée sous forme de heatmap. Ces 2 représentations sont faites à l'aide de la fonction PCA intégrée au package \emph{DESeq2} et au package \emph{gplots} couplé au package \emph{RcolorBrewer} pour le gradient de couleur de la heatmap. 
+\par Pour ces deux visualisations nous avons utilisé la matrice de comptage transformé selon la méthode VST "Variance stabilization transformation".
+Enfin nous avons fini par réaliser une clustering heatmap de l'expression des 50 gènes les plus significativement différentiellement exprimés couplés au fichier d'annotation afin de visualiser les ID des gènes. Cette dernière heatmap a été réalisée à l'aide du package \emph{NMF}  pour "Non negative Matrix Factorization". La méthode utilisée pour les matrices de distances des deux heatmaps est la méthode dite de pearson.
+
+## \large{Création de l'application}
+ 
+
+Concernant la réalisation de l'application, nous avons préalablement créé un script contenant des fonctions générant les visualisations et résultats que nous souhaitions avoir dans l'application (annexe 2.3). Nous avons réalisé ces fonctions car pour la plus grande partie des résultats et leurs visualisations les lignes de codes correspondantes étaient imposantes ce qui aurait apporté une perte de lisibilité dans les scripts de l'application.
+En plus de ce script contenant les fonctions nécessaires au fonctionnement de l'application nous utilisons les packages propres à la création d'une application que sont \emph{Shiny} et \emph{Shinydashboard}.
 
 #### Shiny
-Premièrement, le package Shiny permet la création d'application web interactive capables d'utiliser toutes les fonctionnalités de R. C'est un outil permettant de créér des pages web sans forcément avoir de connaissance en HTML, css ou javascript. Cependant, c'est un plus d'avoir des connaissances dans ce domaine si on veut customiser ces pages web afin d'avoir une application plus attirante. 
+
+ 
+Premièrement, le package \emph{Shiny} permet la création d'applications web interactives capables d'utiliser toutes les fonctionnalités de R. C'est un outil permettant de créér des pages web sans forcément avoir de connaissances en HTML, css ou javascript. Cependant, c'est un plus d'avoir des connaissances dans ces domaines si on veut customiser ces pages web afin d'avoir une application plus attirante. 
 Une application shiny est composée de deux fichiers : 
 \begin{itemize}
 \item Le fichier ui.R (user interface) permet de contrôler l'apparance de l'application (annexe 2.1).
 \item Le fichier sever.R contient les instruction permettant le fonctionnement de l'application (annexe 2.2).
 \end{itemize}
 
+\newpage
 #### Shinydashboard
-Pour l'aspect esthétique et la facilité de navigation nous avons décider de faire un dashboard à l'aide du package Shinydashboard. Ce package permet donc de générer un corps d'application sous forme de dashboard. Ce  modèle d'application ce présente sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
+ 
+Pour l'aspect esthétique et la facilité de navigation nous avons décidé de faire un tableau de bord à l'aide du package \emph{Shinydashboard}. Ce package permet donc de générer un corps d'application sous forme de tableau de bord. On y retrouve un en-tête avec le titre de l'application, une barre latérale servant de menu et le corps principal avec lequel on va pouvoir interagir. Le menu latéral va permettre de naviguer entre les différentes pages de l'application. Le tableau de bord peut être personalisé comme on le souhaite à l'aide de css ou javascript afin d'avoir un environnement agréable à prendre en main.
+
 
 
 ### \normalsize{Rédaction du rapport}
 #### Markdown
-Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire un rapport automatisé de notre travail. Les packages markdown et knitr permettent d'assembler rapport sous forme de texte et de code R. Ainsi nous pouvons intégrer notre code et les résultats obtenus lors de l'analyse. Nous avons choisi un format de sortie sous forme de PDF, ce qui nous autorise à utiliser LaTeX afin d'avoir un document final avec une mise en page optimale que nous auront définie.
+ 
+Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire un rapport automatisé de notre travail. Les packages markdown et knitr permettent d'assembler le rapport sous forme de texte et de code R. Ainsi nous pouvons intégrer notre code et les résultats obtenus lors de l'analyse. Nous avons choisi un format de sortie sous forme de PDF, ce qui nous autorise à utiliser LaTeX afin d'avoir un document final avec une mise en page optimale que nous auront définie.
 
 
 \newpage
 # \Large{Résultats}
-## \large{Analyse de données RNA-seq}
-Les résultats de l'analyse d'expression différentielle a mis en valeur 2181 gènes differentiellement exprimés au risque alpha = 0.05 (figure ?), 1242 gènes sont surégulés et 939 sous régulés par rapport à la condition de réference "control". 
+## \large{Analyse de l'expression différentielle de données RNA-seq}
+L'analyse de l'expression différentielle de données RNA-seq a donné lieu à plusieurs résultats que nous allons présenter dans cette partie. Premièrement, nous nous intéressons aux résultats qui concernent les gènes grâçe au volcano plot et au tableau résumant l'état des gènes au sein de l'expérience.
+Comme on peut le voir dans le tableau de la figure 3, les résultats de l'analyse d'expression différentielle ont mis en valeur 2181 gènes differentiellement exprimés au risque alpha de 0.05 (figure 3). On remarque aussi que 1242 gènes sont sur-exprimés et 939 sont sous-exprimés par rapport à la condition de réference "control". 
+
+\singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
 # Number of genes wich is differential express at 5%
 up_regulated <- res %>% filter(padj <= 0.05 & log2FoldChange > 0) %>% nrow()
@@ -212,12 +282,18 @@ tb.DE <- data.frame("No DE" = tb[1], "Down regulated" = down_regulated, "Up regu
 row.names(tb.DE) <- ""
 tb.DE
 ```
-\sffamily\small{Figure ? : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05}
+\squeezeup
+\sffamily\footnotesize{Figure 3 : Table des résultats de l'analyse d'expression différentielle au risque alpha = 0.05.}
+
 \normalsize
 \setromanfont{Times New Roman}
-On remarque que les gènes les plus différentiellement exprimés sont SPACL1, PER1, ARHGEF2,et MAOA, la plus part des gènes les plus différentiellement exprimés sont surexprimés par rapport à la réference (figure ?)
+\setstretch{1.5}
 
-```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE }
+A la vue du volcano plot ci-dessous, on remarque que les gènes les plus significativement différentiellement exprimés sont SPACL1, PER1, ARHGEF2,et MAOA. La plupart des gènes les plus différentiellement exprimés sont sur-exprimés par rapport à la réference car ils se trouvent à droite de l'axe des ordonnéeset ont donc un LFC positif. On note d'ailleurs que les deux gènes les plus-sur exprimés sont ALOX15B et AC007325.2 (figure 4)
+
+\par
+\singlespacing
+```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, fig.width = 12}
 res_v <- res %>% mutate(sig=padj<0.05) %>%  arrange(padj) %>%
   inner_join(anno,by=c("row"= "ensgene"))
 
@@ -237,14 +313,21 @@ ggplot(res_v, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
   theme(axis.title.y = element_text(size=14))
 
 ```
-\sffamily\small{Figure ? : Volcano plot de l'analyse d'expression différentielle.
-En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.05 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes surexprimés par rapport à la réference et les points à gauche correspondent aux gènes sous exprimés par rapport à la référence.}
+
+\sffamily\footnotesize{Figure 4 : Volcano plot de l'analyse d'expression différentielle.
+En bleu on retrouve les gènes dont l'expression diffère de la condition de réference "control" au risque alpha = 0.05 et en rouge les gènes dont l'expression ne diffère pas au risque alpha = 0.05. Les points à droite de la ligne de démarcation correspondent aux gènes sur-exprimés par rapport à la réference (LFC > 0) et les points à gauche correspondent aux gènes sous-exprimés par rapport à la référence(LFC < 0).}
+
 \normalsize
+
+\setstretch{1.5}
 \setromanfont{Times New Roman}
-Entre les échantillons on remarque à l'aide de la PCA (figure ?) que deux groupes ce distinque selon la première dimension qui donne le plus gros pourcentage d'information, un groupe contenant les échantillons traités et un groupe contenant les echantillons contrôle, le suivi de la seconde dimension qui a un pourcentage d'information moins important on remarque là aussi deux groupes l'un contenant les tous les échantillons sauf les échantillons SRR1039517 et SRR1039516 ce qui laisse pensé que ces deux echanillons sont les plus éloignés des autres du fait de la différence du type cellulaire, on aurait 3 types cellulaires proches (N05261,N06101,N61311) et l'un plus éloignés (N08061), on remarque d'ailleurs sur la matrice de distance obtenu avec la méthode de corrélation de pearson (figure ?) que les l'échantillon SRR1039517 est le plus eloigné de ses homologues treated et que sa plus forte corrélation est avec son "control" associé. La matrice de distance pour les échantillons montre tous de même bien deux groupes l'un contenant les echantillons traités et l'autre les échantillons controles, d'ailleurs la clustering heatmap (figure ? ) sur l'expression des gènes montrent cette fois bien clairement deux groupes l'un contenant les echantillons traités et l'autre les echantillons controles, cette visualisation montre aussi comme nous l'avions identifié que les gènes les plus différentiellement exprimées sont le plus souvent surexprimés dans les echantillons traités.
+\par
+Entre les échantillons on remarque à l'aide de la PCA (figure 5) que deux groupes se distingue selon la première dimension qui donne le plus gros pourcentage d'information (32%) : un groupe contenant les échantillons traités et un groupe contenant les échantillons contrôles. Selon la seconde dimension qui a un pourcentage d'information moins important (24%), on remarque là aussi deux groupes. L'un des groupes contient tous les échantillons sauf SRR1039517 et SRR1039516. Cela laisse penser que ces deux échanillons sont les plus éloignés des autres du fait de la différence du types cellulaires. On aurait donc 3 types cellulaires proches (N05261,N06101,N61311) et l'un plus éloignés (N08061). 
+\par
+On remarque d'ailleurs sur la matrice de distance obtenue avec la méthode de corrélation de pearson (figure 5) que l'échantillon SRR1039517 est le plus éloigné de ses homologues "treated" et que sa plus forte corrélation est avec son "control" associé. La matrice de distance pour les échantillons montre tout de même bien deux groupes : l'un contenant les échantillons traités et l'autre les échantillons contrôles. D'ailleurs la clustering heatmap (figure 6 ) sur l'expression des gènes montre cette fois bien clairement deux groupes l'un contenant les échantillons traités et l'autre les échantillons contrôles. Cette visualisation montre aussi, comme nous l'avions identifié, que les gènes les plus significativement différentiellement exprimés sont le plus souvent sur-exprimés dans les échantillons traités.
 
-
-```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, out.width='8cm', out.height='10cm', fig.show='hold'}
+\singlespacing
+```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE, out.width='9cm', out.height='20cm', fig.show='hold'}
 #PCA
 vsdata <- vst(dds, blind=FALSE)
 plotPCA(vsdata, intgroup="dex")+
@@ -264,38 +347,27 @@ mat <- as.matrix(dists)
 hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
 heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
 ```
-\sffamily\small{Figure ? : Analyse en composante principale et matrice de distance sur les 8 échantillons avec une transformation selon la méthode VST.
-Un gradient de couleur bleu est utilisée, plus la couleur vire au bleu plus la distance calculée est proche.}
+\sffamily\footnotesize{Figure 5 : Analyse en composante principale (gauche) et matrice de distance (droite) sur les 8 échantillons avec une transformation selon la méthode VST "Variance stabilization transformation".
+Un gradient de couleur bleu est utilisé. Plus la couleur vire au bleu plus la distance calculée est proche.}
 \normalsize
+
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 
-
-
-```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
-#Heatmap of gene expression for 50 better DE gene
-library(NMF)
-res <- tbl_df(res)
-res <- res %>% 
-  arrange(padj) %>% 
-  inner_join(anno,by=c("row"="ensgene")) %>%
-  filter(padj<0.05)
-NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],], 
-              labRow=arrange(res, padj, pvalue)$symbol[1:50], 
-              scale="row", distfun="pearson", 
-              annCol=dplyr::select(airway_metadata, dex, celltype), 
-              col=c("green","black","black","red"))
-```
-\sffamily\small{Figure ? : Heatmap de l'expression des 50 gènes ayant la plus la meilleur p.value. Le gradient utilisé est un gradient rouge-vert, plus l'expression est importante plus cela vire au rouge et inversement plus cela vire au vert plus l'expression est faible.}
+\singlespacing
+  \includegraphics[width=\textwidth]{heatmap.png}
+\sffamily\footnotesize{Figure 6 : Clustering Heatmap de l'expression des 50 gènes étant les plus significativement DE. Le gradient utilisé est un gradient rouge-vert. Plus l'expression est importante plus la couleur vire au rouge et inversement plus la couleur vire au vert plus l'expression est faible.}
 \normalsize
+
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 
 \newpage
 ## \large{Application RShiny}
-## \large{Application RShiny}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Notre but était donc de mettre en place une application Shiny capable de faire l'analyse de données RNA-seq faite peécédemment. Pour cela nous utilisons les packages  \emph{Shiny} et \emph{Shinydashboard} afin de créer une application ergonomique et agréable à prendre en main. Pour ce faire, nous avons décidé de diviser l'application en 4 principales parties : 
+ 
+Notre but était donc de mettre en place une application Shiny capable de faire l'analyse d'expression différentielle de données RNA-seq. Pour cela nous utilisons les packages  \emph{Shiny} et \emph{Shinydashboard} afin de créer une application ergonomique et agréable à prendre en main. Pour ce faire, nous avons décidé de diviser l'application en 4 principales parties : 
 
 \begin{itemize}
 \item Une première partie de présentation de l'application.
@@ -304,30 +376,32 @@ Notre but était donc de mettre en place une application Shiny capable de faire 
 \item Une dernière partie avec tous les résultats.
 \end{itemize}
 
-Nous avons fait le choix de faire cette application en anlgais et nous allons donc détailler chacunes des parties en précisant leur mode de fonctionnement ainsi qu'en affichant certains résultats obtenus.
+Nous avons fait le choix de faire cette application en anglais et nous allons donc détailler chacunes des parties en précisant leur mode de fonctionnement ainsi qu'en affichant certains résultats obtenus.
 
 ### \normalsize{Partie 1 : Informations}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-La première partie sert de page d'accueil pour l'application. Elle présente rapidement le but et les fonctionnalités de cette application. Comme l'analyse de données RNA-seq faite précédemment, cette application se base sur l'utilisation du package DESeq2 afin d'obtenir des resultats pouvant être interprétés à partir d'une table de comptage et d'un fichier metadata au minimum. On retrouve donc aussi sur cette page d'accueil les types de fichiers autorisés pour permettre l'analyse ainsi que des exemples de ceux ci. 3 sortes de fichiers sont autorisés : une table de comptage de reads (count table), un fichier metadata (metdata table) et un fichier d'annotation de gènes (annotation file). 
+ 
+La première partie sert de page d'accueil pour l'application. Elle présente rapidement le but et les fonctionnalités de cette application. Comme l'analyse de l'expression différentielle RNA-seq faite précédemment, cette application se base sur l'utilisation du package DESeq2 afin d'obtenir des resultats pouvant être interprétés à partir d'une table de comptage et d'un fichier metadata au minimum. On retrouve donc ainsi sur cette page d'accueil les types de fichiers autorisés pour permettre l'analyse ainsi que des exemples de ceux ci. Trois sortes de fichiers sont autorisés : une table de comptage de reads (count table), un fichier metadata (metadata table) et un fichier d'annotation de gènes (annotation file). 
 
 ### \normalsize{Partie 2 : Importation des données}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
 Les 3 types de fichiers cités dans le paragraphe précédent peuvent être importés dans l'application. Cependant seulement deux sont essentiels et l'autre est optionnel. En effet, les fichiers count table et metadata table sont nécessaires au bon fonctionnement des outils du package DESeq2. Concernant le fichier d'annotation, il est facultatif donc il est demandé à l'utilisateur de préciser s'il en possède un. Ce fichier va servir à afficher le symbole des gènes si besoin pour certains résultats. 
 \par 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Tous les fichiers importés doivent être au format .csv, .tsv ou .txt avec pour séparation des tabulations, des virgules ou des points-virgules. Les fichiers doivent avoir des compositions spécifiques. Concernant le fichier de comptage de reads, la première colonne doit correspondre à l'identifiant du gène et toutes les autres aux comptages de reads par échantillons. Pour le fichier metadata, la première colonne doit correspondre aux échantillons de la table de comptages et une autre colonne minimum est nécessaire. Celle-ci doit être une colonne qui sépare les échantillons en 2 conditions (e.g. control et treated). Pour finir le fichier d'annotation doit répondre à une obligation : une des colonnes doit être nommées "symbol". Cette colonne correspond au symbole des gènes et est nécessaire pour pouvoir afficher ces symboles sur le volcano plot ou le heatmap.
+ 
+Tous les fichiers importés doivent être au format .csv, .tsv ou .txt avec pour séparation des tabulations, des virgules ou des points-virgules. Les fichiers doivent avoir des compositions spécifiques. Concernant le fichier de comptage de reads, la première colonne doit correspondre à l'identifiant du gène et toutes les autres aux comptages de reads par échantillons. Pour le fichier metadata, la première colonne doit correspondre aux échantillons de la table de comptages et une autre colonne minimum est nécessaire. Celle-ci doit être une colonne qui sépare les échantillons en 2 conditions (e.g. control et treated). Pour finir le fichier d'annotation doit répondre à une obligation : une des colonnes doit être nommées "symbol". Cette colonne correspond au symbole des gènes et est nécessaire pour pouvoir afficher ces symboles sur le volcano plot ou la clustering heatmap des gènes.
 Enfin, chaque fichier importé est affiché sur sa page pour permettre à l'utilisateur de parcourir les tableaux.
 
+\singlespacing
   \includegraphics[width=\textwidth]{exTable.png}
-\sffamily\small{Figure ? : Exemple de l'importation de la table de comptage. L'utilisateur peut parcourir les pages de 20 entités du tableaux par une recherche ou en choisissant la page.}
+\sffamily\footnotesize{Figure 7 : Exemple de l'importation de la table de comptage. L'utilisateur peut parcourir les pages de 20 entités du tableaux par une recherche ou en choisissant la page.}
 
 \normalsize
+\setstretch{1.5}
 \setromanfont{Times New Roman}
 
 ### \normalsize{Partie 3 : DESeq2}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 
 DESeq2 est lancé grâce à un bouton "Run DESeq2 workflow". En appuyant sur sur ce bouton, un écran d'attente va s'afficher le temps que le processus se termine. Durant cette attente, la fonction DESeqDataSetFromMatrix() va permettre de stocker les valeurs d'entrée, les calculs intermédiaires et les résultats d'une analyse de l'expression différentielle.
-Afin de faire fonctionner correctement cette partie, un design est demandé lors de l'importation du fichier metadata. Ce design doit correspondre à un facteur permettant de distinguer les deux groupes différents d'échantillons. Il faut donc faire le bon choix lors de l'élaboration du design garder la ou les bonnes colonnes du fichier metadata. On appelle une "colonne linéaire" une colonne dont toutes les valeurs en lignes sont différentes. Si une colonnes dite "linéaire" se trouve dans le design, alors l'application risque de crash au moment du lancement du processus DESeq2. Il sera donc nécessaire de la redémarer. 
+Afin de faire fonctionner correctement cette partie, un design est demandé lors de l'importation du fichier metadata. Ce design doit correspondre à un facteur permettant de distinguer les deux différents groupes des échantillons. Il faut donc faire le bon choix lors de l'élaboration du design et garder : la bonne colonne du fichier metadata. On appelle une "colonne linéaire" une colonne dont toutes les valeurs en lignes sont différentes. Une liste de sélections laisse le choix à l'utilisateur entre les colonnes du tableau correspondant aux critères nécessaires au bon déroulement de du workflow DESeq2 : les colonnes non linéaires et les colonnes dont toutes les valeurs ne sont pas égales.
 Avec un bon design, le DESeq2 est lancé et les résultats s'affichent après une dizaine de secondes d'attente. 
 \par
 Ensuite, la fonction DESeq() permet de faire une analyse en 3 étapes :
@@ -337,48 +411,59 @@ Ensuite, la fonction DESeq() permet de faire une analyse en 3 étapes :
 \item Ajustement de la loi binomiale négative et test de Wald
 \end{itemize}
 
-La statistique de Wald est un test de significativité du coefficient de régression  ; elle est basée sur la propriété de normalité asymptotique de l'estimation du maximum de vraisemblance. 
-Pour finir le processus DESeq2, les résultats sont extraits sous forme de tableau grâce à la fonction results(). Dans ce tableau on retrouve les moyennes des échantillons, les log2foldchange, les erreurs standards, les statistiques de tests, les p-values et les p-values ajustées. Ces résultats vont être importants pour permettre d'établir les graphiques de la section "Résultats".
+Le test de Wald est un test de significativité du coefficient de régression  ; il est est basée sur la propriété de normalité asymptotique de l'estimation du maximum de vraisemblance. 
+Pour finir le processus DESeq2, les résultats sont extraits sous forme de tableau grâce à la fonction results(). Dans ce tableau on retrouve les moyennes des échantillons, les log2foldchange, les erreurs standards, les statistiques de tests, les p-values et les p-values ajustées. Ces résultats vont être importants pour permettre d'établir les graphiques et autres résultats de la section "Résultats".
 
 ### \normalsize{Partie 4 : Résultats}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-On retrouve plusieurs sortes de résultats sous forme de graphiques. Tous les graphiques sont faits grâce au package ggplot2 mais aussi DESeq2 pour le graphique de dispersion et l'ACP et NMF pour les heatmaps. Tous ces graphiques sont directement disponible dès la fin du processus de DESeq2 sauf 3. En effet, l'ACP et les deux heatmaps sont affichés après une seconde étape qui va permettre de lancer les fonctions capables de réaliser ces graphiques. 
+ 
+On retrouve plusieurs types de résultats sous forme de graphiques. Tous les graphiques sont réalisés grâce au package ggplot2 mais aussi grâçe aux fonctions intégrées au package DESeq2 pour le graphique de dispersion et l'ACP et le package NMF pour les heatmaps. Tous ces graphiques sont directement disponibles dès la fin du processus de DESeq2 sauf 3. En effet, l'ACP et les deux heatmaps sont affichés après une seconde étape qui va permettre de lancer les fonctions capables de réaliser ces graphiques. 
 \par
-Le premier disponible est un graphique de comptage de données ("count distribution") qui montre la fréquence de reads par échantillons. Il est possible de choisir l'échantillon que nous voulons visualiser ainsi que la porté de l'axe de abscisses et la dimension des barres sur le graphique. Ensuite, on retrouve un graphique permettant de visualiser le nombre de reads par échantillons et par gènes. Il y a donc la possibilité de choisir le gène que l'on veut visualiser. Pour continuer, nous trouvons un barplot témoignant de la profondeur pour chaque échantillon avec la possibilité de choisir la largeur des barres. Chacun de ces trois graphiques proposent une option pour visualiser les données avant et après normalisation.
+Le premier disponible est un graphique de la distribution du comptage de reads ("count distribution") qui montre la fréquence de reads par échantillons. Il est possible de choisir l'échantillon que nous voulons visualiser ainsi que la porté de l'axe de abscisses et la dimension des barres sur le graphique. Ensuite, on retrouve un graphique permettant de visualiser le nombre de reads par gènes et par échantillons. Il y a donc la possibilité de choisir le gène que l'on veut visualiser. Pour continuer, nous trouvons un barplot témoignant de la profondeur de séquençage pour chaque échantillon avec la possibilité de choisir la largeur des barres. Chacun de ces trois graphiques proposent une option pour visualiser les données avant et après normalisation.
 
+\singlespacing
 ```{r, echo=FALSE,out.width="100%", out.height="30%",fig.show='hold',fig.align='center', fig.height=20}
 
 knitr::include_graphics(c("countdistImage.png","countGene.png"))
 ```
-\sffamily\small{Figure ? : Exemple de pages pour les graphiques de count distribution (gauche) et du comptage de reads par gènes (droite). On remarques les options comme la normalisation, la taille des barres ou le choix de l'échantillon ou du gène.}
+\squeezeup
+\sffamily\footnotesize{Figure 8 : Exemple de pages pour les graphiques de count distribution (gauche) et du comptage de reads par gènes (droite). On remarques les options comme la normalisation, la taille des barres ou le choix de l'échantillon ou du gène.}
 
+\setstretch{1.5}
 \normalsize
 \setromanfont{Times New Roman}
 
-La dispersion est un paramètre décrivant la déviation de la variance par rapport à la moyenne. Un graphique montrant la relation entre la dispersion et la moyenne des comptages
+La dispersion est un paramètre décrivant la déviation de la variance par rapport à la moyenne. Le graphique de dispersion permet d'avoir une idée de la dispersion des données, on peut y distinguer une valeur intermédiaire (en bleu) entre la dispersion individuelle (en noir) et la dispersion ajustée (en rouge). Ces valeurs de dispersion sont utilisées pour le calcul des tests statistiques d'expression différentielle.
+Il reste alors 5 graphiques à voir dont 4 vus dans l'analyse de l'expression différentielle de données RNA-seq de la partie précédente. En effet, l'Analyse en Composante Principale et la matrice de distance sont aussi disponibles avec des options permettant de choisir le mode de transformation entre Log transformation et Variance-stabilizing transformation. Il est aussi possible de choisir le groupe pour l'ACP. De plus, la clustering heatmap d'expression de gènes est aussi visualisée avec le choix de la transformation (VTS ou LogT) ainsi que le choix de la condition pour la séparation des échantillons dans la heatmap et le nombre de gènes à afficher. Enfin, on retrouve le volcano plot. Comme pour la heatmap d'expression de gènes, le volcano plot offre la possibilité d'afficher les symboles des gènes sur le graphique pour une visualisation plus explicite (comme sur la figure 4). 
+
+\singlespacing
+  \includegraphics[width=\textwidth]{optionVolcano.png}
+\sffamily\footnotesize{Figure 9 : Options d'affichage des symboles de gènes sur le volcano plot. "Choose your fold" permet de choisir la portée des gènes à afficher selon l'axe de abscisses afin de voir les gènes sur et sous-exprimés. "Choose your log10" permet de choisir les gènes à afficher selon l'axe des ordonnées afin de voir les gènes le plus significativement différentiellement exprimés.}
+
+\normalsize
+\setstretch{1.5}
+\setromanfont{Times New Roman}
+
+Pour finir, un MA plot est disponible avec un tableau présentant le nombre de gènes différentiellement exprimés ainsi que les gènes sur-exprimés et sous-exprimés. Pour le MAplot et le volcano plot il est possible de choisir sa p-value même si elle est initialisée à 0.05 pour chaque. De plus, chacun des graphiques obtenus est téléchargeable en bas de chaque page.
 
 
-- dipsersion
-- PCA
+\singlespacing
+  \includegraphics[width=\textwidth]{MAplot.png}
+\sffamily\footnotesize{Figure 10 : MA plot obtenu sur l'application avec le jeu de données présenté dans la partie matériels et méthodes.}
 
-- MAplot
-- Volcano
-
-- Distance matrix
-- Gene expression heatmap
-
-Chacun des graphiques est téléchargeable au format .png en bas de chaque page.
+\normalsize
+\setstretch{1.5}
+\setromanfont{Times New Roman}
 
 
 ### \normalsize{Customisation}
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Nous avons utilisé différents outils pour rendre plus agréable l'utilisation de l'application sur le plan visuel. A l'aide du langage HTML nous avons pu modifier des thèmes déjà existants. En effet, nous avons décidé de créer un bouton permettant de choisir entre 2 thèmes : un thème foncé et un thème clair selon les préférences de l'utilisateur. Pour cela nous avons utilisé le package \emph{dashboardthemes} qui propose différents thèmes dont ceux utilisés : grey_dark et grey_light. Il a fallu modifier le thème grey_dark car il affichait une police noire sur un fond foncé dans les tableaux. C'était donc difficilement lisible. Pour se faire, nous avons du récupérer le code du thème sur le \href{https://github.com/nik01010/dashboardthemes}{\underline{git}} de Nik. L. présentant le package et modifier ou ajouter certains codes HTML directement sur R de façon à ce que tout soit optimisé.
+ 
+Nous avons utilisé différents outils pour rendre plus agréable l'utilisation de l'application sur le plan visuel. A l'aide du langage HTML nous avons pu modifier des thèmes déjà existants. En effet, nous avons décidé de créer un bouton permettant de choisir entre 2 thèmes : un thème foncé et un thème clair selon les préférences de l'utilisateur. Pour cela nous avons utilisé le package \emph{dashboardthemes} qui propose différents thèmes dont ceux utilisés : grey_dark et grey_light. Il a fallu modifier le thème grey_dark car il affichait une police noire sur un fond foncé dans les tableaux. C'était donc difficilement lisible. Pour se faire, nous avons dû récupérer le code du thème sur le \href{https://github.com/nik01010/dashboardthemes}{\underline{git}} de Nik. L. présentant le package afin de pouvoir modifier ou ajouter certains codes HTML directement sur R de façon à ce que tout soit optimisé.
 \par
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Nous avons aussi fait en sorte d'améliorer le visuel de nos graphiques. Pour cela nous avons donc utilisé ggplot2, le package permettant de faire des graphiques plus élégants. Ainsi les couleurs, les tailes des titres et des légendes et le texte sur les graphiques on pu être modifiés ou ajoutés pour compléter et améliorer au mieux chacun des graphiques.
+ 
+Nous avons aussi fait en sorte d'améliorer le visuel de nos graphiques. Pour cela nous avons donc utilisé ggplot2, le package permettant de faire des graphiques plus élégants. Ainsi les couleurs, les tailles des titres et des légendes et le texte sur les graphiques on pu être modifiés ou ajoutés pour compléter et améliorer au mieux chacun des graphiques.
 \par
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Pour finir, nous avons mis en place un bouton accueil grâce au langage HTML. Ce bouton est placé en haut à droite de l'écran, dans l'en-tête et permet à tout moment de retourner sur la page d'accueil qui est la page d'information sur l'application. De plus, toujours grâce au langage HTML, nous avons ajouté un pied de page dans lequel on retrouve des information sur les développeurs de l'application ainsi que le git sur lequel on retrouve tout le travail réalisé.
+ 
+Pour finir, nous avons mis en place un bouton accueil grâce au langage HTML. Ce bouton est placé en haut à droite de l'écran, dans l'en-tête et permet à tout moment de retourner sur la page d'accueil qui est la page d'information sur l'application. De plus, toujours grâce au langage HTML, nous avons ajouté un pied de page dans lequel on retrouve des informations sur les développeurs de l'application ainsi que le git sur lequel on retrouve tout le travail réalisé.
 
 
 
@@ -389,11 +474,12 @@ Pour finir, nous avons mis en place un bouton accueil grâce au langage HTML. Ce
 
 \newpage
 # \Large{Conclusion et perspectives}
-
-Tout d'abord avant de conclure il est important de replacé le projet dans son contexte. Le but principal était d'aborder de nouveaux outils nous permettant d'evoluer et progresser sous l'environnement R ainsi que trouver des outils permettant l'accessibilité à ces mêmes outils. Dans ce sens ce projet nous a permis de découvrir le depot de package bioconductor qui fournis de nombreux package destinés à la bioinformatique et nous avons pu nous concentrer sur l'un de ces packages DESeq2. Nous avons grâce a ce package appris dans un premier temps à mieux comprendre l'analyse d'expression differentielle de données RNA-seq pour ensuite réalisé avec ce package notre propre analyse d'expression différentielle.
-Et c'est à partir de cette analyse que nous avons pu repondre à notre problématique de l'accessibilité, et nous avons donc réaliser une application simple suivant le workflow de notre analyse d'expression différentielle sour DESeq2, cette application permet à tous possesseur d'une table de comptage et de son design associé de réaliser un workflow de manière automatisé tous en ayant la possibilité de choisir ses propres paramètres. Toutes la partie création de cette application nous a permis de découvrir le package shiny et d'apprendre son utilisation, au dela du package en lui même cette démarche a permis l'apprentissage de base importante dans le language html ainsi que quelque point dans le language CSS.
-La finalité de ce projet est donc l'acquisition de nouvelles compétences dans l'analyse de données RNA-seq sous R ainsi que de nouvelles compétences dans différentes formes de mise en forme de résultats et leurs accessibilités à d'autres.
-Maintenant que nous nous sommes familiarisés à ces différents outils nous pourrions allé plus loin dans notre application et dans l'analyse de données RNA-seq en étudiant les autres outils permettant de completer notre analyse nottament en apprenant à utiliser les packages permettant de réaliser les etapes précedent l'optention de la table de comptage, ce qui permettra d'avoir une application prête à l'utilisation dés l'optention des fichier fastQ. 
+ 
+Tout d'abord avant de conclure il est important de replacer le projet dans son contexte. Le but principal était d'aborder de nouveaux outils nous permettant d'évoluer et progresser sous l'environnement R ainsi que de trouver des outils permettant l'accessibilité à ces mêmes outils. Dans ce sens, ce projet nous a permis de découvrir le dépôt de packages Bioconductor qui fournit de nombreux packages destinés à la bioinformatique. Nous avons donc pu nous concentrer sur le package \emph{DESeq2} pour une analyse d'expression différentielle. Nous avons grâce a ce package appris dans un premier temps à mieux comprendre l'analyse d'expression differentielle de données RNA-seq pour ensuite réaliser notre propre analyse d'expression différentielle à partir de données récupérées d'un article traitant la compréhension des mécanismes de traitement de l'asthme. \par
+Et c'est à partir de cette analyse que nous avons pu repondre à notre problématique de l'accessibilité des résultats. Nous avons donc réalisé une application interactive suivant le workflow de notre analyse d'expression différentielle sous DESeq2. Cette application permet à tout possesseur d'une table de comptage de reads et de son design associé de réaliser un workflow de manière automatisé tout en ayant la possibilité de choisir ses propres paramètres. 
+Toute la partie création de cette application nous a permis de découvrir le package \emph{Shiny} et d'apprendre son utilisation et son fonctionnement. Au-delà du package en lui même, cette démarche nous a permis l'apprentissage de bases importantes dans le langage html ainsi que quelques notions nécessaires pour la customisation dans le langage CSS.
+La finalité de ce projet est donc l'acquisition de nouvelles compétences dans l'analyse de données RNA-seq sous R ainsi que dans la mise en forme et l'accessibilité des résultats.\par
+Maintenant que nous nous sommes familiarisés à ces différents outils nous pourrions aller plus loin dans notre application et dans l'analyse de données RNA-seq en étudiant d'autres outils permettant de complèter notre analyse. Notamment en apprenant à utiliser les packages permettant de réaliser les étapes précédant l'obtention de la table de comptage, ce qui permettrait d'avoir une application prête à l'utilisation dès l'obtention des fichiers fastQ. 
 
 
 \newpage
@@ -415,10 +501,6 @@ Maintenant que nous nous sommes familiarisés à ces différents outils nous pou
 \href{https://github.com/nik01010/dashboardthemes}{\underline{https://github.com/nik01010/dashboardthemes}}
 \end{enumerate}
 \newpage
-
-# \Large{Résumé}
-
-# \Large{Abstract}
 
 
 \newpage
@@ -1466,7 +1548,7 @@ server <- function(input, output,session) {
   })
   ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
-    distance.matrix.heatmap(dds$TransformationMatrix)
+    sample.distance.matrix.heatmap(dds$TransformationMatrix)
   }
   output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
@@ -1617,9 +1699,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuDistanceMatrix <- reactive({
     if(input$RunMatrix){
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Distance matrix",tabName = "DistanceMatrix")
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix")
     }
   })
   
@@ -1627,9 +1709,9 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuHeatmap <- reactive({
     if(input$RunHeatmap){
-      menuSubItem("Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Heatmap",tabName = "Heatmap")
+      menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
     }
   })
 }
@@ -1657,19 +1739,19 @@ library(ggrepel)
 ### All of this function can be use after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
 ###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
-###      - depth()
-###      - count_distribution()
-###      - plotcount()
+###      - depth.plot()
+###      - count.distribution.plot()
+###      - gene.count.plot()
 ###   - DESeq2 : results object after run DESeq() on your DESeq2 dataset and results() on
 ###              DESeq() object 
-###      - maplot()
-###      - volcanoplot()
-###      - number_of_DE 
+###      - ma.plot()
+###      - volcano.plot()
+###      - number.DE.gene 
 ###   - DESeq2 : after run DESeq() on your DESeq2 datasetn and do vst() or rlogtransformation() on 
 ###              DESeq() object
-###      - pca()
-###      - heatmap()
-###      - clustering_heatmap()
+###      - pca.plot()
+###      - distance.matrix.heatmap()
+###      - gene.expression.heatmap
 ###      - dispersion()
 
 ### Depth plot ----
@@ -1867,11 +1949,11 @@ pca.plot <- function(dds.resTransf,intgroup){
   )
 }
 
-### Distance matrix ----
+### Sample Distance matrix ----
 ### distance.matrix.heatmap generate a heatmap of dist between different sample
 ### distance.matrix.heatmap need just one argument
 ###   - dds.resTransf which is an DESeq2 transformate object with vst() or rLogtransformation()
-distance.matrix.heatmap <- function(dds.resTransf){
+sample.distance.matrix.heatmap <- function(dds.resTransf){
   dists <- dist(t(assay(dds.resTransf)))
   mat <- as.matrix(dists)
   hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
@@ -1923,3 +2005,4 @@ gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,ann
 
 ```
 \normalsize
+
