@@ -30,7 +30,7 @@ header-includes:
     # Evite l'interligne de 1.5 dans le sommaire
     - \usepackage{tocloft}
     - \usepackage{float}
-    - \newcommand{\squeezeup}{\vspace{-7mm}}
+    - \newcommand{\squeezeup}{\vspace{-5mm}}
 
 
 ---
@@ -63,7 +63,8 @@ Dans un premier  temps un jeu de données d’une analyse RNA-seq de l'étude \e
 Une fois ce package compris et maîtrisé, nous nous sommes attaqués à l’accessibilité à ce type d’analyses avec DESeq2. Pour cela nous avons décidé de créer une application permettant d'exécuter simplement le workflow DESeq2. Afin de réaliser cette application nous avons utilisé le package Shiny qui permet de créer une application web interactive en associant des fonctionnalités de R, tout en y associant des fonctionnalités utilisant les langages HTML, javaScript ou encore CSS.
 
 \par
-\emph{mots clés : }
+\emph{mots clés : Expression différentielle, Rstudio, DESeq2, NGS,}
+ 
 
 
 \newpage
@@ -78,12 +79,12 @@ We have therefore focused on the analysis of data from RNA-seq experiments and m
 Once this package was understood and mastered, we tackled the accessibility of this type of analysis with DESeq2. To do this we decided to create an application to simply run the DESeq2 workflow. In order to realize this application we used the Shiny package which allows to create an interactive web application by associating R functionalities, while associating functionalities using HTML, javaScript or CSS.
 
 \par
-\emph{keywords : }
+\emph{keywords : Differential expression, Rstudio, DESeq2, NGS, }
 
 
 \newpage
 \begin{center}
-\includegraphics[width=10in]{attestationDeNonPlagiat.pdf}
+\includegraphics[width=10in]{attestationDeNonPlagiatGabin.pdf}
 \end{center}
 
 \newpage
@@ -222,7 +223,6 @@ ggplot(data=count_table_dds, aes(log(count_table_dds[,"SRR1039517"]+1))) +
   theme_bw()
 ```
 \normalsize
-\singlespacing
 \squeezeup
 \sffamily\footnotesize{Figure 2 : Visulisation de la distribution des comptages non normalisés pour l'échantillon SRR1039517.}
 \setstretch{1.5}
@@ -272,6 +272,7 @@ Pour la rédaction du rapport, nous utilisons RMarkdown qui nous permet de faire
 L'analyse de l'expression différentielle de données RNA-seq a donné lieu à plusieurs résultats que nous allons présenter dans cette partie. Premièrement, nous nous intéressons aux résultats qui concernent les gènes grâçe au volcano plot et au tableau résumant l'état des gènes au sein de l'expérience.
 Comme on peut le voir dans le tableau de la figure 3, les résultats de l'analyse d'expression différentielle ont mis en valeur 2181 gènes differentiellement exprimés au risque alpha de 0.05 (figure 3). On remarque aussi que 1242 gènes sont sur-exprimés et 939 sont sous-exprimés par rapport à la condition de réference "control". 
 
+\squeezeup
 \singlespacing
 ```{r message=FALSE, warning=FALSE, eval=TRUE, tidy=FALSE, echo=FALSE}
 # Number of genes wich is differential express at 5%
@@ -432,6 +433,7 @@ knitr::include_graphics(c("countdistImage.png","countGene.png"))
 \normalsize
 \setromanfont{Times New Roman}
 
+
 La dispersion est un paramètre décrivant la déviation de la variance par rapport à la moyenne. Le graphique de dispersion permet d'avoir une idée de la dispersion des données, on peut y distinguer une valeur intermédiaire (en bleu) entre la dispersion individuelle (en noir) et la dispersion ajustée (en rouge). Ces valeurs de dispersion sont utilisées pour le calcul des tests statistiques d'expression différentielle.
 Il reste alors 5 graphiques à voir dont 4 vus dans l'analyse de l'expression différentielle de données RNA-seq de la partie précédente. En effet, l'Analyse en Composante Principale et la matrice de distance sont aussi disponibles avec des options permettant de choisir le mode de transformation entre Log transformation et Variance-stabilizing transformation. Il est aussi possible de choisir le groupe pour l'ACP. De plus, la clustering heatmap d'expression de gènes est aussi visualisée avec le choix de la transformation (VTS ou LogT) ainsi que le choix de la condition pour la séparation des échantillons dans la heatmap et le nombre de gènes à afficher. Enfin, on retrouve le volcano plot. Comme pour la heatmap d'expression de gènes, le volcano plot offre la possibilité d'afficher les symboles des gènes sur le graphique pour une visualisation plus explicite (comme sur la figure 4). 
 
@@ -500,6 +502,7 @@ Maintenant que nous nous sommes familiarisés à ces différents outils nous pou
 \par
 \href{https://github.com/nik01010/dashboardthemes}{\underline{https://github.com/nik01010/dashboardthemes}}
 \end{enumerate}
+
 \newpage
 
 
@@ -704,6 +707,11 @@ library(shinydashboardPlus)
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
 
+
+
+
+
+
 ### Annotation pannel ----
 parameters_Annotation <- tagList(
   tags$style("#paramsAnno { display:none; }"),
@@ -717,8 +725,8 @@ parameters_Annotation <- tagList(
              fluidRow(
                column(width= 6,
                       box(title="Upload annotation file",width = 12, solidHeader = TRUE,collapsible = TRUE,
-                          column(width=5,selectInput("sep_Anno", "Separator:", c("Comma" = ",", "Tab" = "\t", 
-                  "Semi-colon" = ";"))),
+                          column(width=5,selectInput("sep_Anno", "Separator:", 
+                                                     c("Comma" = ",", Tab" = "\t", "Semi-colon" = ";"))),
                           fileInput("AnnotationFile", "Upload annotation file", 
                                     accept = c(".csv",".txt",".tsv")))),
                column(width= 6,     
@@ -732,10 +740,14 @@ parameters_Annotation <- tagList(
                         height = 160
                         )
                       )
-                    )
-                )
-            )
-          )
+                      )
+               )
+               )
+             )
+
+
+
+
 
 ### User Interface  ----
 ### UI is a shinydashboard, we use library shinydashboard to set up a dashboard UI
@@ -743,18 +755,24 @@ parameters_Annotation <- tagList(
 ###   - a Header
 ###   - a sidebar
 ###   - a body 
-ui <- tagList(
+ui <- 
+  
+  tagList(
+  
+  
   ### Parameters of the dashboard ----
+  
   div(
     id = "app",
     dashboardPage(
+      
       ### Customize the header ----
       ### header is composate of :
       ###   - a title 
       ###   - a home bouton which on click return user on introduction page
       dashboardHeader(title = "RNA-seq DE analysis", 
                       uiOutput("themes"),
-                     
+
                       ### Home button ----
                       tags$li(a(onclick = "openTab('Intro')",
                                 href = NULL,
@@ -777,25 +795,30 @@ ui <- tagList(
       ### in this sidebar menu we have menu item which is associate with a tab of body dashboard 
       dashboardSidebar(
         sidebarMenu(id="mysidebar",
-            menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
-            menuItem(text = "1 Upload data", tabName = "upload", icon = icon("arrow-circle-up"),
-                     startExpanded = TRUE,
-                        # menuItem which are set up in the server function
-                      menuItemOutput("CountTable"),
-                      menuItemOutput("MetadataTable"),
-                      menuItemOutput("AnnotationTable")),
-            menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle")),
-            menuItemOutput("menuResults"),
-            tags$hr(),# a simple line 
-            # this menu generate a switch button to set theme of dashboard
-            # two options are available a light or dark mode
-            menuItem(icon = NULL,
-            materialSwitch(inputId = "theme", label = "Theme", status = "default", value= TRUE)
-            ),tags$hr()
+                    menuItem(text = "Informations", tabName = "Intro", icon = icon("info-circle")),
+                    menuItem(text = "1 Upload data", tabName = "upload", 
+                             icon = icon("arrow-circle-up"),startExpanded = TRUE,
+                             # menuItem which are set up in the server function
+                             menuItemOutput("CountTable"),
+                             menuItemOutput("MetadataTable"),
+                             menuItemOutput("AnnotationTable")),
+                    menuItemOutput("menuDESeq2"),
+                    
+                    menuItemOutput("menuResults"),
+
+                    tags$hr(),# a simple line 
+                    # this menu generate a switch button to set theme of dashboard
+                    # two options are available a light or dark mode
+                    menuItem(icon = NULL,
+                             materialSwitch(inputId = "theme", label = "Theme", 
+                                            status = "default", value= TRUE)
+                    ),tags$hr()
         )
       ),
       ### Dashboard body ----
       ### Organization of the differents pages associate with their menuItem
+      
+      
       dashboardBody(
         useShinyjs(),
         fluidRow(
@@ -803,7 +826,8 @@ ui <- tagList(
             ### Introduction ----
             ### introduction page associate with menuItem "Informations"
             ### In this page we find all information about application
-            ### in particular how it works and different tool used to generate DE analysis
+       
+                 ### in particular how it works and different tool used to generate DE analysis
             ### to generate layout html tag provide by shiny library are used 
             ### withSpinner() of shinycssloaders library is use to generate waiting screen during load of img
             tabItem(tabName = "Intro",
@@ -812,43 +836,54 @@ ui <- tagList(
                       p("This is an R Shiny web interactive application developed as part of a ", 
                         strong("course project."), "The purpose of this application is to perform a ",
                         strong("differential expression analysis from a counts table"), 
-                        "in order to help 
-                        researchers getting interpretable results.",
+                        "in order to help researchers getting interpretable results.",
                         align = "justify"),
                       p("This application uses the package ", 
                         a("DESeq2", href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html"), 
                         "from Bioconductor. It is a package to study differential gene expression analysis 
-                        based on the negative binomial distribution. It allows a quick visualization of results 
-                        in order to analyze the counts table data. The results will be given in different forms 
-                        like graphics, heatmaps, MAplot or even Volcano plot.",
+                        based on the negative
+                        binomial distribution. It allows a quick visualization of results 
+                        in order to analyze the counts table
+                        data. The results will be given in different forms like graphics, heatmaps, 
+                        MAplot or even Volcano
+                        plot.",
                         align = "justify"),
                       tags$hr(),
                       h3("1. Upload data", style="padding-left: 1em"),
                       p("The input data files accepted for this App are 3 files in '.txt', '.csv' or '.tsv' 
-                      format separated by comma, tabulation or semi-colon.
-                        This App necessarily requires a 'Count Data Table' and a 'Metadata Table'. An optional 
-                      'Annotation File' can be added", style="padding-left: 2em", align = "justify"),
-                      h4("1.1 Count Data Table", style="padding-left: 3em"),
-                      p("The Count Data Table must contain the count for each sample of the experiment for each 
-                        gene and the first column must be gene ID or gene name as below :",
-                        style="padding-left: 5em", align = "justify"),
+                        format 
+                      separated by comma, tabulation or semi-colon.
+                        This App necessarily requires a 'Count Data Table' and a 'Metadata Table'. 
+                      An optional 'Annotation File' can be added", 
+                      style="padding-left: 2em", align = "justify"),
+                      h4("1.1 Count Data Table", 
+                         style="padding-left: 3em"),
+                      p("The Count Data Table must contain the count for each sample of the experiment 
+                      for each gene 
+                        and the first column must be gene ID or gene name as below :",style="padding-left: 5em", 
+                        align = "justify"),
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("countExample"))),
                       br(),
                       h4("1.2 Metadata Table", style="padding-left: 3em"),
                       p("The Metadata table must contain the information of the experiment with at least 
-                      2 columns. The first one corresponds to the samples in the same order as the columns of 
-                      the Count Table. 
-                        The second one is a condition column. You can add as many columns as you have factors 
-                      in your experiment.",style="padding-left: 5em", align = "justify"),
-                      column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("metadataExample"))),
+                        2 columns. 
+                      The first one corresponds to the samples in the same order as 
+                      the columns of the Count Table. 
+                        The second one is a condition column. You can add as many columns 
+                      as you have factors in your experiment.",
+                      style="padding-left: 5em", align = "justify"),
+                      column( 12, style="padding-left: 5em" ,
+                              withSpinner(tableOutput("metadataExample"))),
                       h4("1.2  Annotation File", style="padding-left: 3em"),
-                      p("The Annotation File contains informations about the genes. If you have one, it must 
-                        contain a column named 'symbol' in which we can find the symbol of each gene.",
+                      p("The Annotation File contains informations about the genes. 
+                        If you have one, it must contain a column named 'symbol' in which we can find 
+                      the symbol of each gene.",
                         style="padding-left: 5em", align = "justify"),
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoExample"))),
                       h3("2. Results", style="padding-left: 1em"),
                       p("The results will be display after running DESeq2. You will obtain 9 differents 
-                        results :", style="padding-left: 2em", align = "justify"),
+                      results :", 
+                        style="padding-left: 2em", align = "justify"),
                       p("- Count distribution",
                         br(), "- Count by gene",
                         br(), "- Depth of sample",
@@ -856,13 +891,17 @@ ui <- tagList(
                         br(), "- PCA",
                         br(), "- MA plot",
                         br(), "- Volcano plot",
-                        br(), "- Distance matrix",
-                        br(), "- Heatmap",style="padding-left: 5em", align = "justify"),
+                        br(), "- Sample distance matrix",
+                        br(), "- Gene expression Heatmap",style="padding-left: 5em", 
+                        align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  
                         style="padding-left: 2em", align = "justify")
+                      
                       )
                     ),
             ### Upload count table ----
+
+
             ### upload page of count table of RNA-seq experience
             ### this page is associate with menuItemOuput("")
             ### On this page we find :
@@ -874,9 +913,11 @@ ui <- tagList(
             ###   - a dataTableOutput of count table input in fileInput
             tabItem(tabName = "CountData",
                     column(width = 6,
-                           box(title="Upload count table",width = 12, solidHeader = TRUE,collapsible = TRUE,
+                           box(title="Upload count table",width = 12, solidHeader = TRUE,
+                               collapsible = TRUE,
                                column(width=5,
-                                      selectInput("separator_Count", "Separator:", c("Comma" = ",",                                                                                     "Tab" = "\t", "Semi-colon" = ";"))),
+                                      selectInput("separator_Count", "Separator:", 
+                                                  c("Comma" = ",", "Tab" = "\t", "Semi-colon" = ";"))),
                                fileInput("CountDataTable", "Upload count table", 
                                          accept = c(".csv",".txt",".tsv"))
                            )),
@@ -902,8 +943,9 @@ ui <- tagList(
             ###   - a box which countain :
             ###       - information about file accepted in fileInput
             ###   - a box which countain :
-            ###       - a text input to chose design formula to set for DESeq2 dataset object
+            ###       - a select input to chose design formula to set for DESeq2 dataset object
             ###   - a dataTableOutput of metadata input in fileInput
+            
                   tabItem(tabName = "Metadata",
                     column(width = 6,
                            box(title="Upload metadata table",width = 12, solidHeader = TRUE,collapsible = TRUE,
@@ -925,10 +967,11 @@ ui <- tagList(
                              )),
                     column(width = 12,
                            box(width = 12,
-                               textInput("DesignDESeq2","Choose your design without linear combination", 
-                                         placeholder = "Conditions"))),
+                               selectInput("DesignDESeq2","Choose your design without linear combination", 
+                                           c("")))),
                     dataTableOutput("MetaTable")
                     ),
+
             ### Upload annotation file ----
             ### upload page of annotation file associate with the RNA-seq experience
             ### this page is associate with menuItemOuput("")
@@ -947,7 +990,8 @@ ui <- tagList(
               tabItem(tabName = "Annotation",
                     fluidPage(
                       box(width = 12,
-                          checkboxInput("CheckAnnotation","Do you have an annotation file ?",value=FALSE)),
+                          checkboxInput("CheckAnnotation","Do you have an annotation file ?",
+                                        value=FALSE)),
                       fluidRow(
                         parameters_Annotation),
                       dataTableOutput("AnnoTable")
@@ -963,87 +1007,97 @@ ui <- tagList(
                       box(width = 12, solidHeader = F,
                           HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
                                <br><p> Check if your design chosen previously is correct.
-                               <br>If it is not, the application will crash.</p>
-                               <br><h7>This will take a few seconds.</h7></center>")),
+                                  <br>
+                               <br><h7>The process will take a few seconds.</h7></center>")),
                       box(width = 12,
 
                           actionButton("RunDESeq2","Run DESeq2 Workflow ",icon = icon("fas fa-user-astronaut"), 
                                        class="btn btn-danger btn-lg btn-block ")),
                       uiOutput("SuccessMessage")
+                      
                           )
                     ),
+            
             ### Count distribution page ----
             ### On this page we find count distribution plot and it parameters after running DESeq
             ### On this page we find :
             ###     - a box() which countain :
-            ###         - selectInput of sample which set sample on 
-            ###           count.distribution.plot function
+            ###         - selectInput of sample which set sample on count.distribution.plot function
             ###         - sliderInput of break width which set break.width on count.distribution.plot function
             ###         - sliderInput range of x.axis which set x.min and x.max on count.distribution.plot 
-            ###           function
+                        function
             ###     - a box() which countain :
             ###         - return of count.distribution.plot 
             tabItem(tabName = "Count_Distribution",
                     box(title="Count distribution",solidHeader = T, status = "primary",width=12,
                         collapsible = TRUE,
                         column(width = 6,
-                               selectInput("sample","Which sample do you want to see ?", choices = c())
+                               selectInput("sample","Which sample do you want to see ?", 
+                                           choices = c())
                         ),
                         column(width = 6,
-                               sliderInput("breaksDistribution","Break size",min=0,max=2,value=1.0,step = 0.25)
+                               sliderInput("breaksDistribution","Break size",min=0,max=2,
+                                           value=1.0,step = 0.25)
                         ),
                         column(width = 6,
                                sliderInput("axis","Axis x",min=0,max=20,value=c(0,14))
                         ),
-                        column(width = 6, checkboxInput("normalizeDistribution","Do you want to see distribution 
-                                                        after normalisation ?",value=FALSE)
+                        column(width = 6, 
+                               checkboxInput("normalizeDistribution",
+                        "Do you want to see distribution after normalisation ?",
+                                             value=FALSE)
                         )
                     ),
                     box(width=12,status = "primary",withSpinner(plotOutput("CountDistributionPlot"))),
                     column(width= 4,
                            downloadButton("downloadDistribution",'Download plot',class = "btn-warning")
                     )
+                    
             ),
+            
             ### Count by gene page ----
             ### On this page we find count by gene plot and it parameters after running DESeq
             ### On this page we find :
             ###     - a box() which countain :
             ###         - selectizeInput of gene which set sample on count.gene.plot function
-            ###         - a checkBox normalization if checkbox is check ON dds.count use is normalize, else 
-            ###           dds.count use is not normalize
+            ###         - a checkBox normalization if checkbox is check ON dds.count use is normalize, 
+                        else dds.count use is not normalize
             ###     - a box() which countain :
             ###         - return of count.gene.plot 
             ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "Count_Gene",
                     box(title="Count by gene",solidHeader = T, status = "primary",width=12,collapsible = TRUE,
                         column(width = 6,
+                               
                                selectizeInput("gene","Which gene do you want to see ?", choices = NULL)
+                               
                         ),
-                        column(width = 6, checkboxInput("normalizeCountGene","Do you want to see distribution 
-                                                        after normalisation ?",value=FALSE)
+                        column(width = 6, checkboxInput("normalizeCountGene",
+                        "Do you want to see distribution after normalisation ?",value=FALSE)
                         )
                     ),
                     box(width=12,status = "primary",withSpinner(plotOutput("CountGenePlot"))),
                     column(width= 4,
                            downloadButton("downloadCountgene",'Download plot',class = "btn-warning")
                     )
+                    
             ),
             ### Depth plot ----
             ### On this page we find depth sample plot and it parameters after running DESeq
             ### On this page we find :
             ###     - a box() which countain :
             ###         - sliderInput of break width which set break.width on depth.plot function
-            ###         - a checkBox normalization if checkbox is check ON dds.count use is normalize, else 
-            ###           dds.count use is not normalize
+            ###         - a checkBox normalization if checkbox is check ON dds.count use is normalize, 
+                        else dds.count use is not normalize
             ###     - a box() which countain :
             ###         - return of depth.plot 
             ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "Depth",
                     box(title="Depth of Sample",width = 12,solidHeader = T, status = "primary",
-                        collapsible = TRUE,
+                    collapsible = TRUE,
                         sliderInput("breaksDepth","Bar size",min=0,max=4,value=0.75,step = 0.25),
                         checkboxInput("normalizeDepth","Do you want to see depth after normalisation ?",
-                                      value=FALSE)
+                    value=FALSE)
                     ),
                     box(width=12,status = "primary",withSpinner(plotOutput("depth",height = 500))),
                     column(width= 4,
@@ -1064,13 +1118,13 @@ ui <- tagList(
                     box(width = 12,
                         title = "PCA", solidHeader = T, status = "primary",collapsible = TRUE,
                         selectInput("TransformationPCA",label= "Choose your transformation",
-                                    choices = c("Variance-stabilizing transformation"="vst",
-                                                "Log transformation"="rld")),
+                        choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         selectInput("conditionpca","Choose your intgroup for PCA ?", choices = c()),
                         actionButton("runPCA","Run PCA")
                     ),
-                    box(solidHeader = F, status = "primary",width = 12,
-                        withSpinner(plotOutput("PCAplot",height = 650))),
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
+                        withSpinner(plotOutput("PCAplot",height = 650))
+                    ),
                     column(width= 4,
                            downloadButton("downloadPCA",'Download plot',class = "btn-warning")
                     )
@@ -1115,7 +1169,8 @@ ui <- tagList(
             ###     - a box() which countain :
             ###         - sliderInput of P.value which set p.val of volcano.plot function
             ###         - a checkbox Yes/No if there an annotation
-            ###           - if check Yes uiOutput("sliderFoldVolcano") and uiOutput("SliderLogVolcanon") appear
+            ###              - if check Yes uiOutput("sliderFoldVolcano") and 
+                            uiOutput("SliderLogVolcanon") appear
             ###     - a box() which countain :
             ###         - return of volcano.plot 
             ###     - a downloadButton to download  the generate plot
@@ -1125,6 +1180,7 @@ ui <- tagList(
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotationVolcano","Do you have an annotation file ?",value=FALSE),
                           sliderInput("pvalueVolcano", "Choose your pvalue", min=0, max=1, value=0.05),
+                          uiOutput("AnnoVolcano"),
                           uiOutput("SliderFoldVolcano"),
                           uiOutput("SliderLogVolcano")
                       ),
@@ -1133,23 +1189,25 @@ ui <- tagList(
                       column(width= 4,
                              downloadButton("downloadVolcano",'Download plot',class = "btn-warning")))
             ),
-            ### distance matrix heat map ----
+            
+            
+            ### sample distance matrix heat map ----
             ### On this page we find distance matrix heat map and it parameters after running DESeq
             ### We find :
             ###     - a box() which countain :
-            ###         - a selectInput to chose transformation for distance.matrix.heatmap 
+            ###         - a selectInput to chose transformation for distance.matrix.heatmap  
             ###         - a actionButton to run distance.matrix.heatmap function
             ###     - a box() which countain :
             ###         - return of distance.matrix.heatmap
             ###     - a downloadButton to download  the generate plot
             tabItem(tabName = "DistanceMatrix",
+                    
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
                         selectInput("TransformationMatrix",label= "Choose your transformation",
-                                    choices = c("Variance-stabilizing transformation"="vst",
-                                                "Log transformation"="rld")),
+                        choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         actionButton("RunMatrix","Run Heat map")),
-                    box(solidHeader = F, status = "primary",width = 12,
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("DistanceMatrixMap",height = 650))
                     ),
                     column(width= 4,
@@ -1168,54 +1226,65 @@ ui <- tagList(
             ###     - a box() which countain :
             ###         - return of distance.matrix.heatmap
             ###     - a downloadButton to download  the generate plot
+            
             tabItem(tabName = "Heatmap",
                     waiter::use_waiter(),
                     box(width = 12,
                         title = "Heat map", solidHeader = T, status = "primary",collapsible = TRUE,
-                        column(width=6, selectInput("TransformationHeatmap",label= "Choose your transformation",
-                                                    choices = c("Variance-stabilizing transformation"="vst",
-                                                                "Log transformation"="rld")),
+                        column(width=6, selectInput("TransformationHeatmap",
+                        label= "Choose your transformation",
+                        choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                                checkboxInput("annotationHeatmap","Do you have a Annotation file ?",value=FALSE)
                         ),
                         column(width=6,
                                selectInput("conditionHeatmap","Choose your condition for Heat map ?", 
-                                           choices = c()),
+                                choices = c()),
                                actionButton("RunHeatmap","Run Heat map")),
+                        
                         column(width=12,
                                sliderInput("nbGenes",label="Choose the number of genes you want to display", 
-                                           min = 0, 
-                                           max = 200, value = c(0, 60)))),
-                    box(solidHeader = F, status = "primary",width = 12,
+                                min = 0, max = 200, value = c(0, 60)))),
+                    uiOutput("Annoheatmap"),
+                    box(solidHeader = F, status = "primary",width = 12, align = "center",
                         withSpinner(plotOutput("Heatmap", height = 1000, width = 1000))
                     ),
                     column(width= 4,
                            downloadButton("downloadHeatmap",'Download plot',class = "btn-warning")
-                    ))
+                    )
+            )
+                           )
+            )
+            )
           )
-        )
-      )
-    )
-  ),
+                    ),
   ### footer settings ----
   tags$footer(
     wellPanel(
       HTML('
-           <p align="center" width="4">Developed by
-<a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a> and 
-<a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
+           <p align="center" width="4">Developed by 
+      <a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a>
+      and 
+      <a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
            <p align="center" width="4">First year of 
-<a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Master<span>&#39;</span>s degree</a> 
-in Rennes. </p>
-           <p align="center" width="4"> 
-<a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>'
+            <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Master<span>&#39;</span>s 
+            degree</a> 
+            in Rennes. </p>
+           <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" 
+            target="_blank">University of Rennes 1.</a> </p>'
       ), 
-      style = "position:relative;
-               width:100%;
-               background-color: #2d3741;"))
-)
+      style = 
+        "
+      position:relative;
+      width:100%;
+      background-color: rgb(70,80,90);
+      color: rgb(205,205,205);"
+      ))
+  )
+
 ```
 \normalsize
 
+\newpage
 
 \newpage
 ## \large{2.2 Serveur}
@@ -1226,8 +1295,10 @@ in Rennes. </p>
 server <- function(input, output,session) {
   ### Create dds object with no values
   dds <- reactiveValues()
+  
   ### Increase the authorized size for upload ----
   options(shiny.maxRequestSize=30*1024^2)
+  
   
   ### Display a count table example in the introduction 
   output$countExample <- renderTable({   
@@ -1252,11 +1323,14 @@ server <- function(input, output,session) {
   count_table <- reactive({
     req(input$CountDataTable)
     countTable <- read.csv(input$CountDataTable$datapath, sep = input$separator_Count)
+    
   })
   
   ### Display the count file ----
-  output$CountReadTable <- DT::renderDataTable(count_table(), options = list(pageLength = 20, 
-                           autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
+  output$CountReadTable <- DT::renderDataTable(count_table(), 
+                                               options = list(pageLength = 20, autoWidth = FALSE,
+                                                              scrollX = TRUE, scrollY = '300px'))
+  
   
   ### Import the metadata file ---- 
   ### csv, tsv or txt files separated by comma, tab or semi-colon
@@ -1265,14 +1339,41 @@ server <- function(input, output,session) {
     meta_table <- read.csv(input$MetadataFile$datapath, sep = input$separator_Metadata, row.names=NULL)
   })
   ### Display the metadata file ----
-  output$MetaTable <- DT::renderDataTable(metadata(),options = list(pageLength = 20, autoWidth = FALSE,
-                                                                    scrollX = TRUE, scrollY = '300px'))
+  output$MetaTable <- DT::renderDataTable(metadata(),
+                                          options = list(pageLength = 20, autoWidth = FALSE,
+                                                         scrollX = TRUE, scrollY = '300px'))
   
   ### Design condition for DESeq2 ----
   ### Corresponds to the columns of the metadata table
-  observeEvent(input$MetadataFile,{
-    updateTextInput(session,"DesignDESeq2", value = paste("~ ",paste(colnames(metadata()), collapse=" + ")))
+  
+  ### Verify for each column of metadata() if the values of each row are differents or not
+  allValuesDifferent <- reactive({
+    apply(metadata(), 2, function(a) length(unique(a))==nrow(metadata()))
   })
+  
+  ### Select the FALSE of "allValuesDifferent" so the columns with equal values
+  notAllValuesDifferent <- reactive({
+    metadata()[allValuesDifferent() == FALSE]
+  })
+  
+  ### Verify for each column notAllValuesDifferent if the values of each row are equals
+  uniqueValue <- reactive({
+    apply(notAllValuesDifferent(), 2, function(a) length(unique(a))==1)
+  })
+  
+  ### Select the false of "uniqueValue" so tje columns without unique values 
+  notUniqueValue <- reactive({
+    notAllValuesDifferent()[uniqueValue() == FALSE]
+  })
+  
+  ### Update selectinput with columns of notUniqueValue() for the DESeq2 design
+  observeEvent(input$MetadataFile,{
+    updateSelectInput(session,"DesignDESeq2", 
+                      choices = paste("~ ",paste(colnames(notUniqueValue()))))
+  })
+  
+
+  
   
   ### Check if the user has annotation file to upload 
   observeEvent(input$CheckAnnotation, {
@@ -1289,19 +1390,34 @@ server <- function(input, output,session) {
     req(input$AnnotationFile)
     read.csv(input$AnnotationFile$datapath, sep = input$sep_Anno)
   })
-  output$AnnoTable <- DT::renderDataTable(anno(),options = list(pageLength = 20, autoWidth = FALSE,
-                                                                scrollX = TRUE, scrollY = '300px'))
+  output$AnnoTable <- DT::renderDataTable(anno(),
+                                          options = list(pageLength = 20, autoWidth = FALSE,
+                                                         scrollX = TRUE, scrollY = '300px'))
   
+  ### Display DESeq2 page after count table uploaded and a message to upload metadata file and choose design
+  observeEvent(input$CountDataTable,{
+    output$menuDESeq2 <- renderMenu({
+      if(input$DesignDESeq2 == ""){
+        showNotification("Upload a metadata file and choose a design.")
+      }
+      menuItem(text = "2 Run DESeq2", tabName = "deseq2", icon = icon("play-circle"))
+    })
+  })
+
   ### Running DESeq2 clicking on the button  ---- 
   observeEvent(input$RunDESeq2,{
+    if(input$DesignDESeq2 == ""){
+      showNotification("Upload a metadata file and choose a design.")
+    }
+    else{
     req(input$RunDESeq2)
     ### Waiting screen 
     waiter <- waiter::Waiter$new(html = spin_ball())
     waiter$show()
     
     ### DESeq2 process 
-    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(input$DesignDESeq2),
-                                      tidy=TRUE)
+    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),
+                                      design=as.formula(input$DesignDESeq2), tidy=TRUE)
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
     
@@ -1310,6 +1426,7 @@ server <- function(input, output,session) {
       box(width = 12, solidHeader = F,
           HTML("<center><h3>DESeq2 workflow successfully completed</h3></center>"))
     })
+    
     
     ### Samples choices for count distribution
     updateSelectInput(session,"sample",choices = metadata()[,1])
@@ -1323,6 +1440,7 @@ server <- function(input, output,session) {
     ### Factor choices heatmap
     updateSelectInput(session,"conditionHeatmap",choices = colnames(metadata()))
     
+    
     ### Counts data frame normalized or not
     dds$counts_dds <-as.data.frame(counts(dds$DESeq2))
     dds$counts_dds_n <-as.data.frame(counts(dds$DESeq2,normalized=TRUE))
@@ -1330,9 +1448,37 @@ server <- function(input, output,session) {
     dds$counts_turnup <- as.data.frame(t(dds$counts_dds))
     dds$counts_turnup_n <- as.data.frame(t(dds$counts_dds_n))
     
+    
+    ### Display "Results" menu when DESeq2 is successfully run
+    ### Put a check icon for the menu where the plots are already display
+    ### The others (PCA and both heatmap) needs to be run
+    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),
+                                                 startExpanded = TRUE,
+                                                 menuSubItem("Count distribution",
+                                                             tabName = "Count_Distribution",
+                                                             icon = icon("far fa-check-square")),
+                                                 menuSubItem("Count by gene", tabName = "Count_Gene",
+                                                             icon = icon("far fa-check-square")),
+                                                 menuSubItem("Depth of sample",tabName = "Depth",
+                                                             icon = icon("far fa-check-square")),
+                                                 menuSubItem("Dispersion",tabName = "Dispersion",
+                                                             icon = icon("far fa-check-square")),
+                                                 menuPCA(),
+                                                 menuSubItem("MA Plot",tabName = "MAplot",
+                                                             icon = icon("far fa-check-square")),
+                                                 menuSubItem("Volcano Plot",tabName = "Volcanoplot",
+                                                             icon = icon("far fa-check-square")),
+                                                 menuDistanceMatrix(),
+                                                 menuHeatmap()
+    )  
+    })
+    
     ### End of the waiting screen
     on.exit(waiter$hide())
-  })
+  }})
+  
+
+
   
   ### Count distribution ----
   ### Normalize or not the data
@@ -1346,7 +1492,7 @@ server <- function(input, output,session) {
   })
 
   ### Display count distribution plot using count.distribution.plot() function (see function_dds.R)
-  distribution <- function(){count.distribution.plot(normcount(), sample=input$sample,x.min=input$axis[1],
+  distribution <- function(){count.distribution.plot(normcount(), sample = input$sample,x.min=input$axis[1],
                                                      x.max=input$axis[2],
                                                      break.width = input$breaksDistribution)}
 
@@ -1365,6 +1511,7 @@ server <- function(input, output,session) {
     }
   )
   
+  
   ### Count by gene ----
   ### Normalize or not the data
   normCountGene <- eventReactive(input$normalizeCountGene,{
@@ -1377,7 +1524,8 @@ server <- function(input, output,session) {
   })
   ### Display Count by gene plot using gene.count.plot() function (see function_dds.R)
   countg <- function() {
-    gene.count.plot(normCountGene(), input$gene)}
+    gene.count.plot(normCountGene(), input$gene)
+  }
   output$CountGenePlot <- renderPlot({
     validate(
       need(dds$DESeq2, "Please run DESeq2")
@@ -1418,6 +1566,7 @@ server <- function(input, output,session) {
       ggsave(file, plot = depthFunction(), device = "png")
     }
   )
+  
   
   ### Dispersion ----
   ### Display dispersion plot using dispersion() function from function_dds.R
@@ -1474,6 +1623,8 @@ server <- function(input, output,session) {
     }
   )
   
+  
+
   ### MA plot ----
   ### Display MA plot using ma.plot() function from function_dds.R
   MAplotFunction <- function(){
@@ -1501,24 +1652,36 @@ server <- function(input, output,session) {
   ### Display parameters for volcano 
   ### If there is an annotation file, display sliders to choose parameters 
   observeEvent(input$annotationVolcano,{
-    if(input$annotationVolcano== TRUE){
+    if(input$CheckAnnotation== TRUE){
+      if(input$annotationVolcano==TRUE){
       output$SliderFoldVolcano <- renderUI({ 
         sliderInput("sliderfold", "Choose your fold", min=-20, max=20, value=c(-6,6))
       })
       output$SliderLogVolcano <- renderUI({ 
         sliderInput("sliderlog", "Choose your log10", min=0, max=300, value=30)
       })
-    }else{
+    }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationVolcano==TRUE){
       output$SliderFoldVolcano <- renderUI({})
       output$SliderLogVolcano <- renderUI({})
-    }
+      output$AnnoVolcano <- renderUI({
+        HTML("<center><h3> You don't have annotation file. </h3></center>")
+      })
+      }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationVolcano==FALSE){
+        output$SliderFoldVolcano <- renderUI({})
+        output$SliderLogVolcano <- renderUI({})
+        output$AnnoVolcano <- renderUI({})
+      }}
   })
   
   ### Display volcano plot using volcano.plot() function from function_dds.R
   VolcanoplotFunction <- function(){
-    volcano.plot(dds$results,is.anno = input$annotationVolcano, anno = anno() ,p.val=input$pvalueVolcano,
-                 minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,
-                 count.tb=colnames(count_table()))
+    volcano.plot(dds$results,is.anno = input$annotationVolcano, anno = anno() ,
+                 p.val=input$pvalueVolcano,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], 
+                 minlogP=input$sliderlog,count.tb=colnames(count_table()))
   }
   output$volcanoPlot <- renderPlot({
     validate(
@@ -1535,9 +1698,7 @@ server <- function(input, output,session) {
   )
   
 
-  
-  
-  ### Distance matrix heatmap ----
+  ### Sample distance matrix heatmap ----
   ### Chose vst or rlog transformation
   observeEvent(input$RunMatrix,{
     if(input$TransformationMatrix=="vst"){
@@ -1577,6 +1738,18 @@ server <- function(input, output,session) {
     }
   })
   
+  observeEvent(input$annotationHeatmap,{
+    if(input$annotationHeatmap==TRUE){
+      if(input$CheckAnnotation==FALSE){
+        output$Annoheatmap <- renderUI(
+          box(width = 12, solidHeader = F,
+            HTML("<center><h3> You don't have annotation file. </h3></center>")))
+      }}
+    else{
+      output$Annoheatmap <- renderUI({})
+    }
+  })
+  
   ### Display heatmap using gene.expression.heatmap() function from function_dds.R
   heatmapCluster <- function() {
     input$RunHeatmap
@@ -1606,15 +1779,17 @@ server <- function(input, output,session) {
   observeEvent(input$theme,{
     if(input$theme==TRUE){
       output$themes <- renderUI({
-        shinyDashboardThemes("grey_dark")
+        theme_grey_dark2
       })
     }else{
       output$themes <-renderUI({
-        shinyDashboardThemes("grey_light")
+        theme_grey_light2
       })
     }
   })
   
+  
+
   
   ### "Input count table" menu in the sidebar
   ### Change the icon with a check icon when the counts file is imported
@@ -1623,7 +1798,8 @@ server <- function(input, output,session) {
       menuSubItem(text = "1.1 Input count table", tabName = "CountData")
       
     }else{
-      menuSubItem(text = "1.1 Input count table", tabName = "CountData", icon = icon("far fa-check-square"))
+      menuSubItem(text = "1.1 Input count table", tabName = "CountData", 
+                  icon = icon("far fa-check-square"))
     }
   })
   output$CountTable <- renderMenu({
@@ -1637,7 +1813,8 @@ server <- function(input, output,session) {
       menuSubItem(text = "1.2 Input metadata table", tabName = "Metadata")
       
     }else{
-      menuSubItem(text = "1.2 Input metadata table", tabName = "Metadata", icon = icon("far fa-check-square"))
+      menuSubItem(text = "1.2 Input metadata table", tabName = "Metadata", 
+                  icon = icon("far fa-check-square"))
     }
   })
   output$MetadataTable <- renderMenu({
@@ -1659,30 +1836,7 @@ server <- function(input, output,session) {
     menuAnnotation()
   })
   
-  ### Display "Results" menu when DESeq2 is successfully run
-  ### Put a check icon for the menu where the plots are already display
-  ### The others (PCA and both heatmap) needs to be run
-  observeEvent(input$RunDESeq2,{
-    output$menuResults <- renderMenu({  menuItem(text = "3 Results", tabName = "deseq2", icon = icon("poll"),
-                                                 startExpanded = TRUE,
-                                      menuSubItem("Count distribution",tabName = "Count_Distribution",
-                                                  icon = icon("far fa-check-square")),
-                                      menuSubItem("Count by gene", tabName = "Count_Gene",
-                                                  icon = icon("far fa-check-square")),
-                                      menuSubItem("Depth of sample",tabName = "Depth",
-                                                  icon = icon("far fa-check-square")),
-                                      menuSubItem("Dispersion",tabName = "Dispersion",
-                                                  icon = icon("far fa-check-square")),
-                                      menuPCA(),
-                                      menuSubItem("MA Plot",tabName = "MAplot",
-                                                  icon = icon("far fa-check-square")),
-                                      menuSubItem("Volcano Plot",tabName = "Volcanoplot",
-                                                  icon = icon("far fa-check-square")),
-                                      menuDistanceMatrix(),
-                                      menuHeatmap()
-    )  
-    })
-  })
+
   
   ### Menu for PCA menu in sidebar
   ### Change the icon with check icon when pca is run successfully
@@ -1694,12 +1848,12 @@ server <- function(input, output,session) {
     }
   })
   
-  
   ### Menu for Distance matrix in the sidebar
   ### Change the icon with check icon when heatmap is run successfully
   menuDistanceMatrix <- reactive({
     if(input$RunMatrix){
-      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix",icon = icon("far fa-check-square"))
+      menuSubItem("Sample distance matrix",tabName = "DistanceMatrix",
+                  icon = icon("far fa-check-square"))
     }else{
       menuSubItem("Sample distance matrix",tabName = "DistanceMatrix")
     }
@@ -1709,11 +1863,13 @@ server <- function(input, output,session) {
   ### Change the icon with check icon when heatmap is run successfully
   menuHeatmap <- reactive({
     if(input$RunHeatmap){
-      menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap", 
+                  icon = icon("far fa-check-square"))
     }else{
       menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
     }
   })
+  
 }
 
 ```
@@ -1733,25 +1889,23 @@ library(shiny)
 library(tidyverse)
 library(NMF)
 library(ggrepel)
-
-
+library(factoextra)
 ### Preamble ----
 ### All of this function can be use after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
 ###   - DESeq2 : count table after run counts() on yout DESeq2 dataset
-###      - depth.plot()
-###      - count.distribution.plot()
-###      - gene.count.plot()
-###   - DESeq2 : results object after run DESeq() on your DESeq2 dataset and results() on
-###              DESeq() object 
-###      - ma.plot()
-###      - volcano.plot()
-###      - number.DE.gene 
-###   - DESeq2 : after run DESeq() on your DESeq2 datasetn and do vst() or rlogtransformation() on 
-###              DESeq() object
-###      - pca.plot()
-###      - distance.matrix.heatmap()
-###      - gene.expression.heatmap
+###      - depth()
+###      - count_distribution()
+###      - plotcount()
+###   - DESeq2 : results object after run DESeq() on your DESeq2 dataset and results() or DESeq() object 
+###      - maplot()
+###      - volcanoplot()
+###      - number_of_DE 
+###   - DESeq2 : after run DESeq() on your DESeq2 datasetn and do vst() or
+###rlogtransformation() on DESeq() object
+###      - pca()
+###      - heatmap()
+###      - clustering_heatmap()
 ###      - dispersion()
 
 ### Depth plot ----
@@ -1762,7 +1916,6 @@ library(ggrepel)
 depth.plot <- function(dds.count,break.width=1){
   depth <- as.data.frame(colSums(dds.count))
   depth$Sample <- row.names(depth)
-  
   return(ggplot(depth, aes( x=Sample ,y=depth[,1]))+ 
            geom_bar(stat="identity",fill=brewer.pal(n=length(depth$Sample),name="YlGn"),width = break.width)+
            labs(title = "Depth of each sample", x="Samples", y="Depth")+theme_bw()+
@@ -1770,7 +1923,6 @@ depth.plot <- function(dds.count,break.width=1){
            theme(axis.title.x = element_text(size=14)) +
            theme(axis.title.y = element_text(size=14)))
 }
-
 
 ### Count distribution plot ----
 ### count_distribution return an histogram of count values distribution in the log(count+1) 
@@ -1781,11 +1933,10 @@ depth.plot <- function(dds.count,break.width=1){
 ###   - sample for which we display the count distribution
 ###   - min which is the min of x axis 
 ###   - max which is the max of x axis
-
 count.distribution.plot <- function(dds.count, sample,x.min=0,x.max=14,break.width=1){
-  
   return(ggplot(data=dds.count, aes(log(dds.count[,sample]+1))) + 
-           geom_histogram(breaks=seq(x.min,x.max,break.width),position="identity",alpha=0.5,fill="darkcyan", 
+           geom_histogram(breaks=seq(x.min,x.max,break.width),
+                          position="identity",alpha=0.5,fill="darkcyan", 
                           color="dodgerblue1")+
            theme_classic() +
            labs(title=sample, 
@@ -1797,31 +1948,28 @@ count.distribution.plot <- function(dds.count, sample,x.min=0,x.max=14,break.wid
   )
 }
 
-
-
-
-
-
 ### Dispersion plot ----
 ### dispersion return plot obtained by DESeq2::plotDispEsts() function of DESeq2 package
 ### dispersion just need one argument : a DESeq() object
 dispersion <- function(dds){
   DESeq2::plotDispEsts(dds, main= "Relationship between dispersion and counts means")
 }
-
-
 ### nummber of differemtial express gene ----
 ### number.DE.gene return a table of DE results with number of TRUE,FALSE and NA in function of pvalue
 ### number.DE.gene need two arguments
 ###   - dds.result which is a results table obtain by function results() on a DESeq() object
 ###   - p.val which is pvalue accept un DE analysis, padje is set at 0.05
-
 number.DE.gene <- function(dds.result,p.val = 0.05){
-  tb.DE <- as.data.frame(table(dds.result$padj <= p.val ,useNA="always"))
-  colnames(tb.DE) = c("DE","Genes")
+  up_regulated <- dds.result %>% filter(padj <= p.val & log2FoldChange > 0) %>% nrow()
+  down_regulated <- dds.result %>% filter(padj <= p.val & log2FoldChange < 0) %>% nrow()
+  tb <-table(dds.result$padj <= p.val ,useNA="always")
+  tb.DE <- data.frame("No DE" = tb[1], 
+                      "Down regulated" = down_regulated, 
+                      "Up regulated" = up_regulated, 
+                      "NA" = tb[3]  )
+  row.names(tb.DE) <- ""
   return(tb.DE)
 }
-
 
 ### Plotcount ----
 ### plotcount return a point plot of read count for one gene in each sample
@@ -1847,7 +1995,6 @@ gene.count.plot <- function(dds.count,gene){
   )
 }
 
-
 ### Maplot ---- 
 ### maplot return a MA plot of DE
 ### maplot need two arguments
@@ -1867,21 +2014,6 @@ ma.plot <- function(dds.results,p.val=0.05){
            theme(axis.title.y = element_text(size=14)))
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### VolcanonPlot ---- 
 ### volcano.plot generate a volcano plot of DE
 ### volcano.plot need 8 arguments
@@ -1897,13 +2029,12 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
   if(is.anno == TRUE){
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(pvalue), col=sig)) +
+    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
              geom_point() +
              ggtitle("Volcano plot labelling top significant genes") +
-             geom_text_repel(data = subset(dds.res, 
-                                           (-log10(pvalue) > minlogP | 
-                                              log2FoldChange > maxlogF | 
-                                              log2FoldChange < minlogF)),
+             geom_text_repel(data = subset(dds.res, (-log10(padj) > minlogP |
+                                                       log2FoldChange > maxlogF |
+                                                       log2FoldChange < minlogF)),
                              aes(label = symbol),
                              size = 4,
                              box.padding = unit(0.35, "lines"),
@@ -1917,7 +2048,7 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
              theme(axis.title.y = element_text(size=14)))
   }else{
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj)
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(pvalue), col=sig)) +
+    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
              geom_point()+
              scale_colour_discrete(name="",
                                    labels=c("Not significative", "Significative", "NA")) +
@@ -1949,18 +2080,16 @@ pca.plot <- function(dds.resTransf,intgroup){
   )
 }
 
-### Sample Distance matrix ----
+### Distance matrix ----
 ### distance.matrix.heatmap generate a heatmap of dist between different sample
 ### distance.matrix.heatmap need just one argument
 ###   - dds.resTransf which is an DESeq2 transformate object with vst() or rLogtransformation()
-sample.distance.matrix.heatmap <- function(dds.resTransf){
-  dists <- dist(t(assay(dds.resTransf)))
+distance.matrix.heatmap <- function(dds.resTransf){
+  dists <- get_dist(t(assay(dds.resTransf)),method = "pearson")
   mat <- as.matrix(dists)
   hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
   return(heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13)))
 }
-
-
 
 ### Heatmap ----
 ### gene.expression.heatmap generate a gene expression distance heatmap
@@ -1975,8 +2104,8 @@ sample.distance.matrix.heatmap <- function(dds.resTransf){
 ###   - condition : design formula of RNA-seq experience
 ###   - min : num of row in results table starting from the top
 ###   - max : num of row in results table starting from the top
-gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,anno,p.val=0.05,metadata,
-                                    condition,count.tb,min,max){
+gene.expression.heatmap <- function(dds.results,dds.resTransf,is.anno=FALSE,anno,p.val=0.05,
+                                    metadata,condition,count.tb,min,max){
   res <- tbl_df(dds.results)
   if(is.anno==TRUE){
     res <- res %>% 
@@ -1988,7 +2117,7 @@ gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,ann
                   labRow=arrange(res, padj, pvalue)$symbol[min:max], 
                   scale="row", distfun="pearson", 
                   annCol=dplyr::select(metadata, condition), 
-                  col=c("green","black","black","red"))
+                  col=c("green","black","black","red"),treeheight = c(500,100))
     
   }else{
     res <- res %>% 
@@ -1998,9 +2127,725 @@ gene.expression.heatmap <- function(dds.results, dds.resTransf,is.anno=FALSE,ann
                   labRow=arrange(res, padj, pvalue)$symbol[min:max], 
                   scale="row", distfun="pearson", 
                   annCol=dplyr::select(metadata, condition), 
-                  col=c("green","black","black","red"))
+                  col=c("green","black","black","red"),treeheight = c(500,100))
   }
 }
+
+## Theme ----
+shinyDashboardThemeDIY <- function(
+  appFontFamily, appFontColor, logoBackColor, bodyBackColor, headerButtonBackColor, headerButtonIconColor,
+  headerButtonBackColorHover, headerButtonIconColorHover, headerBackColor, headerBoxShadowColor,
+  headerBoxShadowSize, sidebarBackColor, sidebarPadding, sidebarShadowRadius, sidebarShadowColor,
+  sidebarMenuBackColor, sidebarMenuPadding, sidebarMenuBorderRadius, sidebarUserTextColor, 
+  sidebarSearchBackColor,sidebarSearchIconColor, sidebarSearchBorderColor,  sidebarTabTextColor, 
+  sidebarTabTextSize, sidebarTabBorderStyle, sidebarTabBorderColor, sidebarTabBorderWidth,   
+  sidebarTabBackColorSelected, sidebarTabTextColorSelected, sidebarTabRadiusSelected, 
+  sidebarTabTextColorHover, sidebarTabBackColorHover, sidebarTabBorderStyleHover, sidebarTabBorderColorHover, 
+  sidebarTabBorderWidthHover, sidebarTabRadiusHover, boxBackColor, boxBorderRadius,
+  boxShadowSize, boxShadowColor, boxTitleSize, boxDefaultColor, boxPrimaryColor, boxSuccessColor, 
+  boxWarningColor,boxDangerColor, tabBoxTabColor, tabBoxTabTextSize, tabBoxTabTextColor, 
+  tabBoxTabTextColorSelected, tabBoxBackColor, tabBoxHighlightColor, tabBoxBorderRadius, buttonBackColor, 
+  buttonTextColor, buttonBorderColor, buttonBorderRadius, buttonBackColorHover, buttonTextColorHover, 
+  buttonBorderColorHover, buttonHeight = 34, buttonPadding = "6px 12px",textboxBackColor, 
+  textboxBorderColor, textboxBorderRadius, textboxBackColorSelect, textboxBorderColorSelect,
+  textboxHeight = 34, textboxPadding = "6px 12px", tableBackColor, tableBorderColor,
+  tableBorderTopSize, tableBorderRowSize, primaryFontColor = "auto", successFontColor = "auto",
+  warningFontColor = "auto", dangerFontColor = "auto", infoFontColor = "auto", boxInfoColor = "auto", 
+  dataFontColor
+) {
+  
+  htmltools::tags$head(
+    
+    htmltools::tags$style(
+      
+      htmltools::HTML(
+        
+        paste0(
+          
+          '
+          /* font: google import [OPTIONAL] */
+          /* @import url("//fonts.googleapis.com/css?family=',"Roboto",'"); */
+          /* font */
+          body, label, input, button, select, box,
+          .h1, .h2, .h3, .h4, .h5, h1, h2, h3, h4, h5 {
+          font-family: "',appFontFamily,'";
+          color: ', appFontColor, ';
+          }
+          /* font: fix for h6 */
+          /* messes up sidebar user section if included above */
+          .h6, h6 {
+          font-family: "',appFontFamily,'";
+          }
+          /* sidebar: logo */
+          .skin-blue .main-header .logo {
+          background: ', logoBackColor, ';
+          }
+          /* sidebar: logo hover */
+          .skin-blue .main-header .logo:hover {
+          background: ', logoBackColor, ';
+          }
+          /* sidebar: collapse button  */
+          .skin-blue .main-header .navbar .sidebar-toggle {
+          background: ', headerButtonBackColor, ';
+          color:', headerButtonIconColor, ';
+          }
+          /* sidebar: collapse button hover */
+          .skin-blue .main-header .navbar .sidebar-toggle:hover {
+          background: ', headerButtonBackColorHover, ';
+          color:', headerButtonIconColorHover, ';
+          }
+          /* header */
+          .skin-blue .main-header .navbar {
+          background: ', headerBackColor, ';
+          box-shadow: ', headerBoxShadowSize, ' ', headerBoxShadowColor ,';
+          }
+          /* sidebar*/
+          .skin-blue .main-sidebar {
+          background: ', sidebarBackColor, ';
+          box-shadow: ', sidebarShadowRadius, " ", sidebarShadowColor, ';
+          padding-left: ', sidebarPadding, 'px;
+          padding-right: ', sidebarPadding, 'px;
+          /* padding-top: 60px; */
+          }
+          /* sidebar menu */
+          .main-sidebar .user-panel, .sidebar-menu, .sidebar-menu>li.header {
+          white-space: nowrap;
+          background: ', sidebarMenuBackColor, ';
+          padding: ', sidebarMenuPadding, 'px;
+          border-radius: ', sidebarMenuBorderRadius, 'px;
+          }
+          /* fix for user panel */
+          .user-panel>.info>p, .skin-blue .user-panel>.info {
+          color: ', sidebarUserTextColor, ';
+          font-size: 12px;
+          font-weight: normal;
+          }
+          section.sidebar .user-panel {
+          padding: 10px;
+          }
+          /* sidebar: tabs */
+          .skin-blue .main-sidebar .sidebar .sidebar-menu a {
+          color: ', sidebarTabTextColor, ';
+          font-size: ', sidebarTabTextSize ,'px;
+          border-style: ', sidebarTabBorderStyle, ';
+          border-color: ', sidebarTabBorderColor, ';
+          border-width: ', sidebarTabBorderWidth, 'px;
+          }
+          /* sidebar: tab selected */
+          .skin-blue .main-sidebar .sidebar .sidebar-menu .active > a {
+          color: ', sidebarTabTextColorSelected, ';
+          font-size: ', sidebarTabTextSize, 'px;
+          border-radius: ', sidebarTabRadiusSelected, ';
+          border-style: ', sidebarTabBorderStyleHover, ';
+          border-color: ', sidebarTabBorderColorHover, ';
+          border-width: ', sidebarTabBorderWidthHover, 'px;
+          }
+          .skin-blue .sidebar-menu > li:hover > a,
+          .skin-blue .sidebar-menu > li.active > a {
+          color: ', sidebarTabTextColorSelected, ';
+          background: ', sidebarTabBackColorSelected, ';
+          border-radius: ', sidebarTabRadiusHover, ';
+          }
+          /* sidebar: tab hovered */
+          .skin-blue .main-sidebar .sidebar .sidebar-menu a:hover {
+          background: '
+          ,sidebarTabBackColorHover, ';'
+          ,'color: ', sidebarTabTextColorHover, ';
+          font-size: ', sidebarTabTextSize ,'px;
+          border-style: ', sidebarTabBorderStyleHover, ';
+          border-color: ', sidebarTabBorderColorHover, ';
+          border-width: ', sidebarTabBorderWidthHover, 'px;
+          border-radius: ', sidebarTabRadiusHover, ';
+          }
+          /* sidebar: subtab */
+          .skin-blue .sidebar-menu > li > .treeview-menu {
+          margin: 0px;
+          background: ', sidebarMenuBackColor, ';
+          }
+          .skin-blue .treeview-menu > li > a {
+          background: ', sidebarMenuBackColor, ';
+          }
+          /* sidebar: subtab selected */
+          .skin-blue .treeview-menu > li.active > a,
+          .skin-blue .treeview-menu > li > a:hover {
+          background: ', sidebarTabBackColorSelected, ';
+          }
+          /* sidebar: search text area */
+          .skin-blue .sidebar-form input[type=text] {
+          background: ', sidebarSearchBackColor, ';
+          color: ', appFontColor, ';
+          border-radius: ', textboxBorderRadius, 'px 0px 0px ', textboxBorderRadius, 'px;
+          border-color: ', sidebarSearchBorderColor, ';
+          border-style: solid none solid solid;
+          }
+          /* sidebar: search button */
+          .skin-blue .input-group-btn > .btn {
+          background: ', sidebarSearchBackColor, ';
+          color: ', sidebarSearchIconColor, ';
+          border-radius: 0px ', textboxBorderRadius, 'px ', textboxBorderRadius, 'px 0px;
+          border-style: solid solid solid none;
+          border-color: ', sidebarSearchBorderColor, ';
+          }
+          /* sidebar form */
+          .skin-blue .sidebar-form {
+          border-radius: 0px;
+          border: 0px none rgb(255,255,255);
+          margin: 10px;
+          }
+          /* body */
+          .content-wrapper, .right-side {
+          background: ', bodyBackColor, ';
+          }
+          /* box */
+          .box {
+          background: ', boxBackColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          box-shadow: ', boxShadowSize, ' ', boxShadowColor, ';
+          }
+          /* box: title */
+          .box-header .box-title {
+          font-size: ', boxTitleSize, 'px;
+          }
+          /* tabbox: title */
+          .nav-tabs-custom>.nav-tabs>li.header {
+          color: ', appFontColor, ';
+          font-size: ', boxTitleSize, 'px;
+          }
+          /* tabbox: tab color */
+          .nav-tabs-custom, .nav-tabs-custom .nav-tabs li.active:hover a, 
+          .nav-tabs-custom .nav-tabs li.active a {
+          background: ', tabBoxTabColor, ';
+          color: ', appFontColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .nav-tabs-custom {
+          box-shadow: ', boxShadowSize, ' ', boxShadowColor, ';
+          }
+          /* tabbox: active tab bg */
+          .nav-tabs-custom>.nav-tabs>li.active {
+          border-radius: ', tabBoxBorderRadius, 'px;
+          border-top-color: ', tabBoxHighlightColor, ';
+          # box-shadow: ', boxShadowSize, ' ', boxShadowColor, ';
+          }
+          /* tabbox: font color */
+          .nav-tabs-custom>.nav-tabs>li.active:hover>a, .nav-tabs-custom>.nav-tabs>li.active>a {
+          border-bottom-color: ', tabBoxTabColor, ';
+          border-top-color: ', tabBoxHighlightColor, ';
+          border-right-color: ', tabBoxHighlightColor, ';
+          border-left-color: ', tabBoxHighlightColor, ';
+          color: ', tabBoxTabTextColorSelected, ';
+          font-size: ', tabBoxTabTextSize, 'px;
+          border-radius: ', tabBoxBorderRadius, 'px;
+          }
+          /* tabbox: inactive tabs background */
+          .nav-tabs-custom>.nav-tabs>li>a {
+          color: ', tabBoxTabTextColor, ';
+          font-size: ', tabBoxTabTextSize, 'px;
+          }
+          /* tabbox: top area back color */
+          .nav-tabs-custom, .nav-tabs-custom>.tab-content, .nav-tabs-custom>.nav-tabs {
+          border-bottom-color: ', tabBoxHighlightColor, ';
+          background: ', tabBoxBackColor, ';
+          }
+          /* tabbox: top area rounded corners */
+          .nav-tabs-custom>.nav-tabs {
+          margin: 0;
+          border-radius: ', tabBoxBorderRadius, 'px;
+          }
+          /* infobox */
+          .info-box {
+          background: ', boxBackColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          box-shadow: ', boxShadowSize, ' ', boxShadowColor, ';
+          }
+          /* valuebox */
+          .small-box {
+          border-radius: ', boxBorderRadius, 'px;
+          box-shadow: ', boxShadowSize, ' ', boxShadowColor, ';
+          }
+          /* valuebox: main font color */
+          .small-box h3, .small-box p {
+          color: rgb(255,255,255)
+          }
+          /* box: default color */
+          .box.box-solid>.box-header, .box>.box-header {
+          color: ', appFontColor, ';
+          }
+          .box.box-solid>.box-header {
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .box.box-solid, .box {
+          border-radius: ', boxBorderRadius, 'px;
+          border-top-color: ', boxDefaultColor, ';
+          }
+          /* box: info color */
+          .box.box-solid.box-info>.box-header h3, .box.box-info>.box-header h3 {
+          color: ', infoFontColor, ';
+          }
+          .box.box-solid.box-info>.box-header {
+          background: ', boxInfoColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .box.box-solid.box-info, .box.box-info {
+          border-color: ', boxInfoColor, ';
+          border-left-color: ', boxInfoColor, ';
+          border-right-color: ', boxInfoColor, ';
+          border-top-color: ', boxInfoColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          /* box: primary color */
+          .box.box-solid.box-primary>.box-header h3, .box.box-primary>.box-header h3 {
+          color: ', primaryFontColor, ';
+          }
+          .box.box-solid.box-primary>.box-header {
+          background: ', boxPrimaryColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .box.box-solid.box-primary, .box.box-primary {
+          border-color: ', boxPrimaryColor, ';
+          border-left-color: ', boxPrimaryColor, ';
+          border-right-color: ', boxPrimaryColor, ';
+          border-top-color: ', boxPrimaryColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          /* box: success color */
+          .box.box-solid.box-success>.box-header h3, .box.box-success>.box-header h3 {
+          color: ', successFontColor, ';
+          }
+          .box.box-solid.box-success>.box-header {
+          background: ', boxSuccessColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .box.box-solid.box-success, .box.box-success {
+          border-color: ', boxSuccessColor, ';
+          border-left-color: ', boxSuccessColor, ';
+          border-right-color: ', boxSuccessColor, ';
+          border-top-color: ', boxSuccessColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          /* box: warning color */
+          .box.box-solid.box-warning>.box-header h3, .box.box-warning>.box-header h3 {
+          color: ', warningFontColor, ';
+          }
+          .box.box-solid.box-warning>.box-header {
+          background: ', boxWarningColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .box.box-solid.box-warning, .box.box-warning {
+          border-color: ', boxWarningColor, ';
+          border-left-color: ', boxWarningColor, ';
+          border-right-color: ', boxWarningColor, ';
+          border-top-color: ', boxWarningColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          /* box: danger color */
+          .box.box-solid.box-danger>.box-header h3, .box.box-danger>.box-header h3 {
+          color: ', dangerFontColor, ';
+          }
+          .box.box-solid.box-danger>.box-header {
+          background: ', boxDangerColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          .box.box-solid.box-danger, .box.box-danger {
+          border-color: ', boxDangerColor, ';
+          border-left-color: ', boxDangerColor, ';
+          border-right-color: ', boxDangerColor, ';
+          border-top-color: ', boxDangerColor, ';
+          border-radius: ', boxBorderRadius, 'px;
+          }
+          /* button */
+          .btn-default {
+          background: ', buttonBackColor, ';
+          color: ', buttonTextColor, ';
+          border-color: ', buttonBorderColor, ';
+          border-radius: ', buttonBorderRadius, 'px;
+          height: ', buttonHeight, 'px;
+          padding: ', buttonPadding, ';
+          }
+          /* button: hover */
+          .btn-default:hover {
+          background: ', buttonBackColorHover, ';
+          color: ', buttonTextColorHover, ';
+          border-color: ', buttonBorderColorHover, ';
+          }
+          /* button: focus */
+          .btn-default:focus, .action-button:focus {
+          background: ', buttonBackColor, ';
+          color: ', buttonTextColor, ';
+          border-color: ', buttonBorderColor, ';
+          }
+          /* button: active */
+          .btn-default:active, .action-button:active {
+          background: ', buttonBackColor, ';
+          color: ', buttonTextColor, ';
+          border-color: ', buttonBorderColor, ';
+          }
+          /* button: visited */
+          .btn-default:visited {
+          background: ', buttonBackColor, ';
+          color: ', buttonTextColor, ';
+          border-color: ', buttonBorderColor, ';
+          }
+          /* textbox */
+          .form-control, .selectize-input, .selectize-control.single .selectize-input {
+          background: ', textboxBackColor, ';
+          color: ', appFontColor, ';
+          border-color: ', textboxBorderColor, ';
+          border-radius: ', textboxBorderRadius, 'px;
+          height: ', textboxHeight, 'px;
+          min-height: ', textboxHeight, 'px;
+          padding: ', textboxPadding, ';
+          }
+          /* textbox: selected */
+          .form-control:focus, .selectize-input.focus {
+          color: ', appFontColor, ';
+          background: ', textboxBackColorSelect, ';
+          border-color: ', textboxBorderColorSelect, ';
+          -webkit-box-shadow: inset 0px 0px 0px, 0px 0px 0px;
+          box-shadow: inset 0px 0px 0px, 0px 0px 0px;
+          }
+          /* multi-row selectize input */
+          .selectize-control.multi .selectize-input.has-items {
+          height: auto;
+          }
+          /* verbatim text output */
+          .qt pre, .qt code {
+          font-family: ', appFontFamily, ' !important;
+          }
+          pre {
+          color: ', appFontColor, ';
+          background-color: ', textboxBackColor, ';
+          border: 1px solid ', textboxBorderColor, ';
+          border-radius: ', textboxBorderRadius, 'px;
+          }
+          /* drop-down menu */
+          .selectize-dropdown, .selectize-dropdown.form-control {
+          background: ', textboxBackColor, ';
+          border-radius: 4px;
+          }
+          /* table */
+          .table {
+          background: ', tableBackColor, ';
+          border-radius: ', textboxBorderRadius, 'px;
+          }
+          /* table: row border color*/
+          .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, 
+          .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+          border-top: ', tableBorderRowSize, 'px solid ', tableBorderColor, ';
+          }
+          /* table: top border color*/
+          .table>thead>tr>th {
+          border-bottom: ', tableBorderTopSize, 'px solid ', tableBorderColor, ';
+          }
+          /* table: hover row */
+          .table-hover>tbody>tr:hover {
+          background-color: ', tableBorderColor, ';
+          }
+          /* table: stripe row */
+          .table-striped>tbody>tr:nth-of-type(odd) {
+          background-color: ', tableBorderColor, ';
+          }
+          /* table: body colour */
+          table.dataTable tbody tr {
+          background-color: ', tableBackColor, ' !important;
+          }
+          /* table: footer border colour */
+          table.dataTable {
+          border: 0px !important;
+          }
+          /* datatable: selected row */
+          table.dataTable tr.selected td, table.dataTable td.selected {
+          background-color: ', boxSuccessColor, ' !important;
+          color: rgb(0,0,0) !important;
+          }
+          /* datatable: hover row */
+          table.dataTable tr.hover td, table.dataTable td.hover {
+          background-color: ', tableBorderColor, ' !important;
+          }
+          table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+          background-color: ', tableBorderColor, ' !important;
+          }
+          table.dataTable.row-border tbody th, table.dataTable.row-border tbody td,
+          table.dataTable.display tbody th, table.dataTable.display tbody td {
+          border-top: 1px solid ', tableBorderColor, ' !important;
+          }
+          /* datatable: stripe row */
+          table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+          background-color: ', tableBorderColor, ' !important;
+          }
+          /* datatable: page control */
+          .dataTables_wrapper .dataTables_paginate .paginate_button {
+          background-color: ', tableBorderColor, ' !important;
+          color: ', dataFontColor, ' !important;
+          }
+          /* datatable: table info */
+          .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+          .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+          .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          color: ', dataFontColor, ' !important;
+          }
+          .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+          .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing,
+          .dataTables_wrapper .dataTables_paginate {
+          color: ', dataFontColor, ' !important;
+          }
+          .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+          .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing,
+          .dataTables_wrapper .dataTables_paginate {
+          color: ', dataFontColor, ' !important;
+          }
+          thead {color: ', dataFontColor, '; } tbody {color: ', dataFontColor, '; }
+          
+          /* datatable search box */
+          .dataTables_wrapper .dataTables_filter input {
+          background-color: ', textboxBackColor, ';
+          border: 1px solid ', textboxBorderColor, ';
+          border-radius: ', textboxBorderRadius, 'px;
+          }
+          thead {color: ', dataFontColor, '; } tbody {color: ', dataFontColor, '; }
+          /* notification and progress bar */
+          .progress-bar {
+          background-color: ', boxSuccessColor, ';
+          }
+          .shiny-notification {
+          height: 80px;
+          font-family: ', appFontFamily, ';
+          font-size: 15px;
+          color: rgb(0,0,0);
+          background-color: rgb(225,225,225);
+          border-color: rgb(205,205,205);
+          border-radius: 10px;
+          margin-left: -450px !important;
+          }
+          /* horizontal divider line */
+          hr {
+          border-top: 1px solid rgb(215,215,215);
+          }
+          /* modal */
+          .modal-body {
+          background-color: ', boxBackColor, ';
+          }
+          .modal-footer {
+          background-color: ', boxBackColor, ';
+          }
+          .modal-header {
+          background-color: ', boxBackColor, ';
+          }
+          '
+        )
+      )
+    )
+  )
+}
+
+theme_grey_dark2 <- shinyDashboardThemeDIY(
+  ### general
+  appFontFamily = "Arial"
+  ,appFontColor = "rgb(205,205,205)"
+  ,primaryFontColor = "rgb(255,255,255)"
+  ,infoFontColor = "rgb(255,255,255)"
+  ,successFontColor = "rgb(255,255,255)"
+  ,warningFontColor = "rgb(255,255,255)"
+  ,dangerFontColor = "rgb(255,255,255)"
+  ,bodyBackColor = "rgb(45,55,65)"
+  
+  ### header
+  ,logoBackColor = "rgb(70,80,90)"
+  
+  ,headerButtonBackColor = "rgb(70,80,90)"
+  ,headerButtonIconColor = "rgb(25,35,45)"
+  ,headerButtonBackColorHover = "rgb(40,50,60)"
+  ,headerButtonIconColorHover = "rgb(0,0,0)"
+  
+  ,headerBackColor = "rgb(70,80,90)"
+  ,headerBoxShadowColor = ""
+  ,headerBoxShadowSize = "0px 0px 0px"
+  
+  ### sidebar
+  ,sidebarBackColor = "rgb(52,62,72)"
+  ,sidebarPadding = 0
+  
+  ,sidebarMenuBackColor = "transparent"
+  ,sidebarMenuPadding = 0
+  ,sidebarMenuBorderRadius = 0
+  
+  ,sidebarShadowRadius = ""
+  ,sidebarShadowColor = "0px 0px 0px"
+  
+  ,sidebarUserTextColor = "rgb(205,205,205)"
+  
+  ,sidebarSearchBackColor = "rgb(45,55,65)"
+  ,sidebarSearchIconColor = "rgb(153,153,153)"
+  ,sidebarSearchBorderColor = "rgb(45,55,65)"
+  
+  ,sidebarTabTextColor = "rgb(205,205,205)"
+  ,sidebarTabTextSize = 14
+  ,sidebarTabBorderStyle = "none"
+  ,sidebarTabBorderColor = "none"
+  ,sidebarTabBorderWidth = 0
+  
+  ,sidebarTabBackColorSelected = "rgb(70,80,90)"
+  ,sidebarTabTextColorSelected = "rgb(255,255,255)"
+  ,sidebarTabRadiusSelected = "5px"
+  
+  ,sidebarTabBackColorHover = "rgb(55,65,75)"
+  ,sidebarTabTextColorHover = "rgb(255,255,255)"
+  ,sidebarTabBorderStyleHover = "none"
+  ,sidebarTabBorderColorHover = "none"
+  ,sidebarTabBorderWidthHover = 0
+  ,sidebarTabRadiusHover = "5px"
+  
+  ### boxes
+  ,boxBackColor = "rgb(52,62,72)"
+  ,boxBorderRadius = 5
+  ,boxShadowSize = "0px 0px 0px"
+  ,boxShadowColor = ""
+  ,boxTitleSize = 16
+  ,boxDefaultColor = "rgb(52,62,72)"
+  ,boxPrimaryColor = "rgb(200,200,200)"
+  ,boxInfoColor = "rgb(80,95,105)"
+  ,boxSuccessColor = "rgb(155,240,80)"
+  ,boxWarningColor = "rgb(240,80,210)"
+  ,boxDangerColor = "rgb(240,80,80)"
+  
+  ,tabBoxTabColor = "rgb(52,62,72)"
+  ,tabBoxTabTextSize = 14
+  ,tabBoxTabTextColor = "rgb(205,205,205)"
+  ,tabBoxTabTextColorSelected = "rgb(205,205,205)"
+  ,tabBoxBackColor = "rgb(52,62,72)"
+  ,tabBoxHighlightColor = "rgb(70,80,90)"
+  ,tabBoxBorderRadius = 5
+  
+  ### inputs
+  ,buttonBackColor = "rgb(230,230,230)"
+  ,buttonTextColor = "rgb(0,0,0)"
+  ,buttonBorderColor = "rgb(50,50,50)"
+  ,buttonBorderRadius = 5
+  
+  ,buttonBackColorHover = "rgb(180,180,180)"
+  ,buttonTextColorHover = "rgb(50,50,50)"
+  ,buttonBorderColorHover = "rgb(50,50,50)"
+  
+  ,textboxBackColor = "rgb(68,80,90)"
+  ,textboxBorderColor = "rgb(76,90,103)"
+  ,textboxBorderRadius = 5
+  ,textboxBackColorSelect = "rgb(80,90,100)"
+  ,textboxBorderColorSelect = "rgb(255,255,255)"
+  
+  ### tables
+  ,tableBackColor = "rgb(52,62,72)"
+  ,tableBorderColor = "rgb(70,80,90)"
+  ,tableBorderTopSize = 1
+  ,tableBorderRowSize = 1
+  
+  ### datatables
+  ,dataFontColor = "rgb(255, 255, 255)"
+)
+
+theme_grey_light2 <- shinyDashboardThemeDIY(
+  
+  ### general
+  appFontFamily = "Arial"
+  ,appFontColor = "rgb(45,45,45)"
+  ,primaryFontColor = "rgb(15,15,15)"
+  ,infoFontColor = "rgb(15,15,15)"
+  ,successFontColor = "rgb(15,15,15)"
+  ,warningFontColor = "rgb(15,15,15)"
+  ,dangerFontColor = "rgb(15,15,15)"
+  ,bodyBackColor = "rgb(240,240,240)"
+  
+  ### header
+  ,logoBackColor = "rgb(120,120,120)"
+  
+  ,headerButtonBackColor = "rgb(120,120,120)"
+  ,headerButtonIconColor = "rgb(220,220,220)"
+  ,headerButtonBackColorHover = "rgb(100,100,100)"
+  ,headerButtonIconColorHover = "rgb(60,60,60)"
+  
+  ,headerBackColor = "rgb(120,120,120)"
+  ,headerBoxShadowColor = "#dfdfdf"
+  ,headerBoxShadowSize = "3px 5px 5px"
+  
+  ### sidebar
+  ,sidebarBackColor = "rgb(255,255,255)"
+  ,sidebarPadding = 0
+  
+  ,sidebarMenuBackColor = "transparent"
+  ,sidebarMenuPadding = 0
+  ,sidebarMenuBorderRadius = 0
+  
+  ,sidebarShadowRadius = "3px 5px 5px"
+  ,sidebarShadowColor = "#dfdfdf"
+  
+  ,sidebarUserTextColor = "rgb(115,115,115)"
+  
+  ,sidebarSearchBackColor = "rgb(240,240,240)"
+  ,sidebarSearchIconColor = "rgb(100,100,100)"
+  ,sidebarSearchBorderColor = "rgb(220,220,220)"
+  
+  ,sidebarTabTextColor = "rgb(100,100,100)"
+  ,sidebarTabTextSize = 14
+  ,sidebarTabBorderStyle = "none"
+  ,sidebarTabBorderColor = "none"
+  ,sidebarTabBorderWidth = 0
+  
+  ,sidebarTabBackColorSelected = "rgb(230,230,230)"
+  ,sidebarTabTextColorSelected = "rgb(0,0,0)"
+  ,sidebarTabRadiusSelected = "0px"
+  
+  ,sidebarTabBackColorHover = "rgb(245,245,245)"
+  ,sidebarTabTextColorHover = "rgb(0,0,0)"
+  ,sidebarTabBorderStyleHover = "none solid none none"
+  ,sidebarTabBorderColorHover = "rgb(200,200,200)"
+  ,sidebarTabBorderWidthHover = 4
+  ,sidebarTabRadiusHover = "0px"
+  
+  ,boxBackColor = "rgb(248,248,248)"
+  ,boxBorderRadius = 5
+  ,boxShadowSize = "none"
+  ,boxShadowColor = ""
+  ,boxTitleSize = 18
+  ,boxDefaultColor = "rgb(225,225,225)"
+  ,boxPrimaryColor = "rgb(95,155,213)"
+  ,boxInfoColor = "rgb(180,180,180)"
+  ,boxSuccessColor = "rgb(112,173,71)"
+  ,boxWarningColor = "rgb(237,125,49)"
+  ,boxDangerColor = "rgb(232,76,34)"
+  
+  ,tabBoxTabColor = "rgb(248,248,248)"
+  ,tabBoxTabTextSize = 14
+  ,tabBoxTabTextColor = "rgb(100,100,100)"
+  ,tabBoxTabTextColorSelected = "rgb(45,45,45)"
+  ,tabBoxBackColor = "rgb(248,248,248)"
+  ,tabBoxHighlightColor = "rgb(200,200,200)"
+  ,tabBoxBorderRadius = 5
+  
+  ### inputs
+  ,buttonBackColor = "rgb(215,215,215)"
+  ,buttonTextColor = "rgb(45,45,45)"
+  ,buttonBorderColor = "rgb(150,150,150)"
+  ,buttonBorderRadius = 5
+  
+  ,buttonBackColorHover = "rgb(190,190,190)"
+  ,buttonTextColorHover = "rgb(0,0,0)"
+  ,buttonBorderColorHover = "rgb(150,150,150)"
+  
+  ,textboxBackColor = "rgb(255,255,255)"
+  ,textboxBorderColor = "rgb(118,118,118)"
+  ,textboxBorderRadius = 5
+  ,textboxBackColorSelect = "rgb(245,245,245)"
+  ,textboxBorderColorSelect = "rgb(108,108,108)"
+  
+  ### tables
+  ,tableBackColor = "rgb(248,248,248)"
+  ,tableBorderColor = "rgb(238,238,238)"
+  ,tableBorderTopSize = 1
+  ,tableBorderRowSize = 1
+  
+  ### datatables
+  ,dataFontColor = "rgb(108,108,108)"
+  
+)
 
 
 ```
