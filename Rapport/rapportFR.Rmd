@@ -161,7 +161,7 @@ anno <- anno %>% select(ensgene,symbol)
 # \Large Matériels et méthodes
 ## \large{Analyse de l'expression différentielle de données RNA-seq}
 #### Jeu de données
-Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme et le but de cette étude est de comprendre le mécanisme dans les muscles lisses des voies respiratoires ainsi que l'impact du traitement sur l'expression génétique dans différent types cellulaires en utilisant la technologie RNA-seq.
+Nous allons tout d'abord procéder à une analyse de l'expression différentielle de gènes. Pour cela, nous avons récupéré un jeu de données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al. Les glucocorticoïdes sont utilisés pour traiter l'asthme, le but de cette étude est de comprendre le mécanisme du traitement dans les muscles lisses des voies respiratoires ainsi que son impact sur l'expression génétique dans différent types cellulaires en utilisant la technologie RNA-seq.
 \par
 Cette expérience rassemble 8 échantillons : 4 traités avec du dexamethasone (glucocorticoïde synthétique) et 4 échantillons contrôles sans traitements.
 Nous avons donc une table de comptage de reads dans laquelle on trouve le nombre de reads mappés sur chaque gène pour chaque échantillon. De plus, nous avons un fichier d'annotation des gènes contenant des informations sur tous les gènes.
@@ -467,7 +467,9 @@ Nous avons aussi fait en sorte d'améliorer le visuel de nos graphiques. Pour ce
  
 Pour finir, nous avons mis en place un bouton accueil grâce au langage HTML. Ce bouton est placé en haut à droite de l'écran, dans l'en-tête et permet à tout moment de retourner sur la page d'accueil qui est la page d'information sur l'application. De plus, toujours grâce au langage HTML, nous avons ajouté un pied de page dans lequel on retrouve des informations sur les développeurs de l'application ainsi que le git sur lequel on retrouve tout le travail réalisé.
 
-
+# \Large{Discussion}
+L'analyse de l'expression différentielle réalisé sur les données de l'étude RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells de Himes BE, Jiang X, Wagner P, et al a permis de mettre en place tout en analysant les résultats obtenus un workflow d'analyse d'expression différentielle utilisant le package DESeq2. Ce workflow contient notamment des étapes de visualisations des données brutes ainsi que de données normalisées de la table de comptages de reads mais aussi des étapes de visualisations des résultats de l'analyse de l'expression différentielle (MA plot, volcano plot, ACP, Heatmap).
+Ce workflow a été intégré dans la réalisation d'une application Shiny permettant d'entreprendre une analyse d'expression différentielle à partir d'une table de comptage de reads et son design expérimental associé auxquels l'on peut rajouter en option un fichier d'annotation. Cette application suit donc le workflow DESeq2 réalisé et génère les différents résultats et visualisations résultant de l'utilisation de ce workflow sur le jeu de données rentré par l'utilisateur.
 
 
 
