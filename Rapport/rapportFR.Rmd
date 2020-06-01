@@ -3,7 +3,7 @@
 
 title: |
   | \vspace{5cm} \textbf{Amélioration de l'accès aux résultats biologiques :}
-  | \textbf{Séquençage ARN et Application Shiny}
+  | \textbf{Analyse d'expression différentielle et Application Shiny}
 subtitle: |
   | Master 1 Bioinformatique
   | Université de Rennes 1 
@@ -63,7 +63,7 @@ Dans un premier  temps un jeu de données d’une analyse RNA-seq de l'étude \e
 Une fois ce package compris et maîtrisé, nous nous sommes attaqués à l’accessibilité à ce type d’analyses avec DESeq2. Pour cela nous avons décidé de créer une application permettant d'exécuter simplement le workflow DESeq2. Afin de réaliser cette application nous avons utilisé le package Shiny qui permet de créer une application web interactive en associant des fonctionnalités de R, tout en y associant des fonctionnalités utilisant les langages HTML, javaScript ou encore CSS.
 
 \par
-\emph{mots clés : Expression différentielle, Rstudio, DESeq2, NGS,}
+\emph{mots clés : Séquençage ARN, Rstudio, DESeq2, NGS, Visualisation graphique}
  
 
 
@@ -79,7 +79,7 @@ We have therefore focused on the analysis of data from RNA-seq experiments and m
 Once this package was understood and mastered, we tackled the accessibility of this type of analysis with DESeq2. To do this we decided to create an application to simply run the DESeq2 workflow. In order to realize this application we used the Shiny package which allows to create an interactive web application by associating R functionalities, while associating functionalities using HTML, javaScript or CSS.
 
 \par
-\emph{keywords : Differential expression, Rstudio, DESeq2, NGS, }
+\emph{keywords : RNA sequencing, Rstudio, DESeq2, NGS, Graphic visualization}
 
 
 \newpage
@@ -492,25 +492,26 @@ Maintenant que nous nous sommes familiarisés à ces différents outils nous pou
 \begin{enumerate}
 \item Himes BE, Jiang X, Wagner P, et al. RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells. PLoS One. 2014;9(6):e99625. Published 2014 Jun 13. doi: \href{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625}{\underline{10.1371/journal.pone.0099625}}
 
-\item Koch CM, Chiu SF, Akbarpour M, et al. A Beginner's Guide to Analysis of RNA Sequencing Data. Am J Respir Cell Mol Biol. 2018;59(2):145-157. doi: \href{https://www.atsjournals.org/doi/10.1165/rcmb.2017-0430TR}{\underline{10.1165/rcmb.2017-0430TR}}
-
 \item Julien Delafontaine. (2013, septembre 11). Analyse de données RNA-seq : mode d’emploi. Consulté à l’adresse \href{https://bioinfo-fr.net/lanalyse-de-donnees-rna-seq-mode-demploi}{\underline{https://bioinfo-fr.net/lanalyse-de-donnees-rna-seq-mode-demploi}}
 
-\item Bioconductor - Home. (2003). Consulté à l’adresse \href{https://www.bioconductor.org/}{\underline{https://www.bioconductor.org/}}
-
-
-\item Wickham, H. (2016). Mastering Shiny. Consulté à l’adresse \href{https://mastering-shiny.org/}{\underline{https://mastering-shiny.org/}} 
+\item Koch CM, Chiu SF, Akbarpour M, et al. A Beginner's Guide to Analysis of RNA Sequencing Data. Am J Respir Cell Mol Biol. 2018;59(2):145-157. doi: \href{https://www.atsjournals.org/doi/10.1165/rcmb.2017-0430TR}{\underline{10.1165/rcmb.2017-0430TR}}
 
 \item Nik. L. (2018, mars 4). nik01010/dashboardthemes. Consulté à l’adresse
 \par
 \href{https://github.com/nik01010/dashboardthemes}{\underline{https://github.com/nik01010/dashboardthemes}}
+
+\item Wickham, H. (2016). Mastering Shiny. Consulté à l’adresse \href{https://mastering-shiny.org/}{\underline{https://mastering-shiny.org/}} 
+
+\item Bioconductor - Home. (2003). Consulté à l’adresse \href{https://www.bioconductor.org/}{\underline{https://www.bioconductor.org/}}
 \end{enumerate}
 
+
 \newpage
+# \Large{Annexe 1 : Bilan personnel}
 
 
 \newpage
-# \Large{Annexe 1 : Script R pour l'analyse RNAseq  via DESeq2}
+# \Large{Annexe 2 : Script R pour l'analyse RNAseq  via DESeq2}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warning=FALSE, eval=FALSE}
@@ -686,8 +687,8 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],],
 \normalsize
 
 \newpage
-# \Large{Annexe 2 : Scripts R pour l'application Shiny}
-## \large{2.1 Interface utilisateur}
+# \Large{Annexe 3 : Scripts R pour l'application Shiny}
+## \large{3.1 Interface utilisateur}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warning=FALSE, eval=FALSE}
@@ -1290,7 +1291,7 @@ ui <-
 \newpage
 
 \newpage
-## \large{2.2 Serveur}
+## \large{3.2 Serveur}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warning=FALSE, eval=FALSE, tidy=FALSE}
@@ -1880,7 +1881,7 @@ server <- function(input, output,session) {
 
 
 \newpage
-## \large{2.3 Fonctions}
+## \large{3.3 Fonctions}
 \renewcommand{\baselinestretch}{.85}
 \scriptsize
 ``` {r message=FALSE, warning=FALSE, eval=FALSE, tidy=FALSE}
