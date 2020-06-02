@@ -515,7 +515,9 @@ ui <-
       HTML('
            <p align="center" width="4">Developed by <a href="https://www.linkedin.com/in/david-gallien-2096b9193/" target="_blank">David Gallien</a> and <a href="https://www.linkedin.com/in/gabin-coudray-a1941913b/" target="_blank">Gabin Coudray</a>. </p>
            <p align="center" width="4">First year of <a href="http://bioinfo-rennes.fr/" target="_blank">Bioinformatics Master<span>&#39;</span>s degree</a> in Rennes. </p>
-           <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>'
+           <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" target="_blank">University of Rennes 1.</a> </p>
+           <p align="center" width="4"> Git : <a href="https://github.com/Gabin-c/RNA-seq-DE-analysis" target="_blank">https://github.com/Gabin-c/RNA-seq-DE-analysis</a> </p>'
+
       ), 
       style = 
         "

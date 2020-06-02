@@ -367,7 +367,11 @@ Un gradient de couleur bleu est utilisé. Plus la couleur vire au bleu plus la d
 
 \newpage
 ## \large{Application RShiny}
- 
+Tout d'abord, l'application est disponible à l'adresse suivante :
+\par
+\href{https://gabin-coudray.shinyapps.io/m1project/}{\emph{\underline{https://gabin-coudray.shinyapps.io/m1project/}}}
+
+\par
 Notre but était donc de mettre en place une application Shiny capable de faire l'analyse d'expression différentielle de données RNA-seq. Pour cela nous utilisons les packages  \emph{Shiny} et \emph{Shinydashboard} afin de créer une application ergonomique et agréable à prendre en main. Pour ce faire, nous avons décidé de diviser l'application en 4 principales parties : 
 
 \begin{itemize}
@@ -1274,7 +1278,10 @@ ui <-
             degree</a> 
             in Rennes. </p>
            <p align="center" width="4"> <a href="https://www.univ-rennes1.fr/" 
-            target="_blank">University of Rennes 1.</a> </p>'
+            target="_blank">University of Rennes 1.</a> </p>
+           <p align="center" width="4"> Git : <a href="https://github.com/Gabin-c/RNA-seq-DE-analysis"
+           target="_blank">https://github.com/Gabin-c/RNA-seq-DE-analysis</a> </p>'
+
       ), 
       style = 
         "
