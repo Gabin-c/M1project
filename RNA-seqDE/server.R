@@ -396,7 +396,7 @@ server <- function(input, output,session) {
   })
   ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
-    sample.distance.matrix.heatmap(dds$TransformationMatrix)
+    distance.matrix.heatmap(dds$TransformationMatrix)
   }
   output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
@@ -545,7 +545,7 @@ server <- function(input, output,session) {
     if(input$RunHeatmap){
       menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap")
     }
   })
   
