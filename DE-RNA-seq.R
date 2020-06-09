@@ -39,6 +39,20 @@ depth <- as.data.frame(depth)
 depth$sample <- row.names(depth)
 ggplot(depth, aes( x=sample ,y=depth))+ geom_bar(stat="identity",col="black", fill="white")+labs(title = "Depth of each sample", x="Sample", y="Depth")+theme_bw()
 
+#Vizualisation of gene count by sample
+count_table_dds[,"name"] <- row.names(count_table_dds)
+ggplot(count_table_dds, aes(x=count_table_dds[,"name"], y=count_table_dds[,gene])) + 
+  geom_point(size=4,aes(colour=factor(name))) + 
+  geom_segment(aes(x=count_table_dds[,"name"], xend=count_table_dds[,"name"], y=0, yend=count_table_dds[,gene]),linetype="dotdash")+ 
+  theme(axis.text.x = element_blank() )+ 
+  labs(title=paste("Count of",gene,  "for each sample"),x="Samples",y="Counts")+ 
+  guides(color= guide_legend(title = "Sample", override.aes = list(size=5))) +
+  theme(plot.title = element_text(face = "bold", size= 18)) +
+  theme(axis.title.x = element_text(size=14)) +
+  theme(axis.title.y = element_text(size=14)) +
+  theme(legend.text=element_text(size=13)) +
+  theme(legend.title=element_blank())
+
 #Differential expression analysis and normalization ----
 dds <- DESeq(dds)
 #Extraction of the DE result

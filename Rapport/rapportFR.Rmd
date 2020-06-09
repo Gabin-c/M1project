@@ -207,7 +207,7 @@ res <- results(dds,tidy = TRUE)
 
 \newpage
 #### Analyse de l'expression différentielle sous DESeq2
-Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons visualisé la distribution du comptage des reads pour chaque échantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation. En parallèle nous avons visualisé la profondeur de séquençage de chaque échantillon avant et après normalisation. Cela a permis de vérifier visuellement la bonne normalisation des données. Pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponibles sur le CRAN. 
+Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons visualisé la distribution du comptage des reads pour chaque échantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation. En parallèle nous avons visualisé la profondeur de séquençage de chaque échantillon avant et après normalisation. Cela a permis de vérifier visuellement la bonne normalisation des données. Et enfin nous avons visualisé le comptage par gène pour chaque échantillon. Pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponibles sur le CRAN. 
 
 \singlespacing
 \scriptsize
