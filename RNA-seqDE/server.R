@@ -71,7 +71,11 @@ server <- function(input, output,session) {
   
   ### Update selectinput with columns of notUniqueValue() for the DESeq2 design
   observeEvent(input$MetadataFile,{
-    updateSelectInput(session,"DesignDESeq2", choices = paste("~ ",paste(colnames(notUniqueValue()))))
+    updateSelectInput(session,"DesignDESeq2", choices = paste(colnames(notUniqueValue())))
+  })
+  
+  observeEvent(input$DesignDESeq2,{
+    updateSelectInput(session,"Reference", choices = metadata()[,input$DesignDESeq2])
   })
   
 
@@ -116,9 +120,11 @@ server <- function(input, output,session) {
     waiter$show()
     
     ### DESeq2 process 
-    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(input$DesignDESeq2), tidy=TRUE)
+    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
+    colData(dds$dds)$input$DesignDESeq2 <- relevel(as.factor(input$DesignDESeq2) , ref = input$Reference)
+    
     
     ### Display success message after running DESeq2
     output$SuccessMessage <- renderUI({
@@ -396,7 +402,7 @@ server <- function(input, output,session) {
   })
   ### Display distance matrix using the fonction distance.matrix.heatmap() from function_dds.R
   distanceCluster <- function(){
-    sample.distance.matrix.heatmap(dds$TransformationMatrix)
+    distance.matrix.heatmap(dds$TransformationMatrix)
   }
   output$DistanceMatrixMap <- renderPlot({
     withProgress(message = "Running heatmap , please wait",{
