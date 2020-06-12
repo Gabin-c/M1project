@@ -545,7 +545,7 @@ server <- function(input, output,session) {
     if(input$RunHeatmap){
       menuSubItem("Gene expression Heatmap",tabName = "Heatmap", icon = icon("far fa-check-square"))
     }else{
-      menuSubItem("Genne expression Heatmap",tabName = "Heatmap")
+      menuSubItem("Gene expression Heatmap",tabName = "Heatmap")
     }
   })
   
