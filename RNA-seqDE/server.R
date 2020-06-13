@@ -73,10 +73,7 @@ server <- function(input, output,session) {
   observeEvent(input$MetadataFile,{
     updateSelectInput(session,"DesignDESeq2", choices = paste(colnames(notUniqueValue())))
   })
-  
-  observeEvent(input$DesignDESeq2,{
-    updateSelectInput(session,"Reference", choices = metadata()[,input$DesignDESeq2])
-  })
+
   
 
   
@@ -123,8 +120,7 @@ server <- function(input, output,session) {
     dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
-    colData(dds$dds)$input$DesignDESeq2 <- relevel(as.factor(input$DesignDESeq2) , ref = input$Reference)
-    
+
     
     ### Display success message after running DESeq2
     output$SuccessMessage <- renderUI({
