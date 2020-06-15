@@ -124,21 +124,10 @@ server <- function(input, output,session) {
     
     
     dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
-<<<<<<< HEAD
     colData(dds$dds)$dex <- relevel(colData(dds$dds)$dex, ref=input$Reference)
-=======
-    
-   
-    
->>>>>>> bd704f3d26ff9443016e97f99769866da032ed6a
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
-<<<<<<< HEAD
-    
-    
-=======
 
->>>>>>> 9e372a7bc775a779ed85cc40a3007599b041a911
     
     ### Display success message after running DESeq2
     output$SuccessMessage <- renderUI({
