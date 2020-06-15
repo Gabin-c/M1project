@@ -74,8 +74,11 @@ server <- function(input, output,session) {
   observeEvent(input$MetadataFile,{
     updateSelectInput(session,"DesignDESeq2", choices = paste(colnames(notUniqueValue())))
   })
-
   
+  observeEvent(req(input$DesignDESeq2),{
+    updateSelectInput(session,"Reference", choices = metadata()[,input$DesignDESeq2])
+  })
+
 
   
   
@@ -119,13 +122,9 @@ server <- function(input, output,session) {
     
     ### DESeq2 process 
     
-    
-    dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
-    
-    dds$dds <- dds
-    
-   
-    
+    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
+    colData(dds$dds)[,input$DesignDESeq2] <- relevel(colData(dds$dds)[,input$DesignDESeq2], ref = input$Reference)
+
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
 
