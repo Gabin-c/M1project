@@ -402,10 +402,12 @@ Enfin, chaque fichier importé est affiché sur sa page pour permettre à l'util
 \setstretch{1.5}
 \setromanfont{Times New Roman}
 
+\newpage
 ### \normalsize{Partie 3 : DESeq2}
  
 DESeq2 est lancé grâce à un bouton "Run DESeq2 workflow". En appuyant sur ce bouton, un écran d'attente va s'afficher le temps que le processus se termine. Durant cette attente, la fonction DESeqDataSetFromMatrix() va permettre de stocker les valeurs d'entrée, les calculs intermédiaires et les résultats d'une analyse de l'expression différentielle.
-Afin de faire fonctionner correctement cette partie, un design est demandé lors de l'importation du fichier metadata. Ce design doit correspondre à un facteur permettant de distinguer les deux différents groupes des échantillons. Il faut donc faire le bon choix lors de l'élaboration du design et garder la bonne colonne du fichier metadata. On appelle une "colonne linéaire" une colonne dont toutes les valeurs en lignes sont différentes. Une liste de sélections laisse le choix à l'utilisateur entre les colonnes du tableau correspondant aux critères nécessaires au bon déroulement de du workflow DESeq2 : les colonnes non linéaires et les colonnes dont toutes les valeurs ne sont pas égales.
+Afin de faire fonctionner correctement cette partie, un design est demandé lors de l'importation du fichier metadata. Ce design doit correspondre à un facteur permettant de distinguer les deux différents groupes des échantillons. Il faut donc faire le bon choix lors de l'élaboration du design et garder la bonne colonne du fichier metadata. De plus, il faut choisir la référence de l'expérience. En effet, sans possibilité de ce choix, le processus DESeq2 prend pour référence le premier facteur dans l'ordre alphabétique. Par exemple, si on a "Wild Type" et "Mutant", c'est "Mutant" qui sera pris en référence alors que ça devrait être "Wild Type". Si la mauvaise référence est utilisée, tous les résultats obtenus seront inversés. Avec notre jeu de données, c'est "control" qui est utilisé comme référence.
+\par On appelle une "colonne linéaire" une colonne dont toutes les valeurs en lignes sont différentes. Une liste de sélections laisse le choix à l'utilisateur entre les colonnes du tableau correspondant aux critères nécessaires au bon déroulement de du workflow DESeq2 : les colonnes non linéaires et les colonnes dont toutes les valeurs ne sont pas égales.
 Avec un bon design, le DESeq2 est lancé et les résultats s'affichent après une dizaine de secondes d'attente. 
 \par
 Ensuite, la fonction DESeq() permet de faire une analyse en 3 étapes :
