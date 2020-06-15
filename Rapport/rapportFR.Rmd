@@ -63,7 +63,7 @@ Dans un premier  temps un jeu de données d’une analyse RNA-seq de l'étude \e
 Une fois ce package compris et maîtrisé, nous nous sommes attaqués à l’accessibilité à ce type d’analyses avec DESeq2. Pour cela nous avons décidé de créer une application permettant d'exécuter simplement le workflow DESeq2. Afin de réaliser cette application nous avons utilisé le package Shiny qui permet de créer une application web interactive en associant des fonctionnalités de R et des fonctionnalités utilisant les langages HTML, javaScript ou encore CSS.
 
 \par
-\emph{mots clés : Séquençage ARN, Rstudio, DESeq2, NGS, Visualisation graphique}
+\emph{mots clés : Séquençage ARN,DESeq2, NGS, Visualisation, Exploration}
  
 
 
@@ -79,7 +79,7 @@ We have therefore focused on the analysis of data from RNA-seq experiments and m
 Once this package was understood and mastered, we tackled the accessibility of this type of analysis with DESeq2. To do this we decided to create an application to simply run the DESeq2 workflow. In order to realize this application we used the Shiny package which allows to create an interactive web application by associating R functionalities, while associating functionalities using HTML, javaScript or CSS.
 
 \par
-\emph{keywords : RNA sequencing, Rstudio, DESeq2, NGS, Graphic visualization}
+\emph{keywords : RNA sequencing, DESeq2, NGS, Graphic visualization, Exploration}
 
 
 \newpage
@@ -207,7 +207,7 @@ res <- results(dds,tidy = TRUE)
 
 \newpage
 #### Analyse de l'expression différentielle sous DESeq2
-Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons visualisé la distribution du comptage des reads pour chaque échantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation. En parallèle nous avons visualisé la profondeur de séquençage de chaque échantillon avant et après normalisation. Cela a permis de vérifier visuellement la bonne normalisation des données. Pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponibles sur le CRAN. 
+Avant d'analyser les résultats de l'analyse d'expression differentielle nous avons visualisé la distribution du comptage des reads pour chaque échantillon avant et après normalisation (figure 2) en  utilisant la methode du log-frequence afin de faciliter la visualisation. En parallèle nous avons visualisé la profondeur de séquençage de chaque échantillon avant et après normalisation. Cela a permis de vérifier visuellement la bonne normalisation des données. Et enfin nous avons visualisé le comptage par gène pour chaque échantillon. Pour ces visualisations et les autres à venir dans l'analyse nous avons utilisé les packages \emph{ggplot2} et \emph{ggrepel} disponibles sur le CRAN. 
 
 \singlespacing
 \scriptsize
