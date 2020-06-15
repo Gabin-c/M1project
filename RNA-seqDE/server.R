@@ -120,10 +120,15 @@ server <- function(input, output,session) {
     waiter$show()
     
     ### DESeq2 process 
+    
+    
     dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
+    
+   
+    
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
-    colData(dds$dds)$input$DesignDESeq2 <- relevel(as.factor(input$DesignDESeq2) , ref = input$Reference)
+    
     
     
     ### Display success message after running DESeq2

@@ -2,7 +2,7 @@
 library(DESeq2)
 library(Biobase)
 library(tidyverse)
-
+library(ggrepel)
 ### import data ----
 #Firstly we import the 3 data table which we will use during this analysis. 
 #The "counts_table" contains the counting of read mapped on each genes by samples,
@@ -138,11 +138,11 @@ res <- res %>%
   arrange(padj) %>% 
   inner_join(anno,by=c("row"="ensgene")) %>%
   filter(padj<0.05)
-NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:50],], 
-              labRow=arrange(res, padj, pvalue)$symbol[1:50], 
+NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:25],], 
+              labRow=arrange(res, padj, pvalue)$symbol[1:25], 
               scale="row", distfun="pearson", 
               annCol=dplyr::select(airway_metadata, dex, celltype), 
-              col=c("green","black","black","red"),
-              filename = "heatmappp.png", width = 1000, height = 1000)
+              col=c("green","black","black","red"))
+              
 
 
