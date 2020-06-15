@@ -124,7 +124,7 @@ server <- function(input, output,session) {
     
     
     dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
-    colData(dds$dds)$dex <- relevel(colData(dds$dds)$dex, ref=input$Reference)
+    colData(dds$dds)[,input$DesignDESeq2] <- relevel(colData(dds$dds)[,input$DesignDESeq2], ref = input$Reference)
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
 
