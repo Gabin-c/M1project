@@ -42,6 +42,7 @@ server <- function(input, output,session) {
   metadata <- reactive({
     req(input$MetadataFile)
     meta_table <- read.csv(input$MetadataFile$datapath, sep = input$separator_Metadata, row.names=NULL)
+    
   })
   ### Display the metadata file ----
   output$MetaTable <- DT::renderDataTable(metadata(),options = list(pageLength = 20, autoWidth = FALSE,scrollX = TRUE, scrollY = '300px'))
@@ -119,18 +120,15 @@ server <- function(input, output,session) {
     ### DESeq2 process 
     
     
-    dds$dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
+    dds <- DESeqDataSetFromMatrix(count_table(),colData=metadata(),design=as.formula(paste("~",paste(input$DesignDESeq2))), tidy=TRUE)
+    
+    dds$dds <- dds
     
    
     
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
-<<<<<<< HEAD
-    
-    
-=======
 
->>>>>>> 9e372a7bc775a779ed85cc40a3007599b041a911
     
     ### Display success message after running DESeq2
     output$SuccessMessage <- renderUI({
