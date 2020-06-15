@@ -73,10 +73,7 @@ server <- function(input, output,session) {
   observeEvent(input$MetadataFile,{
     updateSelectInput(session,"DesignDESeq2", choices = paste(colnames(notUniqueValue())))
   })
-  
-  observeEvent(input$DesignDESeq2,{
-    updateSelectInput(session,"Reference", choices = metadata()[,input$DesignDESeq2])
-  })
+
   
 
   
@@ -128,8 +125,12 @@ server <- function(input, output,session) {
     
     dds$DESeq2 <- DESeq(dds$dds)
     dds$results <- results(dds$DESeq2,tidy=TRUE)
+<<<<<<< HEAD
     
     
+=======
+
+>>>>>>> 9e372a7bc775a779ed85cc40a3007599b041a911
     
     ### Display success message after running DESeq2
     output$SuccessMessage <- renderUI({
