@@ -15,8 +15,10 @@ anno <- anno %>% select(ensgene,symbol)
 
 ### Create the dds object ---
 dds <- DESeqDataSetFromMatrix(counts_table,colData=airway_metadata,design = ~dex,tidy = TRUE)
+dds
 # Set reference of experience, here "control"
-colData(dds)$dex <- relevel(colData(dds)$dex , ref="control")
+dds$dex <- factor(dds$dex, levels = c("control","treated"))
+
 # To display experiment design.
 colData(dds)
 # To display column which biological condition is set.
