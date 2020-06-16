@@ -143,10 +143,10 @@ server <- function(input, output,session) {
     updateSelectizeInput(session,"gene",choices = count_table()[,1], server = TRUE)
     
     ### Factor choices for PCA
-    updateSelectInput(session,"conditionpca",choices = colnames(metadata()))
+    updateSelectInput(session,"conditionpca",choices = colnames(notUniqueValue()))
     
     ### Factor choices heatmap
-    updateSelectInput(session,"conditionHeatmap",choices = colnames(metadata()))
+    updateSelectInput(session,"conditionHeatmap",choices = colnames(notUniqueValue()))
     
     
     ### Counts data frame normalized or not
