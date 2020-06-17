@@ -279,7 +279,7 @@ ui <-
                     fluidPage(
                       box(width = 12, solidHeader = F,
                           HTML(" <center><h3>Here you gonna run DESeq2 workflow.</h3> </pre>
-                               <br><p> Check if your design chosen previously is correct.
+                               <br><p> Check if the design and the reference chosen previously are correct.
                                   <br>
                                <br><h7>The process will take a few seconds.</h7></center>")),
                       box(width = 12,
