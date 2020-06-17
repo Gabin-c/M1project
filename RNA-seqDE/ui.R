@@ -166,8 +166,8 @@ ui <-
                       p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
                       p("Exploration crude data :", style="padding-left: 2em"),
                         p("- Count distribution",
-                        br(), "- Count by gene",
-                        br(), "- Depth of sample",style="padding-left: 5em", align = "justify"),
+                        br(), <li> "Count by gene" </li>
+                        br(), "Depth of sample"),style="padding-left: 5em", align = "justify"),
                       p("Check normalization :", style="padding-left: 2em"),
                         p("- Dispersion",
                         br(), "- Depth of sample",style="padding-left: 5em", align = "justify"),
@@ -178,7 +178,6 @@ ui <-
                         p("- Sample distance matrix",
                         br(), "- Gene expression Heatmap",style="padding-left: 5em", align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
-                      
                       )
                     ),
             ### Upload count table ----
