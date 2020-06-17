@@ -164,15 +164,28 @@ ui <-
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoExample"))),
                       h3("2. Results", style="padding-left: 1em"),
                       p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
-                      p("- Count distribution",
-                        br(), "- Count by gene",
-                        br(), "- Depth of sample",
-                        br(), "- Dispersion",
-                        br(), "- PCA",
-                        br(), "- MA plot",
-                        br(), "- Volcano plot",
-                        br(), "- Sample distance matrix",
-                        br(), "- Gene expression Heatmap",style="padding-left: 5em", align = "justify"),
+                      p("Exploration crude data :",
+                        br(),
+                        tags$ul(
+                          tags$li(" Count distribution"),
+                          tags$li( " Count by gene"),
+                          tags$li(" Depth of sample"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
+                        br(), 
+                      p("Check Normalisation : ",
+                        tags$ul(
+                          tags$li( " Dispersion"),
+                          tags$li( " Depth of sample"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
+                        br(), 
+                      p("Différential expression results",
+                        tags$ul(
+                          tags$li( " MA plot"),
+                          tags$li( " Volcano plot"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
+                        br(), 
+                      p("Difference between samples",
+                        tags$ul(
+                          tags$li(" PCA"),
+                          tags$li( " Sample distance matrix"),
+                          tags$li( " Gene expression Heatmap"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       
                       )
