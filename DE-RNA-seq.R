@@ -143,9 +143,8 @@ dists <- get_dist(t(assay(vsdata)),method="pearson")
 
 mat <- as.matrix(dists)
 gg <- heatmaply_cor(
-  cor(mat),
-  k_col = 2, 
-  k_row = 2
+  mat
+  
 )
 gg
 

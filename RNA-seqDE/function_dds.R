@@ -260,10 +260,9 @@ pca.plot <- function(dds.resTransf,intgroup){
 distance.matrix.heatmap <- function(dds.resTransf){
   dists <- get_dist(t(assay(dds.resTransf)),method = "pearson")
   mat <- as.matrix(dists)
-  gg <- heatmaply_cor(
-    cor(mat),
-    k_col = 2, 
-    k_row = 2
+  gg <- heatmaply(
+    mat
+    
   )
   
   return(gg)
