@@ -29,7 +29,7 @@ count_table_dds <- as.data.frame(counts(dds))
 #To facilitate the vizualisation we use the log-freq of each count value "log(count+1)"
 for( i in 1:8){
   p <- ggplot(data=count_table_dds, aes(log(count_table_dds[,i]+1))) + geom_histogram(breaks=seq(0,14,1),col="black",fill="grey")+theme_light()+labs(title=colnames(count_table_dds)[i], x="Count value (number of read by genes) in log(count+1)",y="Count frequency") + theme_bw()
- plot(p)
+  plot(p)
 }
 #Number for Null for each sample ----
 apply(count_table_dds, 2 ,FUN = function(x) sum(x==0))
@@ -157,6 +157,3 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:25],],
               scale="row", distfun="pearson", 
               annCol=dplyr::select(airway_metadata, dex, celltype), 
               col=c("green","black","black","red"))
-              
-
-

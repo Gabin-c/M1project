@@ -14,6 +14,7 @@ library(waiter)
 library(dashboardthemes)
 library(shinycssloaders)
 library(shinydashboardPlus)
+library(plotly)
 ### Files with all the function needed to make plots ----
 source("function_dds.R")
 
@@ -164,19 +165,28 @@ ui <-
                       column( 12, style="padding-left: 5em" ,withSpinner(tableOutput("annoExample"))),
                       h3("2. Results", style="padding-left: 1em"),
                       p("The results will be display after running DESeq2. You will obtain 9 differents results :", style="padding-left: 2em", align = "justify"),
-                      p("Exploration crude data :", style="padding-left: 2em"),
-                        p("- Count distribution",
-                        br(), <li> "Count by gene" </li>
-                        br(), "Depth of sample"),style="padding-left: 5em", align = "justify"),
-                      p("Check normalization :", style="padding-left: 2em"),
-                        p("- Dispersion",
-                        br(), "- Depth of sample",style="padding-left: 5em", align = "justify"),
-                      p("Différential expression results :", style="padding-left: 2em"),
-                        p("- MA plot",
-                        br(), "- Volcano plot",style="padding-left: 5em", align = "justify"),
-                      p("Différential between samples :", style="padding-left: 2em"),
-                        p("- Sample distance matrix",
-                        br(), "- Gene expression Heatmap",style="padding-left: 5em", align = "justify"),
+                      p("Exploration raw data :",
+                        br(),
+                        tags$ul(
+                          tags$li(" Count distribution"),
+                          tags$li( " Count by gene"),
+                          tags$li(" Depth of sample"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
+                        br(), 
+                      p("Check Normalization : ",
+                        tags$ul(
+                          tags$li( " Dispersion"),
+                          tags$li( " Depth of sample"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
+                        br(), 
+                      p("Différential expression results",
+                        tags$ul(
+                          tags$li( " MA plot"),
+                          tags$li( " Volcano plot"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
+                        br(), 
+                      p("Differences between samples",
+                        tags$ul(
+                          tags$li(" PCA"),
+                          tags$li( " Sample distance matrix"),
+                          tags$li( " Gene expression Heatmap"),style="padding-left: 5em", align = "justify"),style="padding-left: 2em", align = "justify"),
                       p("You can download all the results plots at the bottom of all these pages.",  style="padding-left: 2em", align = "justify")
                       )
                     ),
@@ -417,11 +427,13 @@ ui <-
             tabItem(tabName = "MAplot",
                     box(width = 12,
                         title = "MA plot", solidHeader = T, status = "primary",collapsible = TRUE,
+                        checkboxInput("annotationMA","Do you have an annotation file ?",value=FALSE),
                         sliderInput("pvalueMAplot", "Choose your pvalue", min=0, max=1, value=0.05),
-                        tableOutput("numberDEgenes")
+                        tableOutput("numberDEgenes"),
+                        uiOutput("annoMA"),
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
-                        withSpinner(plotOutput("MAplot",height = 650))),
+                        withSpinner(plotlyOutput("MAplot",height = 650))),
                     column(width= 4,
                            downloadButton("downloadMaplot",'Download plot',class = "btn-warning"))
             ),

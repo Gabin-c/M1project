@@ -5,6 +5,6 @@ account: gabin-coudray
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2245028
-bundleId: 3247027
+bundleId: 3281864
 url: https://gabin-coudray.shinyapps.io/m1project/
-when: 1591704852.89485
+when: 1592393855.08045

@@ -7,6 +7,12 @@ library(tidyverse)
 library(NMF)
 library(ggrepel)
 library(factoextra)
+library(plotly)
+library(webshot)
+install_phantomjs()
+library(processx)
+library(htmlwidgets)
+
 ### Preamble ----
 ### All of this function can be use after running a DESeq2 workflow.
 ### You need a DESeq2 dataset to be able to run it.
@@ -108,18 +114,51 @@ gene.count.plot <- function(dds.count,gene){
 ### maplot need two arguments
 ###   - dds.results which is a results table obtain by function results() on a DESeq() object
 ###   - p.val which is pvalue accept un DE analysis, padje is set at 0.05
-ma.plot <- function(dds.results,p.val=0.05){
-  dds.res <- dds.results %>% mutate(sig=padj<p.val)
-  return(ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = sig)) + 
-           geom_point() + 
-           scale_x_log10() +
-           geom_hline(yintercept = 0, linetype = "dashed",color = "black") + 
-           theme_bw() +
-           scale_colour_discrete(name="",labels=c("Not significative", "Significative", "NA"))+
-           guides(color = guide_legend(override.aes = list(size=5))) +
-           theme(legend.text=element_text(size=13))+
-           theme(axis.title.x = element_text(size=14)) +
-           theme(axis.title.y = element_text(size=14)))
+ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
+  if(is.anno == TRUE){
+    dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
+      inner_join(anno,by=c("row"=count.tb[1]))
+    ggpoint <- ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = sig, label = symbol)) + 
+      geom_point() + 
+      scale_x_log10() +
+      geom_hline(yintercept = 0, linetype = "dashed",color = "black") + 
+      theme_bw() +
+      scale_colour_discrete(name="",labels=c("Not significative", "Significative", "NA"))+
+      guides(color = guide_legend(override.aes = list(size=5))) +
+      theme(legend.text=element_text(size=13))+
+      theme(axis.title.x = element_text(size=14)) +
+      theme(axis.title.y = element_text(size=14))
+    fig <- ggplotly(ggpoint)
+    fig <- fig %>% toWebGL()
+    fig <- fig %>% 
+      config(displaylogo = FALSE,
+             collaborate = FALSE,
+             modeBarButtonsToRemove = list(
+               "toImage"
+             ))
+    return(fig)
+  }
+  else{ dds.res <- dds.results %>% mutate(sig=padj<p.val)
+  ggpoint <- ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = sig, label = row)) + 
+    geom_point() + 
+    scale_x_log10() +
+    geom_hline(yintercept = 0, linetype = "dashed",color = "black") + 
+    theme_bw() +
+    scale_colour_discrete(name="",labels=c("Not significative", "Significative", "NA"))+
+    guides(color = guide_legend(override.aes = list(size=5))) +
+    theme(legend.text=element_text(size=13))+
+    theme(axis.title.x = element_text(size=14)) +
+    theme(axis.title.y = element_text(size=14))
+  fig <- ggplotly(ggpoint)
+  fig <- fig %>% toWebGL()
+  fig <- fig %>% 
+    config(displaylogo = FALSE,
+           collaborate = FALSE,
+           modeBarButtonsToRemove = list(
+             "toImage"
+           ))
+  return(fig)
+  }
 }
 
 ### VolcanonPlot ---- 
@@ -137,7 +176,7 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
   if(is.anno == TRUE){
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
+    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label=symbol)) +
              geom_point() +
              ggtitle("Volcano plot labelling top significant genes") +
              geom_text_repel(data = subset(dds.res, (-log10(padj) > minlogP | log2FoldChange > maxlogF | log2FoldChange < minlogF)),

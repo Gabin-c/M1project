@@ -324,15 +324,34 @@ server <- function(input, output,session) {
   
 
   ### MA plot ----
+  observeEvent(input$annotationMA,{
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationMA==TRUE){
+        output$annoMA <- renderUI({
+          HTML("<center><h3> You don't have annotation file. </h3></center>")
+        })
+      }}
+    if(input$CheckAnnotation== FALSE){
+      if(input$annotationMA==FALSE){
+        output$annoMA <- renderUI({})
+      }}
+    if(input$CheckAnnotation== TRUE){
+      if(input$annotationMA==TRUE){
+        output$annoMA <- renderUI({})}
+        }
+    })
   ### Display MA plot using ma.plot() function from function_dds.R
   MAplotFunction <- function(){
-    ma.plot(dds$results,p.val=input$pvalueMAplot)
+    ma.plot(dds$results,p.val=input$pvalueMAplot, is.anno = input$annotationMA, anno = anno(),count.tb=colnames(count_table()))
   }
-  output$MAplot <- renderPlot({
+  ma <- reactiveValues()
+  output$MAplot <- renderPlotly({
     validate(
       need(dds$results, "Please run DESeq2")
     )
-    MAplotFunction()
+    ma$ma<- MAplotFunction()
+    ma$ma
+    
   })
   ### Display a table with the number of differential expressed genes
   output$numberDEgenes <- renderTable({
@@ -340,11 +359,15 @@ server <- function(input, output,session) {
   })
   ### Download MAplot in .png format
   output$downloadMaplot <- downloadHandler(
-    filename = "Maplot.png",
-    content = function(file){
-      ggsave(file, plot = MAplotFunction(), device = "png")
+    filename = function() {
+      paste("MAplot", ".html", sep = "")
+    },
+    content = function(file) {
+      # export plotly html widget as a temp file to download.
+      saveWidget(as_widget(ma$ma), file, selfcontained = TRUE)
     }
   )
+
   
   ### Volcano plot ----
   ### Display parameters for volcano 
