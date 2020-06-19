@@ -430,7 +430,7 @@ ui <-
                         checkboxInput("annotationMA","Do you have an annotation file ?",value=FALSE),
                         sliderInput("pvalueMAplot", "Choose your pvalue", min=0, max=1, value=0.05),
                         tableOutput("numberDEgenes"),
-                        uiOutput("annoMA"),
+                        uiOutput("annoMA")
                     ),
                     box(solidHeader = F, status = "primary",width = 12,
                         withSpinner(plotlyOutput("MAplot",height = 650))),
@@ -453,12 +453,10 @@ ui <-
                           title = "Volcano plot", solidHeader = T, status = "primary",collapsible = TRUE,
                           checkboxInput("annotationVolcano","Do you have an annotation file ?",value=FALSE),
                           sliderInput("pvalueVolcano", "Choose your pvalue", min=0, max=1, value=0.05),
-                          uiOutput("AnnoVolcano"),
-                          uiOutput("SliderFoldVolcano"),
-                          uiOutput("SliderLogVolcano")
+                          uiOutput("AnnoVolcano")
                       ),
                       box( solidHeader = F, status = "primary",width = 12,
-                           withSpinner(plotOutput("volcanoPlot",height = 650))),
+                           withSpinner(plotlyOutput("volcanoPlot",height = 650))),
                       column(width= 4,
                              downloadButton("downloadVolcano",'Download plot',class = "btn-warning")))
             ),

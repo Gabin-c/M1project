@@ -176,32 +176,46 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
   if(is.anno == TRUE){
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label=symbol)) +
-             geom_point() +
-             ggtitle("Volcano plot labelling top significant genes") +
-             geom_text_repel(data = subset(dds.res, (-log10(padj) > minlogP | log2FoldChange > maxlogF | log2FoldChange < minlogF)),
-                             aes(label = symbol),
-                             size = 4,
-                             box.padding = unit(0.35, "lines"),
-                             point.padding = unit(0.3, "lines"), color = "darkblue") +
-             scale_colour_discrete(name="",
-                                   labels=c("Not significative", "Significative", "NA")) +
-             guides(color = guide_legend(override.aes = list(size=5))) +
-             geom_vline(xintercept=0,linetype="dashed", color = "red")+
-             theme(legend.text=element_text(size=13)) +
-             theme(axis.title.x = element_text(size=14)) +
-             theme(axis.title.y = element_text(size=14)))
-  }else{
+    volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label=symbol)) +
+      geom_point() +
+      ggtitle("Volcano plot labelling top significant genes") +
+      scale_colour_discrete(name="",
+                            labels=c("Not significative", "Significative", "NA")) +
+      guides(color = guide_legend(override.aes = list(size=5))) +
+      geom_vline(xintercept=0,linetype="dashed", color = "red")+
+      theme(legend.text=element_text(size=13)) +
+      theme(axis.title.x = element_text(size=14)) +
+      theme(axis.title.y = element_text(size=14))
+    volc <- ggplotly(volc)
+    volc <- volc %>% toWebGL()
+    volc <- volc %>% 
+      config(displaylogo = FALSE,
+             collaborate = FALSE,
+             modeBarButtonsToRemove = list(
+               "toImage"
+             ))
+    return(volc)
+  }
+  else{
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj)
-    return(ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig)) +
-             geom_point()+
-             scale_colour_discrete(name="",
-                                   labels=c("Not significative", "Significative", "NA")) +
-             geom_vline(xintercept=0,linetype="dashed", color = "red") +
-             guides(colour = guide_legend(override.aes = list(size = 5))) +
-             theme(legend.text=element_text(size=13))+
-             theme(axis.title.x = element_text(size=14)) +
-             theme(axis.title.y = element_text(size=14))) 
+    volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label= row)) +
+      geom_point()+
+      scale_colour_discrete(name="",
+                            labels=c("Not significative", "Significative", "NA")) +
+      geom_vline(xintercept=0,linetype="dashed", color = "red") +
+      guides(colour = guide_legend(override.aes = list(size = 5))) +
+      theme(legend.text=element_text(size=13))+
+      theme(axis.title.x = element_text(size=14)) +
+      theme(axis.title.y = element_text(size=14))
+    volc <- ggplotly(volc)
+    volc <- volc %>% toWebGL()
+    volc <- volc %>% 
+      config(displaylogo = FALSE,
+             collaborate = FALSE,
+             modeBarButtonsToRemove = list(
+               "toImage"
+             ))
+    return(volc)
   }
 }
 
@@ -224,6 +238,7 @@ pca.plot <- function(dds.resTransf,intgroup){
         point.padding = unit(0.3, "lines"), color = "darkblue")
   )
 }
+
 
 ### Distance matrix ----
 ### distance.matrix.heatmap generate a heatmap of dist between different sample
