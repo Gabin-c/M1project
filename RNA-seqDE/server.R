@@ -426,7 +426,7 @@ server <- function(input, output,session) {
   distanceCluster <- function(){
     distance.matrix.heatmap(dds$TransformationMatrix)
   }
-  output$DistanceMatrixMap <- renderPlot({
+  output$DistanceMatrixMap <- renderPlotly({
     withProgress(message = "Running heatmap , please wait",{
       validate(
         need(dds$TransformationMatrix, "Please run DESeq2 and Heat map")
@@ -444,7 +444,7 @@ server <- function(input, output,session) {
   )
   
   ### Gene expression heatmap ----
-  ### Chose vst or rlog transformation
+  ### Chose vst or rlog transformation ----
   observeEvent(input$RunHeatmap,{
     if(input$TransformationHeatmap=="vst"){
       dds$TransformationHeatmap <- vst(dds$DESeq2, blind=FALSE)

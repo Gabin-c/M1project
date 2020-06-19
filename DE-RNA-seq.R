@@ -142,10 +142,12 @@ library(factoextra)
 dists <- get_dist(t(assay(vsdata)),method="pearson")
 
 mat <- as.matrix(dists)
-hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
-heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
-
-
+gg <- heatmaply_cor(
+  cor(mat),
+  k_col = 2, 
+  k_row = 2
+)
+gg
 
 #Heatmap of gene expression for 50 better DE gene
 library(NMF)

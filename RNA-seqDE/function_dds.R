@@ -11,6 +11,8 @@ library(plotly)
 library(webshot)
 library(processx)
 library(htmlwidgets)
+library(heatmaply)
+library(ggcorrplot)
 
 ### Preamble ----
 ### All of this function can be use after running a DESeq2 workflow.
@@ -115,9 +117,9 @@ gene.count.plot <- function(dds.count,gene){
 ###   - p.val which is pvalue accept un DE analysis, padje is set at 0.05
 ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
   if(is.anno == TRUE){
-    dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
+    dds.res <- dds.results %>% mutate(significant.DE=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
-    ggpoint <- ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = sig, label = symbol)) + 
+    ggpoint <- ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = significant.DE, label = symbol)) + 
       geom_point() + 
       scale_x_log10() +
       geom_hline(yintercept = 0, linetype = "dashed",color = "black") + 
@@ -137,8 +139,8 @@ ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
              ))
     return(fig)
   }
-  else{ dds.res <- dds.results %>% mutate(sig=padj<p.val)
-  ggpoint <- ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = sig, label = row)) + 
+  else{ dds.res <- dds.results %>% mutate(significant.DE=padj<p.val)
+  ggpoint <- ggplot(dds.res, aes(x = baseMean, y = log2FoldChange, col = significant.DE, label = row)) + 
     geom_point() + 
     scale_x_log10() +
     geom_hline(yintercept = 0, linetype = "dashed",color = "black") + 
@@ -173,10 +175,10 @@ ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
 ###   - minlogP : min Log10 in y which we set gene ID on geom point
 volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,minlogF=0,minlogP=30,count.tb){
   if(is.anno == TRUE){
-    dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
+    dds.res <- dds.results %>% mutate(significant.DE=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
 
-    volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label=symbol)) +
+    volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=significant.DE, label=symbol)) +
       geom_point() +
       ggtitle("Volcano plot labelling top significant genes") +
 
@@ -201,8 +203,8 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
     return(volc)
   }
   else{
-    dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj)
-    volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label= row)) +
+    dds.res <- dds.results %>% mutate(significant.DE=padj<p.val) %>%  arrange(padj)
+    volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=significant.DE, label= row)) +
 
       geom_point()+
       scale_colour_discrete(name="",
@@ -256,8 +258,21 @@ pca.plot <- function(dds.resTransf,intgroup){
 distance.matrix.heatmap <- function(dds.resTransf){
   dists <- get_dist(t(assay(dds.resTransf)),method = "pearson")
   mat <- as.matrix(dists)
-  hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
-  return(heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13)))
+  gg <- heatmaply_cor(
+    cor(mat),
+    k_col = 2, 
+    k_row = 2
+  )
+  gg <- gg %>% toWebGL()
+  gg <- gg %>% 
+    
+    config(displaylogo = FALSE,
+           collaborate = FALSE,
+           modeBarButtonsToRemove = list(
+             "toImage"
+           ))
+  
+  return(gg)
 }
 
 ### Heatmap ----
