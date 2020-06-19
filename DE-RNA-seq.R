@@ -145,6 +145,8 @@ mat <- as.matrix(dists)
 hmcol=colorRampPalette(brewer.pal(9,"GnBu"))(100)
 heatmap.2(mat,trace="none",col = rev(hmcol),margin=c(13,13))
 
+
+
 #Heatmap of gene expression for 50 better DE gene
 library(NMF)
 res <- tbl_df(res)

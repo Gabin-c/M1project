@@ -375,25 +375,16 @@ server <- function(input, output,session) {
   observeEvent(input$annotationVolcano,{
     if(input$CheckAnnotation== TRUE){
       if(input$annotationVolcano==TRUE){
-      output$SliderFoldVolcano <- renderUI({ 
-        sliderInput("sliderfold", "Choose your fold", min=-20, max=20, value=c(-6,6))
-      })
-      output$SliderLogVolcano <- renderUI({ 
-        sliderInput("sliderlog", "Choose your log10", min=0, max=300, value=30)
-      })
+        output$AnnoVolcano <- renderUI({})
     }}
     if(input$CheckAnnotation== FALSE){
       if(input$annotationVolcano==TRUE){
-      output$SliderFoldVolcano <- renderUI({})
-      output$SliderLogVolcano <- renderUI({})
       output$AnnoVolcano <- renderUI({
         HTML("<center><h3> You don't have annotation file. </h3></center>")
       })
       }}
     if(input$CheckAnnotation== FALSE){
       if(input$annotationVolcano==FALSE){
-        output$SliderFoldVolcano <- renderUI({})
-        output$SliderLogVolcano <- renderUI({})
         output$AnnoVolcano <- renderUI({})
       }}
   })
@@ -402,17 +393,22 @@ server <- function(input, output,session) {
   VolcanoplotFunction <- function(){
     volcano.plot(dds$results,is.anno = input$annotationVolcano, anno = anno() ,p.val=input$pvalueVolcano,minlogF=input$sliderfold[1], maxlogF=input$sliderfold[2], minlogP=input$sliderlog,count.tb=colnames(count_table()))
   }
-  output$volcanoPlot <- renderPlot({
+  volca <- reactiveValues()
+  output$volcanoPlot <- renderPlotly({
     validate(
       need(dds$results, "Please run DESeq2")
     )
-    VolcanoplotFunction()
+    volca$volca <- VolcanoplotFunction()
+    volca$volca
   })
   ### Download Volcano plot in .png format
   output$downloadVolcano <- downloadHandler(
-    filename = "Volcanoplot.png",
-    content = function(file){
-      ggsave(file, plot = VolcanoplotFunction(), device = "png")
+    filename = function() {
+      paste("Volcanoplot", ".html", sep = "")
+    },
+    content = function(file) {
+      # export plotly html widget as a temp file to download.
+      saveWidget(as_widget(volca$volca), file, selfcontained = TRUE)
     }
   )
   
