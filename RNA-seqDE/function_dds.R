@@ -265,14 +265,6 @@ distance.matrix.heatmap <- function(dds.resTransf){
     k_col = 2, 
     k_row = 2
   )
-  gg <- gg %>% toWebGL()
-  gg <- gg %>% 
-    
-    config(displaylogo = FALSE,
-           collaborate = FALSE,
-           modeBarButtonsToRemove = list(
-             "toImage"
-           ))
   
   return(gg)
 }

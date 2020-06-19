@@ -478,7 +478,7 @@ ui <-
                         selectInput("TransformationMatrix",label= "Choose your transformation",choices = c("Variance-stabilizing transformation"="vst","Log transformation"="rld")),
                         actionButton("RunMatrix","Run Heat map")),
                     box(solidHeader = F, status = "primary",width = 12, align = "center",
-                        withSpinner(plotOutput("DistanceMatrixMap",height = 650))
+                        withSpinner(plotlyOutput("DistanceMatrixMap",height = 650))
                     ),
                     column(width= 4,
                            downloadButton("downloadDistanceMatrix",'Download plot',class = "btn-warning")
