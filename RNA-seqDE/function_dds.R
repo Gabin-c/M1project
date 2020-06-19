@@ -136,6 +136,7 @@ ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
              modeBarButtonsToRemove = list(
                "toImage"
              ))
+    fig <- fig %>%layout(legend=list(title=list(text='<b> Significance </b>')))
     return(fig)
   }
   else{ dds.res <- dds.results %>% mutate(sig=padj<p.val)
@@ -151,12 +152,13 @@ ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
     theme(axis.title.y = element_text(size=14))
   fig <- ggplotly(ggpoint)
   fig <- fig %>% toWebGL()
-  fig <- fig %>% 
+  fig <- fig %>%
     config(displaylogo = FALSE,
            collaborate = FALSE,
            modeBarButtonsToRemove = list(
              "toImage"
            ))
+  fig <- fig %>%layout(legend=list(title=list(text='<b> Significance </b>')))
   return(fig)
   }
 }
@@ -194,6 +196,8 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
              modeBarButtonsToRemove = list(
                "toImage"
              ))
+    volc <- volc %>%layout(legend=list(title=list(text='<b> Significance </b>')))
+    
     return(volc)
   }
   else{
@@ -215,6 +219,8 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
              modeBarButtonsToRemove = list(
                "toImage"
              ))
+    volc <- volc %>%layout(legend=list(title=list(text='<b> Significance </b>')))
+    
     return(volc)
   }
 }
