@@ -9,7 +9,6 @@ library(ggrepel)
 library(factoextra)
 library(plotly)
 library(webshot)
-install_phantomjs()
 library(processx)
 library(htmlwidgets)
 
@@ -136,7 +135,7 @@ ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
              modeBarButtonsToRemove = list(
                "toImage"
              ))
-    fig <- fig %>%layout(legend=list(title=list(text='<b> Significance </b>')))
+    fig <- fig %>%layout(legend=list(title=list(text='<b> Significant DE </b>')))
     return(fig)
   }
   else{ dds.res <- dds.results %>% mutate(sig=padj<p.val)
@@ -158,7 +157,7 @@ ma.plot <- function(dds.results,p.val=0.05,is.anno=FALSE,anno,count.tb){
            modeBarButtonsToRemove = list(
              "toImage"
            ))
-  fig <- fig %>%layout(legend=list(title=list(text='<b> Significance </b>')))
+  fig <- fig %>%layout(legend=list(title=list(text='<b> Significant DE </b>')))
   return(fig)
   }
 }
@@ -178,9 +177,11 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
   if(is.anno == TRUE){
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj) %>%
       inner_join(anno,by=c("row"=count.tb[1]))
+
     volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label=symbol)) +
       geom_point() +
       ggtitle("Volcano plot labelling top significant genes") +
+
       scale_colour_discrete(name="",
                             labels=c("Not significative", "Significative", "NA")) +
       guides(color = guide_legend(override.aes = list(size=5))) +
@@ -188,21 +189,23 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
       theme(legend.text=element_text(size=13)) +
       theme(axis.title.x = element_text(size=14)) +
       theme(axis.title.y = element_text(size=14))
+
     volc <- ggplotly(volc)
     volc <- volc %>% toWebGL()
     volc <- volc %>% 
+
       config(displaylogo = FALSE,
              collaborate = FALSE,
              modeBarButtonsToRemove = list(
                "toImage"
              ))
-    volc <- volc %>%layout(legend=list(title=list(text='<b> Significance </b>')))
-    
+    volc <- volc %>%layout(legend=list(title=list(text='<b> Significant DE </b>')))
     return(volc)
   }
   else{
     dds.res <- dds.results %>% mutate(sig=padj<p.val) %>%  arrange(padj)
     volc <- ggplot(dds.res, aes(x=log2FoldChange, y=-log10(padj), col=sig, label= row)) +
+
       geom_point()+
       scale_colour_discrete(name="",
                             labels=c("Not significative", "Significative", "NA")) +
@@ -211,17 +214,19 @@ volcano.plot <-function(dds.results, is.anno=FALSE,anno,p.val=0.05,maxlogF=6,min
       theme(legend.text=element_text(size=13))+
       theme(axis.title.x = element_text(size=14)) +
       theme(axis.title.y = element_text(size=14))
+
     volc <- ggplotly(volc)
     volc <- volc %>% toWebGL()
     volc <- volc %>% 
+
       config(displaylogo = FALSE,
              collaborate = FALSE,
              modeBarButtonsToRemove = list(
                "toImage"
              ))
-    volc <- volc %>%layout(legend=list(title=list(text='<b> Significance </b>')))
-    
+    volc <- volc %>%layout(legend=list(title=list(text='<b> Significant DE </b>')))
     return(volc)
+
   }
 }
 
