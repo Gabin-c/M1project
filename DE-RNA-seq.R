@@ -1,4 +1,6 @@
 #Library
+install.packages("dashboardthemes")
+BiocManager::install("Biobase")
 library(DESeq2)
 library(Biobase)
 library(tidyverse)
@@ -15,6 +17,11 @@ anno <- anno %>% select(ensgene,symbol)
 
 ### Create the dds object ---
 dds <- DESeqDataSetFromMatrix(counts_table,colData=airway_metadata,design = ~dex,tidy = TRUE)
+dds <- estimateSizeFactors(dds)
+dds <- estimateDispersions(dds)
+dds <- nbinomWaldTest(dds)
+prout <- results(dds,tidy = TRUE)
+
 # Set reference of experience, here "control"
 colData(dds)$dex <- relevel(colData(dds)$dex , ref="control")
 # To display experiment design.
@@ -57,6 +64,7 @@ ggplot(count_table_dds, aes(x=count_table_dds[,"name"], y=count_table_dds[,gene]
 dds <- DESeq(dds)
 #Extraction of the DE result
 res <- results(dds,tidy = TRUE)
+res
 # The scale factor resulting of normalization are stock in size factor of our design.
 colData(dds) 
 #Depth of count table after normalization ----
@@ -160,3 +168,4 @@ NMF::aheatmap(assay(vsdata)[arrange(res, padj, pvalue)$row[1:25],],
               scale="row", distfun="pearson", 
               annCol=dplyr::select(airway_metadata, dex, celltype), 
               col=c("green","black","black","red"))
+
